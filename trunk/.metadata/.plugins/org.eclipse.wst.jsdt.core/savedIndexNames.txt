@@ -1,0 +1,4 @@
+INDEX VERSION 1.121+C:\My Dropbox\PUCPR\TCC\Workspace\.metadata\.plugins\org.eclipse.wst.jsdt.core
+980616712.index
+855479767.index
+2502902422.index
