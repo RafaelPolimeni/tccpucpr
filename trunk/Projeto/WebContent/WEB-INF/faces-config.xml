@@ -17,7 +17,6 @@
        		<!-- Var define nome do mapa de variaveis que contem as mensagens -->  
        		<var>labels</var>  
    		</resource-bundle>
-   		
 	   	<!--
 	   		<resource-bundle>  
 	       		<base-name>br.com.messageresource.Messages</base-name>  
@@ -25,12 +24,15 @@
 	       		<var>messages</var>  
 	   		</resource-bundle> 
 	   	-->
-  	</application>
-  
+	   	<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+	   	
+        <variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
+    </application>
+
 	<managed-bean>
 		<description>User Bean</description>
-		<managed-bean-name>user</managed-bean-name>
-		<managed-bean-class>br.com.bean.User</managed-bean-class>
+		<managed-bean-name>userBean</managed-bean-name>
+		<managed-bean-class>br.com.bean.UserBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 		<managed-property>
 			<property-name>name</property-name>
@@ -41,6 +43,11 @@
 			<property-name>lastName</property-name>
 			<property-class>java.lang.String</property-class>
 			<value>Salvalagio Pereira</value>
+		</managed-property>
+		<managed-property>
+			<property-name>testSpring</property-name>
+			<property-class>br.com.bean.TestSpring</property-class>
+			<value>#{testSpring}</value>
 		</managed-property>
 	</managed-bean>
 

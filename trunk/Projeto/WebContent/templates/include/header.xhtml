@@ -26,10 +26,10 @@
 			            </rich:dropDownMenu>
 		            </rich:toolBarGroup>
 		            <rich:toolBarGroup location="right">
-		             	<h:inputText styleClass="barsearch" size="20" rendered="#{not empty user.name}"/>
-                		<h:commandButton styleClass="barsearchbutton" onclick="return false;"  value="#{labels.search}" rendered="#{not empty user.name}"/>
-						<a4j:commandLink value="#{user.name} #{user.lastName}" style="text-decoration: none; color: black;" rendered="#{not empty user.name}"/>
-						<a4j:commandLink value="#{labels.exit}" style="text-decoration: none" rendered="#{not empty user.name}"/>
+		             	<h:inputText styleClass="barsearch" size="20" rendered="#{not empty userBean.name}" />
+                		<h:commandButton styleClass="barsearchbutton" onclick="return false;"  value="#{labels.search}" rendered="#{not empty userBean.name}"/>
+						<a4j:commandLink value="#{userBean.name} #{userBean.lastName}" style="text-decoration: none; color: black;" rendered="#{not empty userBean.name}"/>
+						<a4j:commandLink value="#{labels.exit}" style="text-decoration: none" rendered="#{not empty userBean.name}"/>
 					</rich:toolBarGroup>
 		    	</rich:toolBar>
 			</a4j:form>

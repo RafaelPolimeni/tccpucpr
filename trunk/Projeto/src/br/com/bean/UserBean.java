@@ -1,11 +1,17 @@
 package br.com.bean;
 
-public class User {
+public class UserBean {
 	private String userName;
 	private String name;
 	private String lastName;
+	private TestSpring testSpring;
 	
-	
+	public TestSpring getTestSpring() {
+		return testSpring;
+	}
+	public void setTestSpring(TestSpring testSpring) {
+		this.testSpring = testSpring;
+	}
 	public String getUserName() {
 		return userName;
 	}
