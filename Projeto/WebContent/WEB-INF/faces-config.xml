@@ -37,18 +37,34 @@
 		<managed-property>
 			<property-name>name</property-name>
 			<property-class>java.lang.String</property-class>
-			<value>Victor</value>
+			<value></value>
 		</managed-property>
 		<managed-property>
 			<property-name>lastName</property-name>
 			<property-class>java.lang.String</property-class>
-			<value>Salvalagio Pereira</value>
+			<value></value>
 		</managed-property>
 		<managed-property>
 			<property-name>testSpring</property-name>
 			<property-class>br.com.bean.TestSpring</property-class>
-			<value>#{testSpring}</value>
+			<value></value>
 		</managed-property>
 	</managed-bean>
-
+	
+	<managed-bean>
+		<description>Login Bean</description>
+		<managed-bean-name>loginBean</managed-bean-name>
+		<managed-bean-class>br.com.bean.LoginBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		<managed-property>
+			<property-name>userName</property-name>
+			<property-class>java.lang.String</property-class>
+			<value></value>
+		</managed-property>
+		<managed-property>
+			<property-name>password</property-name>
+			<property-class>java.lang.String</property-class>
+			<value></value>
+		</managed-property>		
+	</managed-bean>
 </faces-config>
