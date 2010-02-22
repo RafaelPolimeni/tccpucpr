@@ -25,7 +25,15 @@
   		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
   		<param-value>.xhtml</param-value>
  	</context-param>
- 	
+	
+	<!-- Spring -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	 	
 	<!-- Faces Servlet Mapping -->
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -59,12 +67,13 @@
 	<filter-mapping>
 		<filter-name>richfaces</filter-name>
 		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
 	
-	<!-- Acegi Securuty -->
+	<!-- Acegi Securuty --> 
 	<filter>
 		<filter-name>Acegi Filter Chain Proxy</filter-name>
 		<filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
@@ -76,16 +85,8 @@
              
 	<filter-mapping>
 		<filter-name>Acegi Filter Chain Proxy</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>*.jsf</url-pattern>
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
-                                               
-	<!-- Spring -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-	</listener>
 </web-app>
