@@ -12,7 +12,7 @@ public class AppUser implements Serializable {
 	private String password;
 	private Set<String> roles;
 
-	public AppUser(String firstName, String lastName, String login, String password, Set<String> roles) {
+	public AppUser(String login, String firstName, String lastName, String password, Set<String> roles) {
 		setFirstName(firstName);
 		setLastName(lastName);
 		setLogin(login);

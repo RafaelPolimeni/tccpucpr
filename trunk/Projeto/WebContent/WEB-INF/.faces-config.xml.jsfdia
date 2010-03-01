@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PROCESS model-entity="JSFProcess">
- <PROCESS-ITEM NAME="rules:#j_acegi_security_check.jsp"
-  PATH="/j_acegi_security_check.jsp" SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
   SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#login.xhtml:0" NAME="item"
    PATH="/login.xhtml" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="login::#j_acegi_security_check.jsp"
-    NAME="output" PATH="/j_acegi_security_check.jsp"
-    TARGET="rules:#j_acegi_security_check.jsp" TITLE="login" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="successLogin::#welcome.jsf" NAME="output"
+    PATH="/welcome.jsf" TARGET="rules:#welcome.jsf" TITLE="successLogin" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="failureLogin::#login.jsf" NAME="output1"
+    PATH="/login.jsf" TARGET="rules:#login.jsf" TITLE="failureLogin" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:*" PATH="*" SHAPE="32,129,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="logout::#j_acegi_logout.jsp" NAME="output"
-    PATH="/j_acegi_logout.jsp" TARGET="rules:#j_acegi_logout.jsp"
-    TITLE="logout" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT ID="login::#login.jsf" NAME="output1"
-    PATH="/login.jsf" TARGET="rules:#login.jsf" TITLE="login" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="logout::#login.jsf" NAME="output"
+    PATH="/login.jsf" TARGET="rules:#login.jsf" TITLE="logout" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:#j_acegi_logout.jsp"
-  PATH="/j_acegi_logout.jsp" SHAPE="240,145,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#login.jsf" PATH="/login.jsf"
   SHAPE="256,289,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#welcome.jsf" PATH="/welcome.jsf"
+  SHAPE="256,33,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

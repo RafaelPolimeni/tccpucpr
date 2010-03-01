@@ -45,32 +45,21 @@
 			<value></value>
 		</managed-property>
 		<managed-property>
-			<property-name>testSpring</property-name>
-			<property-class>br.com.bean.TestSpring</property-class>
-			<value></value>
+			<property-name>authenticationManager</property-name>
+			<property-class>org.acegisecurity.AuthenticationManager</property-class>
+			<value>#{authenticationManager}</value>
 		</managed-property>
-	</managed-bean>
-	
-	<managed-bean>
-		<description>Login Bean</description>
-		<managed-bean-name>loginBean</managed-bean-name>
-		<managed-bean-class>br.com.bean.LoginBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-		<managed-property>
-			<property-name>userName</property-name>
-			<property-class>java.lang.String</property-class>
-		</managed-property>
-		<managed-property>
-			<property-name>password</property-name>
-			<property-class>java.lang.String</property-class>
-		</managed-property>		
 	</managed-bean>
 	
 	<navigation-rule>
 		<from-view-id>/login.xhtml</from-view-id>
 		<navigation-case>
-			<from-outcome>login</from-outcome>
-			<to-view-id>/j_acegi_security_check.jsp</to-view-id>
+			<from-outcome>successLogin</from-outcome>
+			<to-view-id>/welcome.jsf</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>failureLogin</from-outcome>
+			<to-view-id>/login.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
@@ -78,12 +67,7 @@
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>logout</from-outcome>
-			<to-view-id>/j_acegi_logout.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>login</from-outcome>
 			<to-view-id>/login.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
 </faces-config>
