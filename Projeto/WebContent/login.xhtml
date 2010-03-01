@@ -13,12 +13,11 @@
 				<h:form>
 					<h:panelGrid columns="2">
 		            	<h:outputLabel value="User Name" for="userName" />
-		                <h:inputText id="userName" forceId="true" value="#{loginBean.userName}" size="40" maxlength="80"></h:inputText>
+		                <h:inputText id="userName" forceId="true" value="#{userBean.userName}" size="40" maxlength="80"></h:inputText>
 		                <h:outputLabel value="Password" for="password" />
-		                <h:inputSecret id="password" forceId="true" value="#{loginBean.password}" size="40" maxlength="80" redisplay="true"></h:inputSecret>
+		                <h:inputSecret id="password" forceId="true" value="#{userBean.password}" size="40" maxlength="80" redisplay="true"></h:inputSecret>
 		            </h:panelGrid>
-		            <h:commandButton action="login" value="Login" />
-		            <h:messages id="messages" layout="table" globalOnly="true" showSummary="true" showDetail="false" />
+		            <h:commandButton action="#{userBean.login}" value="Login" />
 	            </h:form>
 			</ui:define>
 		</ui:composition>

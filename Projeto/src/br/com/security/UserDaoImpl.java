@@ -16,6 +16,9 @@ public class UserDaoImpl {
 		} else if (userName.equals("tina")) {
 			roles.add("ROLE_ALLACCESS");
 			appUser = new AppUser("tina", "Tina", "Joseph", "tina", roles);
+		} else if (userName.equals("victor")) {
+			roles.add("ROLE_ALLACCESS");
+			appUser = new AppUser("tina", "Tina", "Joseph", "tina", roles);
 		}
 		
 		return appUser;
