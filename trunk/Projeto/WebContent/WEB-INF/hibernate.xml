@@ -7,16 +7,26 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/projeto" />
 		<property name="username" value="root" />
-		<property name="password" value="3$3guNfire" />
+		<property name="password" value="kanda" />
 	</bean>
 	<bean id="mySessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource" ref="myDataSource" />
+		
+		<!-- 
 		<property name="annotatedClasses">
 			<list>
 				<value>br.com.model.User</value>
 			</list>
 		</property>
+		 -->
+		 
+		<property name="annotatedPackages">
+        	<list>
+        		<value>br.com.model</value>
+      		</list>
+      	</property>
+		
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
