@@ -59,7 +59,7 @@ public class UserBean {
 		} catch (BadCredentialsException bce) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Usuário ou senha inválidos"));
 		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Erro", "Erro Desconhecido"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getCause().toString()));
 		}
 
 		return retorno;

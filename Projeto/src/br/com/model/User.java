@@ -1,7 +1,5 @@
 package br.com.model;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,31 +14,29 @@ public class User {
 	public User() {
 
 	}
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="idUser", nullable=false)
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "idUser", nullable = false)
 	private Integer idUser;
-	
-	@Column(name="firstName", nullable=false)
+
+	@Column(name = "firstName", nullable = false)
 	private String firstName;
-	
-	@Column(name="lastName", nullable=false)
+
+	@Column(name = "lastName", nullable = false)
 	private String lastName;
-	
-	@Column(name="completeName", nullable=false)
+
+	@Column(name = "completeName", nullable = false)
 	private String completeName;
-	
-	@Column(name="userName", nullable=false)
+
+	@Column(name = "userName", nullable = false)
 	private String userName;
-	
-	@Column(name="password", nullable=false)
+
+	@Column(name = "password", nullable = false)
 	private String password;
-	
-	@Column(name="enable", nullable=false)
+
+	@Column(name = "enable", nullable = false)
 	private boolean enable;
-	
-	@
-	private List<Authority> authorities;
 
 	/**
 	 * @return the idUser
@@ -145,20 +141,5 @@ public class User {
 	 */
 	public void setEnable(boolean enable) {
 		this.enable = enable;
-	}
-
-	/**
-	 * @return the authorities
-	 */
-	public List<Authority> getAuthorities() {
-		return authorities;
-	}
-
-	/**
-	 * @param authorities
-	 *            the authorities to set
-	 */
-	public void setAuthorities(List<Authority> authorities) {
-		this.authorities = authorities;
 	}
 }
