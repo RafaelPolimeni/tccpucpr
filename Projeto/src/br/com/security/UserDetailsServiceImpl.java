@@ -7,6 +7,8 @@ import org.acegisecurity.userdetails.UserDetailsService;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.springframework.dao.DataAccessException;
 
+import br.com.dao.impl.UserDaoImpl;
+
 public class UserDetailsServiceImpl implements UserDetailsService {
 	private UserDaoImpl userDao;
 

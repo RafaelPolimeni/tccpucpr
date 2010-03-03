@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
     "http://www.springframework.org/dtd/spring-beans.dtd">
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-2.5.xsd
+http://www.springframework.org/schema/jee 
+http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+http://www.springframework.org/schema/security 
+http://www.springframework.org/schema/security/spring-security-2.5.xsd
+http://www.springframework.org/schema/aop 
+http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 	<bean id="filterChainProxy" class="org.acegisecurity.util.FilterChainProxy">
 		<property name="filterInvocationDefinitionSource">
 			<value>
@@ -50,10 +68,6 @@
 		<constructor-arg ref="userDaoImpl" />
 	</bean>
 
-	<bean id="userDaoImpl" class="br.com.security.UserDaoImpl">
-		<property name="sessionFactory" ref="mySessionFactory" />
-	</bean>
-
 	<bean id="filterInvocationInterceptor"
 		class="org.acegisecurity.intercept.web.FilterSecurityInterceptor">
 		<property name="authenticationManager" ref="authenticationManager" />
@@ -63,8 +77,9 @@
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 				PATTERN_TYPE_APACHE_ANT
 				/login.jsf=IS_AUTHENTICATED_ANONYMOUSLY
-				/secure/admin/*=ROLE_ADMIN
-				/secure/app/*=ROLE_USER
+				/**=ROLE_ADMIN,ROLE_USER
+				/pages/admin/*=ROLE_ADMIN
+				/pages/*=ROLE_USER, ROLE_ADMIN
 			</value>
 		</property>
 	</bean>

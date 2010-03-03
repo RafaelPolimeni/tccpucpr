@@ -42,18 +42,18 @@ public class UserBean {
 			/*
 			 * perform authentication
 			 */
-			final Authentication auth = getAuthenticationManager().authenticate(authReq);
+			final Authentication authentication = getAuthenticationManager().authenticate(authReq);
 			
-			this.setUserName(((User)auth.getPrincipal()).getUsername());
-			this.setPassword(auth.getCredentials().toString());
-			this.setName(((User)auth.getPrincipal()).getUsername());
+			this.setUserName(((User)authentication.getPrincipal()).getUsername());
+			this.setPassword(authentication.getCredentials().toString());
+			this.setName(((User)authentication.getPrincipal()).getUsername());
 			
 			/*
 			 * initialize the security context.
 			 */
-			final SecurityContext secCtx = SecurityContextHolder.getContext();
-			secCtx.setAuthentication(auth);
-			session.setAttribute(HttpSessionContextIntegrationFilter.ACEGI_SECURITY_CONTEXT_KEY, secCtx);
+			final SecurityContext secureContext = SecurityContextHolder.getContext();
+			secureContext.setAuthentication(authentication);
+			session.setAttribute(HttpSessionContextIntegrationFilter.ACEGI_SECURITY_CONTEXT_KEY, secureContext);
 			
 			retorno = "successLogin";
 		} catch (BadCredentialsException bce) {
