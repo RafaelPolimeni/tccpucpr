@@ -2,13 +2,12 @@ package br.com.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
+
 @Table(name = "User")
+@Entity
 public class User {
 
 	public User() {
@@ -16,7 +15,7 @@ public class User {
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	//@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "idUser", nullable = false)
 	private Integer idUser;
 
