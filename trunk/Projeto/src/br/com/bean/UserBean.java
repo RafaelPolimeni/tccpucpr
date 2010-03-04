@@ -16,7 +16,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.security.web.authentication.AbstractProcessingFilter;
 
 import br.com.model.Authority;
-import br.com.services.UserService;
+import br.com.service.UserService;
 
 public class UserBean {
 	private Integer idUser;
