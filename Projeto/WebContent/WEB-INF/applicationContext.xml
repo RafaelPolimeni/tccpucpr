@@ -48,7 +48,7 @@ http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 			
 	</security:http>
 	
- 	<bean id="userService" class="br.com.services.impl.UserServiceImpl">
+ 	<bean id="userService" class="br.com.service.impl.UserServiceImpl">
  		<constructor-arg ref="userDaoImpl" />
 	</bean>
  	
