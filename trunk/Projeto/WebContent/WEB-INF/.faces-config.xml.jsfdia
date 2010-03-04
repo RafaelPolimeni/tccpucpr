@@ -4,8 +4,9 @@
   SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#login.xhtml:0" NAME="item"
    PATH="/login.xhtml" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="successLogin::#welcome.jsf" NAME="output"
-    PATH="/welcome.jsf" TARGET="rules:#welcome.jsf" TITLE="successLogin" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="successLogin::#pages#welcome.jsf"
+    NAME="output" PATH="/pages/welcome.jsf"
+    TARGET="rules:#pages#welcome.jsf" TITLE="successLogin" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT ID="failureLogin::#login.jsf" NAME="output1"
     PATH="/login.jsf" TARGET="rules:#login.jsf" TITLE="failureLogin" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
@@ -14,10 +15,18 @@
   <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="logout::#login.jsf" NAME="output"
     PATH="/login.jsf" TARGET="rules:#login.jsf" TITLE="logout" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="gerente::#pages#admin#gerente.jsf"
+    NAME="output1" PATH="/pages/admin/gerente.jsf"
+    TARGET="rules:#pages#admin#gerente.jsf" TITLE="gerente" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="normal::#pages#welcome.jsf" NAME="output2"
+    PATH="/pages/welcome.jsf" TARGET="rules:#pages#welcome.jsf"
+    TITLE="normal" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#login.jsf" PATH="/login.jsf"
   SHAPE="256,289,0,0" model-entity="JSFProcessGroup"/>
- <PROCESS-ITEM NAME="rules:#welcome.jsf" PATH="/welcome.jsf"
+ <PROCESS-ITEM NAME="rules:#pages#welcome.jsf" PATH="/pages/welcome.jsf"
   SHAPE="256,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#gerente.jsf"
+  PATH="/pages/admin/gerente.jsf" SHAPE="272,177,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

@@ -18,18 +18,18 @@
 			        	<rich:dropDownMenu >
 			            	<f:facet name="label"> 
 			                	<h:panelGroup>
-			                    	<h:outputText value="#{labels.projects}"/>
+			                    	<h:outputText value="Teste"/>
 			                    </h:panelGroup>
 			           		</f:facet>
-			           		<rich:menuItem submitMode="ajax" value="#{labels.maintenance}" ></rich:menuItem>
-			           		<rich:menuItem submitMode="ajax" value="#{labels.consult}" ></rich:menuItem>
+			           		<rich:menuItem submitMode="ajax" value="Gerente" action="gerente"></rich:menuItem>
+			           		<rich:menuItem submitMode="ajax" value="Normal" action="normal"></rich:menuItem>
 			            </rich:dropDownMenu>
 		            </rich:toolBarGroup>
 		            <rich:toolBarGroup location="right">
-		             	<h:inputText styleClass="barsearch" size="20" rendered="#{not empty userBean.name}" />
-                		<h:commandButton styleClass="barsearchbutton" onclick="return false;"  value="#{labels.search}" rendered="#{not empty userBean.name}"/>
-						<a4j:commandLink value="#{userBean.name} #{userBean.lastName}" style="text-decoration: none; color: black;" rendered="#{not empty userBean.name}"/>
-						<a4j:commandLink action="#{userBean.logout}" value="#{labels.exit}" style="text-decoration: none" rendered="#{not empty userBean.name}"/>
+		             	<h:inputText styleClass="barsearch" size="20" rendered="#{not empty userBean.firstName}" />
+                		<h:commandButton styleClass="barsearchbutton" onclick="return false;"  value="#{labels.search}" rendered="#{not empty userBean.firstName}"/>
+						<a4j:commandLink value="#{userBean.completeName}" style="text-decoration: none; color: black;" rendered="#{not empty userBean.firstName}"/>
+						<a4j:commandLink action="#{userBean.logout}" value="#{labels.exit}" style="text-decoration: none" rendered="#{not empty userBean.firstName}"/>
 					</rich:toolBarGroup>
 		    	</rich:toolBar>
 			</a4j:form>

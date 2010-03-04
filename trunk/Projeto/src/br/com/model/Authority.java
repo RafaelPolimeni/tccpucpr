@@ -1,12 +1,25 @@
 package br.com.model;
 
-public class Authority {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="Authority")
+public class Authority {
 	public Authority() {
 		
 	}
-
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="idAuthority")
 	private Integer idAuthority;
+	
+	@Column(name="name")
 	private String name;
 
 	/**

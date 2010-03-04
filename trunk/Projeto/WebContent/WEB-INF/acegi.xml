@@ -64,7 +64,7 @@ http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 		<property name="userDetailsService" ref="userDetailsService" />
 	</bean>
 
-	<bean id="userDetailsService" class="br.com.security.UserDetailsServiceImpl">
+	<bean id="userDetailsService" class="br.com.service.impl.UserDetailsServiceImpl">
 		<constructor-arg ref="userDaoImpl" />
 	</bean>
 
@@ -76,8 +76,7 @@ http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 			<value>
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 				PATTERN_TYPE_APACHE_ANT
-				/login.jsf=IS_AUTHENTICATED_ANONYMOUSLY
-				/**=ROLE_ADMIN,ROLE_USER
+				/**=IS_AUTHENTICATED_ANONYMOUSLY
 				/pages/admin/*=ROLE_ADMIN
 				/pages/*=ROLE_USER, ROLE_ADMIN
 			</value>

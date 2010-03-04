@@ -1,3 +1,3 @@
 <html>
-	<jsp:forward page="/welcome.jsf" />
+	<jsp:forward page="/pages/welcome.jsf" />
 </html>
