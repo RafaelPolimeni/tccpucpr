@@ -3,6 +3,10 @@
 	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
 	
+	<lifecycle>
+		<phase-listener>br.com.login.LoginErrorPhaseListener</phase-listener>
+	</lifecycle>
+		
 	<application>
     	<!-- tell JSF to use Facelets -->
     	<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
@@ -35,9 +39,9 @@
 		<managed-bean-class>br.com.bean.UserBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 		<managed-property>
-			<property-name>authenticationManager</property-name>
-			<property-class>org.acegisecurity.AuthenticationManager</property-class>
-			<value>#{authenticationManager}</value>
+			<property-name>userService</property-name>
+			<property-class>br.com.services.UserService</property-class>
+			<value>#{userService}</value>
 		</managed-property>
 	</managed-bean>
 	
@@ -46,10 +50,12 @@
 		<navigation-case>
 			<from-outcome>successLogin</from-outcome>
 			<to-view-id>/pages/welcome.jsf</to-view-id>
+			<redirect/>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>failureLogin</from-outcome>
 			<to-view-id>/login.jsf</to-view-id>
+			<redirect/>
 		</navigation-case>
 	</navigation-rule>
 	
@@ -57,15 +63,18 @@
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>logout</from-outcome>
-			<to-view-id>/login.jsf</to-view-id>
+			<to-view-id>/logout.jsf</to-view-id>
+			<redirect/>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>gerente</from-outcome>
 			<to-view-id>/pages/admin/gerente.jsf</to-view-id>
+			<redirect/>
 		</navigation-case>
 		<navigation-case>
 			<from-outcome>normal</from-outcome>
-			<to-view-id>/pages/welcome.jsf</to-view-id>
+			<to-view-id>/pages/user/welcome.jsf</to-view-id>
+			<redirect/>
 		</navigation-case>
 	</navigation-rule>
 </faces-config>

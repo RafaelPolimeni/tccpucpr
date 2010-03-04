@@ -3,22 +3,20 @@ package br.com.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
-import org.acegisecurity.Authentication;
-import org.acegisecurity.AuthenticationManager;
-import org.acegisecurity.BadCredentialsException;
 import org.acegisecurity.context.HttpSessionContextIntegrationFilter;
-import org.acegisecurity.context.SecurityContext;
 import org.acegisecurity.context.SecurityContextHolder;
-import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
-import org.acegisecurity.ui.WebAuthenticationDetails;
-import org.acegisecurity.ui.webapp.AuthenticationProcessingFilter;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.security.web.authentication.AbstractProcessingFilter;
 
 import br.com.model.Authority;
+import br.com.services.UserService;
 
 public class UserBean {
 	private Integer idUser;
@@ -29,44 +27,26 @@ public class UserBean {
 	private String password;
 	private boolean enable;
 	private List<Authority> authorities;
+	
+	private UserService userService;
+	
+	public String login() throws Exception {
+		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 
-	// Injected by Spring
-	private AuthenticationManager authenticationManager;
+		RequestDispatcher dispatcher = ((ServletRequest) context.getRequest()).getRequestDispatcher("/j_spring_security_check");
 
-	public String login() {
-		String retorno = "failureLogin";
+		dispatcher.forward((HttpServletRequest) context.getRequest(), (HttpServletResponse) context.getResponse());
+		
+		Exception e = (Exception) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(
+				AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY);
+		
+		if(e == null)
+			BeanUtils.copyProperties(this, userService.find(((HttpServletRequest) context.getRequest()).getParameter("j_username")));
+		
+		FacesContext.getCurrentInstance().responseComplete();
+		// It's OK to return null here because Faces is just going to exit.
 
-		try {
-			final String userName = getUserName();
-			final String password = getPassword();
-			final UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(userName, password);
-
-			final HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-			authReq.setDetails(new WebAuthenticationDetails(request));
-
-			final HttpSession session = request.getSession();
-			session.setAttribute(AuthenticationProcessingFilter.ACEGI_SECURITY_LAST_USERNAME_KEY, userName);
-
-			/*
-			 * perform authentication
-			 */
-			final Authentication authentication = getAuthenticationManager().authenticate(authReq);
-
-			/*
-			 * initialize the security context.
-			 */
-			final SecurityContext secureContext = SecurityContextHolder.getContext();
-			secureContext.setAuthentication(authentication);
-			session.setAttribute(HttpSessionContextIntegrationFilter.ACEGI_SECURITY_CONTEXT_KEY, secureContext);
-
-			retorno = "successLogin";
-		} catch (BadCredentialsException bce) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Usuário ou senha inválidos"));
-		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getCause().toString()));
-		}
-
-		return retorno;
+		return null;
 	}
 
 	public String logout() {
@@ -83,10 +63,10 @@ public class UserBean {
 		setPassword("");
 		setAuthorities(new ArrayList<Authority>());
 		setEnable(false);
-		
+
 		return "logout";
 	}
-
+	
 	/**
 	 * @return the idUser
 	 */
@@ -95,7 +75,8 @@ public class UserBean {
 	}
 
 	/**
-	 * @param idUser the idUser to set
+	 * @param idUser
+	 *            the idUser to set
 	 */
 	public void setIdUser(Integer idUser) {
 		this.idUser = idUser;
@@ -109,7 +90,8 @@ public class UserBean {
 	}
 
 	/**
-	 * @param firstName the firstName to set
+	 * @param firstName
+	 *            the firstName to set
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
@@ -123,7 +105,8 @@ public class UserBean {
 	}
 
 	/**
-	 * @param lastName the lastName to set
+	 * @param lastName
+	 *            the lastName to set
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
@@ -137,7 +120,8 @@ public class UserBean {
 	}
 
 	/**
-	 * @param completeName the completeName to set
+	 * @param completeName
+	 *            the completeName to set
 	 */
 	public void setCompleteName(String completeName) {
 		this.completeName = completeName;
@@ -151,7 +135,8 @@ public class UserBean {
 	}
 
 	/**
-	 * @param userName the userName to set
+	 * @param userName
+	 *            the userName to set
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -165,7 +150,8 @@ public class UserBean {
 	}
 
 	/**
-	 * @param password the password to set
+	 * @param password
+	 *            the password to set
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -179,7 +165,8 @@ public class UserBean {
 	}
 
 	/**
-	 * @param enable the enable to set
+	 * @param enable
+	 *            the enable to set
 	 */
 	public void setEnable(boolean enable) {
 		this.enable = enable;
@@ -193,23 +180,24 @@ public class UserBean {
 	}
 
 	/**
-	 * @param authorities the authorities to set
+	 * @param authorities
+	 *            the authorities to set
 	 */
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
 	}
 
 	/**
-	 * @return the authenticationManager
+	 * @return the userService
 	 */
-	public AuthenticationManager getAuthenticationManager() {
-		return authenticationManager;
+	public UserService getUserService() {
+		return userService;
 	}
 
 	/**
-	 * @param authenticationManager the authenticationManager to set
+	 * @param userService the userService to set
 	 */
-	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
+	public void setUserService(UserService userService) {
+		this.userService = userService;
 	}
 }

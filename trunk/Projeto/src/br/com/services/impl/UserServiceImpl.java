@@ -3,14 +3,14 @@ package br.com.services.impl;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import org.acegisecurity.GrantedAuthority;
-import org.acegisecurity.GrantedAuthorityImpl;
-import org.acegisecurity.userdetails.User;
-import org.acegisecurity.userdetails.UserDetails;
-import org.acegisecurity.userdetails.UserDetailsService;
-import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import br.com.bean.UserBean;
 import br.com.dao.UserDao;
@@ -31,21 +31,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		if (user == null)
 			throw new UsernameNotFoundException("User not found: " + username);
 		else {
-			User acegiUser = makeAcegiUser(user);
-
-			try {
-				UserBean userBean = (UserBean) ((HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true))
-						.getAttribute("userBean");
-				BeanUtils.copyProperties(userBean, user);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			return acegiUser;
+			return makeUser(user);
 		}
 	}
 
-	private User makeAcegiUser(br.com.model.User user) {
+	private User makeUser(br.com.model.User user) {
 		return new User(user.getUserName(), user.getPassword(), true, true, true, true, makeGrantedAuthorities(user));
 	}
 
@@ -56,5 +46,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 			result[i++] = new GrantedAuthorityImpl(authority.getName());
 		}
 		return result;
+	}
+	
+	public br.com.model.User find(String username){
+		br.com.model.User user = userDao.findUser(username);
+		return user;
 	}
 }
