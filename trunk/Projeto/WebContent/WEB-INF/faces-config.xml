@@ -40,7 +40,7 @@
 		<managed-bean-scope>session</managed-bean-scope>
 		<managed-property>
 			<property-name>userService</property-name>
-			<property-class>br.com.services.UserService</property-class>
+			<property-class>br.com.service.UserService</property-class>
 			<value>#{userService}</value>
 		</managed-property>
 	</managed-bean>
