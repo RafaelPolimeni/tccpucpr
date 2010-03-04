@@ -1,13 +1,19 @@
 package br.com.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-
-@Table(name = "User")
 @Entity
+@Table(name = "User")
 public class User {
 
 	public User() {
@@ -15,7 +21,7 @@ public class User {
 	}
 
 	@Id
-	//@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "idUser", nullable = false)
 	private Integer idUser;
 
@@ -36,6 +42,9 @@ public class User {
 
 	@Column(name = "enable", nullable = false)
 	private boolean enable;
+	
+	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private List<Authority> authorities;
 
 	/**
 	 * @return the idUser
@@ -140,5 +149,19 @@ public class User {
 	 */
 	public void setEnable(boolean enable) {
 		this.enable = enable;
+	}
+
+	/**
+	 * @return the authorities
+	 */
+	public List<Authority> getAuthorities() {
+		return authorities;
+	}
+
+	/**
+	 * @param authorities the authorities to set
+	 */
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
 	}
 }

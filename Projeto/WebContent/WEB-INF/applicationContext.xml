@@ -21,8 +21,6 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 			<value>
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 				PATTERN_TYPE_APACHE_ANT
-				/error/*=#NONE#
-				/back*=#NONE#
 				/**=httpSessionContextIntegrationFilter,authenticationProcessingFilter,anonymousProcessingFilter,exceptionTranslationFilter,filterInvocationInterceptor
 		</value>
 		</property>
@@ -40,7 +38,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 			<value>/login.jsf</value>
 		</property>
 		<property name="defaultTargetUrl">
-			<value>/welcome.jsf</value>
+			<value>/pages/welcome.jsf</value>
 		</property>
 		<property name="authenticationManager">
 			<ref bean="authenticationManager" />
@@ -57,10 +55,10 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
 	<bean id="daoAuthenticationProvider"
 		class="org.acegisecurity.providers.dao.DaoAuthenticationProvider">
-		<property name="userDetailsService" ref="userDetailsService" />
+		<property name="userDetailsService" ref="userService" />
 	</bean>
 
-	<bean id="userDetailsService" class="br.com.security.UserDetailsServiceImpl">
+	<bean id="userService" class="br.com.service.impl.UserServiceImpl">
 		<constructor-arg ref="userDaoImpl" />
 	</bean>
 
@@ -73,9 +71,8 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 				PATTERN_TYPE_APACHE_ANT
 				/login.jsf=IS_AUTHENTICATED_ANONYMOUSLY
-				/**=ROLE_ADMIN,ROLE_USER
-				/pages/admin/*=ROLE_ADMIN
-				/pages/*=ROLE_USER, ROLE_ADMIN
+				/pages/admin/**=ROLE_ADMIN
+				/pages/**=ROLE_USER, ROLE_ADMIN
 			</value>
 		</property>
 	</bean>
@@ -123,7 +120,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 			<value>/j_acegi_logout.jsp</value>
 		</property>
 	</bean>
-	 -->
+	-->
 	
 	<bean id="dataSource"
 		  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -154,7 +151,10 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 	<!-- Creates a EntityManagerFactory for use with the Hibernate JPA provider and a simple in-memory data source populated with test data -->
 	<bean id="entityManagerFactory" 
 	      class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	    <property name="persistenceUnitName" value="Projeto" />
+	    <!-- 
 		<property name="dataSource" ref="dataSource" />
+		 -->
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 		</property>
@@ -165,6 +165,12 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
+	<!-- Enables interpretation of the @PersistenceUnit/@PersistenceContext annotations providing convenient
+	access to EntityManagerFactory/EntityManager -->
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor">
+		<property name="defaultPersistenceUnitName" value="Projeto" />
+	</bean>
+
 	<!-- DAOs -->
 	<bean id="userDaoImpl" class="br.com.dao.impl.UserDaoImpl">
 		
