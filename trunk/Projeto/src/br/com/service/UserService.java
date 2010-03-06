@@ -9,5 +9,5 @@ import br.com.model.User;
 public interface UserService {
 	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException;
 	
-	User find(String userName);
+	User findByUsername(String username);
 }

@@ -1,6 +1,5 @@
 package br.com.bean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.ExternalContext;
@@ -9,11 +8,11 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.acegisecurity.context.HttpSessionContextIntegrationFilter;
-import org.acegisecurity.context.SecurityContextHolder;
 import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.security.web.authentication.AbstractProcessingFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import br.com.model.Authority;
 import br.com.service.UserService;
@@ -22,51 +21,49 @@ public class UserBean {
 	private Integer idUser;
 	private String firstName;
 	private String lastName;
-	private String completeName;
 	private String userName;
 	private String password;
 	private boolean enable;
 	private List<Authority> authorities;
-	
-	private UserService userService;
-	
+	private String role;
+
+	@Autowired
+	private UserService userServiceImpl;
+
 	public String login() throws Exception {
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
 
 		RequestDispatcher dispatcher = ((ServletRequest) context.getRequest()).getRequestDispatcher("/j_spring_security_check");
 
 		dispatcher.forward((HttpServletRequest) context.getRequest(), (HttpServletResponse) context.getResponse());
-		
+
 		Exception e = (Exception) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(
-				AbstractProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY);
-		
-		if(e == null)
-			BeanUtils.copyProperties(this, userService.find(((HttpServletRequest) context.getRequest()).getParameter("j_username")));
-		
+				AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY);
+
+		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+
+		if (e == null && session.getAttribute("userNotFound") == null) {
+			BeanUtils.copyProperties(this, userServiceImpl.findByUsername(((HttpServletRequest) context.getRequest()).getParameter("j_username")));
+
+			setRole("user");
+
+			for (Authority authority : authorities) {
+				if (authority.getName().equals("ROLE_ADMIN")) {
+					setRole("admin");
+					break;
+				} else if (authority.getName().equals("ROLE_VIEW")) {
+					setRole("view");
+					break;
+				}
+			}
+
+		} 
 		FacesContext.getCurrentInstance().responseComplete();
 		// It's OK to return null here because Faces is just going to exit.
 
 		return null;
 	}
 
-	public String logout() {
-		final HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		request.getSession(false).removeAttribute(HttpSessionContextIntegrationFilter.ACEGI_SECURITY_CONTEXT_KEY);
-
-		// simulate the SecurityContextLogoutHandler
-		SecurityContextHolder.clearContext();
-
-		request.getSession(false).invalidate();
-		setUserName("");
-		setFirstName("");
-		setLastName("");
-		setPassword("");
-		setAuthorities(new ArrayList<Authority>());
-		setEnable(false);
-
-		return "logout";
-	}
-	
 	/**
 	 * @return the idUser
 	 */
@@ -110,21 +107,6 @@ public class UserBean {
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	/**
-	 * @return the completeName
-	 */
-	public String getCompleteName() {
-		return completeName;
-	}
-
-	/**
-	 * @param completeName
-	 *            the completeName to set
-	 */
-	public void setCompleteName(String completeName) {
-		this.completeName = completeName;
 	}
 
 	/**
@@ -188,16 +170,33 @@ public class UserBean {
 	}
 
 	/**
-	 * @return the userService
+	 * @return the userServiceImpl
 	 */
-	public UserService getUserService() {
-		return userService;
+	public UserService getUserServiceImpl() {
+		return userServiceImpl;
 	}
 
 	/**
-	 * @param userService the userService to set
+	 * @param userServiceImpl
+	 *            the userServiceImpl to set
 	 */
-	public void setUserService(UserService userService) {
-		this.userService = userService;
+	public void setUserServiceImpl(UserService userServiceImpl) {
+		this.userServiceImpl = userServiceImpl;
 	}
+
+	/**
+	 * @return the role
+	 */
+	public String getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role
+	 *            the role to set
+	 */
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 }

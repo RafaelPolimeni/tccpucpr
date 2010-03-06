@@ -1,22 +1,25 @@
 package br.com.dao.impl;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+
+import org.springframework.stereotype.Repository;
 
 import br.com.dao.UserDao;
 import br.com.model.User;
 
-public class UserDaoImpl implements UserDao {
+@Repository
+public class UserDaoImpl extends CrudDAOImpl<User> implements UserDao {
 
 	@PersistenceContext
 	EntityManager entityManager;
 
-	public User findUser(String userName) {
-		Query query = entityManager.createQuery("select user from User user where user.userName = :userName");
-		query.setParameter("userName", userName);
-		User user = (User) query.getSingleResult();
-
-		return user;
+	public User findUserByName(String userName) {
+		try{
+			return (User) entityManager.createNamedQuery("User.findByUsername").setParameter("userName", userName).getSingleResult();
+		}catch (NoResultException nre) {
+			return null;
+		}
 	}
 }

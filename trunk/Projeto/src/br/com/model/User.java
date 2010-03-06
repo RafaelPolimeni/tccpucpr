@@ -1,5 +1,7 @@
 package br.com.model;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,11 +12,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "User")
-public class User {
+@NamedQueries( {
+		@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u order by u.firstName"),
+		@NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.userName = :userName")})
+public class User implements EntityInterface{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6663378091231662507L;
 
 	public User() {
 
@@ -31,9 +45,16 @@ public class User {
 	@Column(name = "lastName", nullable = false)
 	private String lastName;
 
-	@Column(name = "completeName", nullable = false)
-	private String completeName;
-
+	@Column(name = "birthDay", nullable = false)
+	@Temporal(TemporalType.DATE)
+	private Date birthDay;
+	
+	@Column(name="email")
+	private String email;
+	
+	@Column(name="phone")
+	private Integer phone;
+	
 	@Column(name = "userName", nullable = false)
 	private String userName;
 
@@ -45,7 +66,11 @@ public class User {
 	
 	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<Authority> authorities;
-
+	
+	public Serializable getPrimaryKey() {
+		return getIdUser();
+	}
+	
 	/**
 	 * @return the idUser
 	 */
@@ -89,21 +114,6 @@ public class User {
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-
-	/**
-	 * @return the completeName
-	 */
-	public String getCompleteName() {
-		return completeName;
-	}
-
-	/**
-	 * @param completeName
-	 *            the completeName to set
-	 */
-	public void setCompleteName(String completeName) {
-		this.completeName = completeName;
 	}
 
 	/**
@@ -163,5 +173,47 @@ public class User {
 	 */
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
+	}
+
+	/**
+	 * @return the birthDay
+	 */
+	public Date getBirthDay() {
+		return birthDay;
+	}
+
+	/**
+	 * @param birthDay the birthDay to set
+	 */
+	public void setBirthDay(Date birthDay) {
+		this.birthDay = birthDay;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * @return the phone
+	 */
+	public Integer getPhone() {
+		return phone;
+	}
+
+	/**
+	 * @param phone the phone to set
+	 */
+	public void setPhone(Integer phone) {
+		this.phone = phone;
 	}
 }
