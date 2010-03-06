@@ -29,7 +29,6 @@
 	   		</resource-bundle> 
 	   	-->
 	   	<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
-	   	
         <variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
     </application>
 
@@ -39,9 +38,21 @@
 		<managed-bean-class>br.com.bean.UserBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 		<managed-property>
-			<property-name>userService</property-name>
+			<property-name>userServiceImpl</property-name>
 			<property-class>br.com.service.UserService</property-class>
-			<value>#{userService}</value>
+			<value>#{userServiceImpl}</value>
+		</managed-property>
+	</managed-bean>
+	
+	<managed-bean>
+		<description>Users Bean</description>
+		<managed-bean-name>usersBean</managed-bean-name>
+		<managed-bean-class>br.com.bean.UsersBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		<managed-property>
+			<property-name>usersServiceImpl</property-name>
+			<property-class>br.com.service.UsersService</property-class>
+			<value>#{usersServiceImpl}</value>
 		</managed-property>
 	</managed-bean>
 	
@@ -67,14 +78,8 @@
 			<redirect/>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>gerente</from-outcome>
-			<to-view-id>/pages/admin/gerente.jsf</to-view-id>
-			<redirect/>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>normal</from-outcome>
-			<to-view-id>/pages/user/welcome.jsf</to-view-id>
-			<redirect/>
+			<from-outcome>users</from-outcome>
+			<to-view-id>/pages/admin/user/users.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 </faces-config>

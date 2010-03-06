@@ -1,5 +1,7 @@
 package br.com.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,12 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Authority")
-public class Authority {
+public class Authority implements EntityInterface{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4097851825814202918L;
+
 	public Authority() {
 		
 	}
@@ -21,7 +28,11 @@ public class Authority {
 	
 	@Column(name="name")
 	private String name;
-
+	
+	public Serializable getPrimaryKey() {
+		return getIdAuthority();
+	}
+	
 	/**
 	 * @return the idAuthority
 	 */

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<jsp:root version="1.2"
+      xmlns:jsp="http://java.sun.com/JSP/Page"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+	  xmlns:rich="http://richfaces.org/rich"> 
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+	<ui:composition template="/templates/main.xhtml">
+		<ui:define name="body">
+			<rich:dataTable value="#{usersBean.users}" var="user" width="700" align="center" style="white-space: nowrap; overflow: auto;" >
+				<f:facet name="header">
+					<rich:columnGroup>
+					 	<rich:column >
+							<h:outputText value="Nome" />
+						</rich:column>
+						<rich:column >
+							<h:outputText value="Telefone" />
+						</rich:column>
+						<rich:column >
+							<h:outputText value="E-mail" />
+						</rich:column>
+						<rich:column >
+							<h:outputText value="Data Nascimento" />
+						</rich:column>
+						<rich:column >
+							<h:outputText value="Habilitado" />
+						</rich:column>
+					</rich:columnGroup>
+				</f:facet>
+				<rich:column title="nome" >
+					<h:outputText value="#{user.firstName} #{user.lastName}" width="200"/>
+				</rich:column>
+				<rich:column title="phone" width="1">
+					<h:outputText value="#{user.phone}"/>
+				</rich:column>
+				<rich:column title="email" width="1">
+					<h:outputText value="#{user.email}"/>
+				</rich:column>
+				<rich:column title="birthDay" width="1" style="text-align:center;">
+					<h:outputText value="#{user.birthDay}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />  
+					</h:outputText>
+				</rich:column>
+				<rich:column title="enabled" style="text-align:center;" width="10">
+					<h:graphicImage value="/img/enable.png" width="16" height="16" rendered="#{userBean.enable}" />
+					<h:graphicImage value="/img/disabled.png" width="16" height="16" rendered="#{not userBean.enable}"/>
+				</rich:column>
+			</rich:dataTable>
+			
+			<br />
+			<h:commandButton action="creteUser" value="Novo" style="margin-left:55px;"/>
+		</ui:define>
+	</ui:composition>
+</html>
+</jsp:root>

@@ -19,6 +19,9 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 http://www.springframework.org/schema/security
 http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 	
+	<context:annotation-config />
+	<context:component-scan base-package="br" />
+	
 	<security:global-method-security
 		secured-annotations="enabled">
 	</security:global-method-security>
@@ -48,12 +51,8 @@ http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 			
 	</security:http>
 	
- 	<bean id="userService" class="br.com.service.impl.UserServiceImpl">
- 		<constructor-arg ref="userDaoImpl" />
-	</bean>
- 	
  	<bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-		<property name="userDetailsService" ref="userService"/>
+		<property name="userDetailsService" ref="userServiceImpl"/>
 	</bean>
  	
  	<security:authentication-manager>
@@ -106,7 +105,4 @@ http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 	<bean id="userDaoImpl" class="br.com.dao.impl.UserDaoImpl">
 		
 	</bean>
-	
-	<context:annotation-config />
-	<context:component-scan base-package="br" />
 </beans>

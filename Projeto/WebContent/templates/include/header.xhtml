@@ -5,31 +5,45 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:a4j="http://richfaces.org/a4j"
-	  xmlns:rich="http://richfaces.org/rich"> 
-
+	  xmlns:rich="http://richfaces.org/rich">
+  
 	<html xmlns="http://www.w3.org/1999/xhtml" >
 		<head>
 			<meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
 		</head>
+
 		<ui:composition>
 			<a4j:form>
 				<rich:toolBar>
 					<rich:toolBarGroup location="left">
-			        	<rich:dropDownMenu >
-			            	<f:facet name="label"> 
-			                	<h:panelGroup>
-			                    	<h:outputText value="Teste"/>
+						<rich:dropDownMenu rendered="#{userBean.role == 'user' || userBean.role == 'admin'}">
+			                <f:facet name="label"> 
+			                    <h:panelGroup>
+			                        <h:outputText value="Atividades"/>
 			                    </h:panelGroup>
-			           		</f:facet>
-			           		<rich:menuItem submitMode="ajax" value="Gerente" action="gerente"></rich:menuItem>
-			           		<rich:menuItem submitMode="ajax" value="Normal" action="normal"></rich:menuItem>
-			            </rich:dropDownMenu>
+			                </f:facet>
+			           	</rich:dropDownMenu>
+			           	
+						<rich:dropDownMenu rendered="#{userBean.role == 'admin'}">
+			                <f:facet name="label"> 
+			                    <h:panelGroup>
+			                        <h:outputText value="Manutenção"/>
+			                    </h:panelGroup>
+			                </f:facet>
+			                <rich:menuGroup value="Cadastros">
+			                	<rich:menuItem submitMode="server" value="Usuários" 
+			                        action="#{usersBean.findAll}" />
+		                	</rich:menuGroup>
+			           	</rich:dropDownMenu>
+						
+						<h:outputText value="Logue-se" rendered="#{empty userBean.role}"/>			            	
 		            </rich:toolBarGroup>
+							            
 		            <rich:toolBarGroup location="right">
-		             	<h:inputText styleClass="barsearch" size="20" rendered="#{not empty userBean.firstName}" />
-                		<h:commandButton styleClass="barsearchbutton" onclick="return false;"  value="#{labels.search}" rendered="#{not empty userBean.firstName}"/>
-						<a4j:commandLink value="#{userBean.completeName}" style="text-decoration: none; color: black;" rendered="#{not empty userBean.firstName}"/>
-						<a4j:commandLink action="logout" value="#{labels.exit}" style="text-decoration: none" rendered="#{not empty userBean.firstName}"/>
+		             	<h:inputText styleClass="barsearch" size="20" rendered="#{not empty userBean.role}" />
+                		<h:commandButton styleClass="barsearchbutton" onclick="return false;"  value="#{labels.search}" rendered="#{not empty userBean.role}"/>
+						<a4j:commandLink value="#{userBean.firstName} #{userBean.lastName}" style="text-decoration: none; color: black;" rendered="#{not empty userBean.role}"/>
+						<a4j:commandLink action="logout" value="#{labels.exit}" style="text-decoration: none" rendered="#{not empty userBean.role}"/>
 					</rich:toolBarGroup>
 		    	</rich:toolBar>
 			</a4j:form>
