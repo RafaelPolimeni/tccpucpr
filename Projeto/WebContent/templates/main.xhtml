@@ -9,19 +9,46 @@
 
 	<html xmlns="http://www.w3.org/1999/xhtml" >
 		<head>
-			<meta http-equiv="Content-Type" content="text/xhtml; charset=UTF-8"/>
 			<title>
-				Projeto
+				<ui:insert name="title">
+					Projeto
+				</ui:insert>
 			</title>
+			<ui:insert name="head">
+			</ui:insert>
+			<script type="text/javascript">
+				var infoWindowAMShown = false;
+				var infoWindowAMTimer;
+				function showModalInfoWindow()
+				{
+					infoWindowAMTimer = setTimeout("if(!infoWindowAMShown){Richfaces.showModalPanel('ajaxLoadingModalBox');infoWindowAMShown=true;}", 1);
+				}
+				function hideModalInfoWindow()
+				{
+					if (infoWindowAMShown) {
+						Richfaces.hideModalPanel('ajaxLoadingModalBox');
+						infoWindowAMShown=false;
+					} else { 
+						if(infoWindowAMTimer)
+							clearTimeout(infoWindowAMTimer);
+					}
+				}
+			</script>
 		</head>
 		<body>
+			<a4j:status onstart="showModalInfoWindow();" onstop="hideModalInfoWindow()"/>
+	   		<rich:modalPanel id="ajaxLoadingModalBox" autosized="true">
+				<f:facet name="header">
+					<h:outputText value="Request being processed"/>
+				</f:facet>
+				<h:outputText value="Your request is being processed, please wait."/>
+			</rich:modalPanel>
 			<table width="100%">
 				<tr>
 					<td style="width:200px;">&nbsp;</td>
 					<td>
 						<ui:include src="/templates/include/header.xhtml" />
 						<rich:panel style="height:600px;">
-							<h:messages id="mssages"/>
 							<ui:insert name="body"/>
 						</rich:panel>
 						<ui:include src="/templates/include/footer.xhtml" />
