@@ -28,7 +28,7 @@ public class LoginErrorPhaseListener implements PhaseListener {
 		if (e instanceof BadCredentialsException) {
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY,
 					null);
-			FacesContext.getCurrentInstance().addMessage("Erro", new FacesMessage("Bad Credencials"));
+			FacesContext.getCurrentInstance().addMessage("errors", new FacesMessage("Erro", "Bad Credencials"));
 		}
 	}
 

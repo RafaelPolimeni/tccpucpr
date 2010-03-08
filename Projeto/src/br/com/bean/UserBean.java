@@ -32,7 +32,7 @@ public class UserBean {
 
 	public String login() throws Exception {
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-
+ 
 		RequestDispatcher dispatcher = ((ServletRequest) context.getRequest()).getRequestDispatcher("/j_spring_security_check");
 
 		dispatcher.forward((HttpServletRequest) context.getRequest(), (HttpServletResponse) context.getResponse());

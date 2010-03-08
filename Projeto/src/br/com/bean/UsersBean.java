@@ -16,6 +16,11 @@ public class UsersBean {
 		return "users";
 	}
 	
+	public String createUser(){
+		
+		return "createUser";
+	}
+	
 	/**
 	 * @return the usersServiceImpl
 	 */
