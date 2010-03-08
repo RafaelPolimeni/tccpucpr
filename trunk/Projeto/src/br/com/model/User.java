@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -31,7 +32,7 @@ public class User implements EntityInterface{
 	private static final long serialVersionUID = 6663378091231662507L;
 
 	public User() {
-
+		
 	}
 
 	@Id
@@ -66,6 +67,9 @@ public class User implements EntityInterface{
 	
 	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<Authority> authorities;
+	
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private Role mainRole;
 	
 	public Serializable getPrimaryKey() {
 		return getIdUser();
@@ -215,5 +219,19 @@ public class User implements EntityInterface{
 	 */
 	public void setPhone(Integer phone) {
 		this.phone = phone;
+	}
+
+	/**
+	 * @return the mainRole
+	 */
+	public Role getMainRole() {
+		return mainRole;
+	}
+
+	/**
+	 * @param mainRole the mainRole to set
+	 */
+	public void setMainRole(Role mainRole) {
+		this.mainRole = mainRole;
 	}
 }
