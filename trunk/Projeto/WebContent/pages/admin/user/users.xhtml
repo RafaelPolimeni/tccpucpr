@@ -14,19 +14,19 @@
 				<f:facet name="header">
 					<rich:columnGroup>
 					 	<rich:column >
-							<h:outputText value="Nome" />
+							<h:outputText value="#{labels['users.name']}" />
 						</rich:column>
 						<rich:column >
-							<h:outputText value="Telefone" />
+							<h:outputText value="#{labels['users.phone']}" />
 						</rich:column>
 						<rich:column >
-							<h:outputText value="E-mail" />
+							<h:outputText value="#{labels['users.email']}" />
 						</rich:column>
 						<rich:column >
-							<h:outputText value="Data Nascimento" />
+							<h:outputText value="#{labels['users.birthday']}" />
 						</rich:column>
 						<rich:column >
-							<h:outputText value="Habilitado" />
+							<h:outputText value="#{labels['users.enable']}" />
 						</rich:column>
 					</rich:columnGroup>
 				</f:facet>
@@ -51,7 +51,9 @@
 			</rich:dataTable>
 			
 			<br />
-			<h:commandButton action="creteUser" value="Novo" style="margin-left:55px;"/>
+			<!-- 
+			<h:commandButton action="#{usersBean.createUser}" value="#{labels['novo']}" style="margin-left:55px;"/>
+			-->
 		</ui:define>
 	</ui:composition>
 </html>

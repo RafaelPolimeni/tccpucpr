@@ -12,17 +12,20 @@
 			<ui:define name="body">
 				<f:view>
 					<h:form id="loginForm" prependId="false">
+						<rich:messages id="errors" showSummary="true" showDetail="true"/>
 						<h:panelGrid columns="2">
-			            	<h:outputLabel value="User Name" for="j_username" />
-			                <h:inputText id="j_username" size="40" maxlength="80"></h:inputText>
+			            	<h:outputLabel value="#{labels['users.username']}:" for="j_username" />
+			                <h:inputText id="j_username" size="40" maxlength="80" value="victor"></h:inputText>
 			                
-			                <h:outputLabel value="Password" for="j_password" />
-			                <h:inputSecret id="j_password"  size="40" maxlength="80"></h:inputSecret>
+			                <h:outputLabel value="#{labels['users.password']}:" for="j_password" />
+			                <h:inputSecret id="j_password"  size="40" maxlength="80" value="senha" redisplay="true"></h:inputSecret>
 			                
+			                <!-- 
 			                <h:outputText value="Remember me" for="_spring_security_remember_me"/>
 							<h:selectBooleanCheckbox id="_spring_security_remember_me" />
+							 -->
 			            </h:panelGrid>
-			            <h:commandButton action="#{userBean.login}" value="Login" />
+			            <h:commandButton action="#{userBean.login}" value="#{labels['menu.login']}"/>
 		            </h:form>
 	            </f:view>
 			</ui:define>

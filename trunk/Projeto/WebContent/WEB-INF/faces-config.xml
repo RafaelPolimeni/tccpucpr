@@ -56,6 +56,18 @@
 		</managed-property>
 	</managed-bean>
 	
+	<managed-bean>
+		<description>Role Bean</description>
+		<managed-bean-name>roleBean</managed-bean-name>
+		<managed-bean-class>br.com.bean.RoleBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		<managed-property>
+			<property-name>roleServiceImpl</property-name>
+			<property-class>br.com.service.RoleService</property-class>
+			<value>#{roleServiceImpl}</value>
+		</managed-property>
+	</managed-bean>
+	
 	<navigation-rule>
 		<from-view-id>/login.xhtml</from-view-id>
 		<navigation-case>
@@ -77,9 +89,17 @@
 			<to-view-id>/logout.jsf</to-view-id>
 			<redirect/>
 		</navigation-case>
+		
+		<!-- Manage users -->
 		<navigation-case>
 			<from-outcome>users</from-outcome>
 			<to-view-id>/pages/admin/user/users.jsf</to-view-id>
+		</navigation-case>
+		
+		<!-- Manage roles -->
+		<navigation-case>
+			<from-outcome>roles</from-outcome>
+			<to-view-id>/pages/admin/role/role.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 </faces-config>

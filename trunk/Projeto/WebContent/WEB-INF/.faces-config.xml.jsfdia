@@ -18,6 +18,9 @@
    <PROCESS-ITEM-OUTPUT ID="users::#pages#admin#user#users.jsf"
     NAME="output1" PATH="/pages/admin/user/users.jsf"
     TARGET="rules:#pages#admin#user#users.jsf" TITLE="users" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="roles::#pages#admin#role#role.jsf"
+    NAME="output2" PATH="/pages/admin/role/role.jsf"
+    TARGET="rules:#pages#admin#role#role.jsf" TITLE="roles" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#login.jsf" PATH="/login.jsf"
@@ -28,4 +31,6 @@
   SHAPE="272,465,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#pages#admin#user#users.jsf"
   PATH="/pages/admin/user/users.jsf" SHAPE="256,433,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#role#role.jsf"
+  PATH="/pages/admin/role/role.jsf" SHAPE="272,689,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>
