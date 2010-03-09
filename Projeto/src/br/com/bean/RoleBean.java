@@ -2,8 +2,6 @@ package br.com.bean;
 
 import java.util.List;
 
-import org.richfaces.component.UIPanel;
-
 import br.com.model.Role;
 import br.com.service.RoleService;
 
@@ -15,20 +13,21 @@ public class RoleBean {
 	
 	private List<Role> roles;
 	
+	private Role role;
+	
 	// States
-	private boolean listState;
-	private boolean createUpdateState;
+	private boolean createState;
+	private boolean updateState;
+	private boolean detailState;
+	private String titleModal;
 	
 	// Service
 	private RoleService roleServiceImpl;
 	
-	// Panels
-	private UIPanel listBox;
-	private UIPanel createUpdateBox;
-	
 	public RoleBean() {
-		setListState(true);
-		setCreateUpdateState(false);
+		setCreateState(false);
+		setUpdateState(false);
+		setDetailState(false);
 	}
 
 	public String findAll(){
@@ -36,26 +35,13 @@ public class RoleBean {
 		return "roles";
 	}
 	
-	public void back(){
-		System.out.println("VOLTAR");
-		this.setListState(true);
-		this.setCreateUpdateState(false);
-		
-		this.clear();
-		
-		setRoles(roleServiceImpl.findAll());
-	}
-	
 	public void createRole(){
-		setListState(false);
-		setCreateUpdateState(true);
+		clear();
+		setCreateState(true);
+		setTitleModal("Inclusão");
 	}
 	
 	public void confirmCreate(){
-		System.out.println("ENTROU");
-		setListState(true);
-		setCreateUpdateState(false);
-		
 		Role role = new Role();
 		role.setName(name);
 		role.setDescription(description);
@@ -63,14 +49,57 @@ public class RoleBean {
 		roleServiceImpl.add(role);
 		
 		setRoles(roleServiceImpl.findAll());
+		clear();
+		setCreateState(false);	
 	}
 	
+	public void showDetails(){
+		setName(role.getName());
+		setDescription(role.getDescription());
+		setIdRole(role.getIdRole());
+		
+		setDetailState(true);
+		setTitleModal("Detalhe");
+	}
+	
+	public void hideModalPanelForm(){
+		setCreateState(false);
+		setUpdateState(false);
+		setDetailState(false);
+	}
+	
+	public void updateRole(){
+		setCreateState(false);
+		setUpdateState(true);
+		setTitleModal("Atualização");
+	}
+	
+	public void prepareUpdate(){
+		setUpdateState(true);
+		setCreateState(false);
+		setDetailState(false);
+	}
+	
+	public void confirmUpdate(){
+		//update
+		setUpdateState(false);
+		setCreateState(false);
+		setDetailState(false);
+		setRoles(roleServiceImpl.findAll());
+	}
+	
+	public void delete(){
+		//update
+		setUpdateState(false);
+		setCreateState(false);
+		setDetailState(false);
+		setRoles(roleServiceImpl.findAll());
+	} 
+	
 	private void clear(){
-		listBox.getChildren().clear();
-		createUpdateBox.getChildren().clear();
-		this.setName("");
-		this.setDescription("");
-		this.setIdRole(null);
+		setName("");
+		setDescription("");
+		setRole(null);
 	}
 	/**
 	 * @return the roles
@@ -87,20 +116,6 @@ public class RoleBean {
 	}
 
 	/**
-	 * @return the listState
-	 */
-	public boolean isListState() {
-		return listState;
-	}
-
-	/**
-	 * @param listState the listState to set
-	 */
-	public void setListState(boolean listState) {
-		this.listState = listState;
-	}
-
-	/**
 	 * @return the roleServiceImpl
 	 */
 	public RoleService getRoleServiceImpl() {
@@ -112,62 +127,6 @@ public class RoleBean {
 	 */
 	public void setRoleServiceImpl(RoleService roleServiceImpl) {
 		this.roleServiceImpl = roleServiceImpl;
-	}
-
-	/**
-	 * @return the createUpdateState
-	 */
-	public boolean isCreateUpdateState() {
-		return createUpdateState;
-	}
-
-	/**
-	 * @param createUpdateState the createUpdateState to set
-	 */
-	public void setCreateUpdateState(boolean createUpdateState) {
-		this.createUpdateState = createUpdateState;
-	}
-
-	/**
-	 * @return the listBox
-	 */
-	public UIPanel getListBox() {
-		return listBox;
-	}
-
-	/**
-	 * @param listBox the listBox to set
-	 */
-	public void setListBox(UIPanel listBox) {
-		this.listBox = listBox;
-	}
-
-	/**
-	 * @return the createUpdateBox
-	 */
-	public UIPanel getCreateUpdateBox() {
-		return createUpdateBox;
-	}
-
-	/**
-	 * @param createUpdateBox the createUpdateBox to set
-	 */
-	public void setCreateUpdateBox(UIPanel createUpdateBox) {
-		this.createUpdateBox = createUpdateBox;
-	}
-
-	/**
-	 * @return the idRole
-	 */
-	public Integer getIdRole() {
-		return idRole;
-	}
-
-	/**
-	 * @param idRole the idRole to set
-	 */
-	public void setIdRole(Integer idRole) {
-		this.idRole = idRole;
 	}
 
 	/**
@@ -196,5 +155,89 @@ public class RoleBean {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * @return the role
+	 */
+	public Role getRole() {
+		return role;
+	}
+
+	/**
+	 * @param role the role to set
+	 */
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	/**
+	 * @return the createState
+	 */
+	public boolean isCreateState() {
+		return createState;
+	}
+
+	/**
+	 * @param createState the createState to set
+	 */
+	public void setCreateState(boolean createState) {
+		this.createState = createState;
+	}
+
+	/**
+	 * @return the updateState
+	 */
+	public boolean isUpdateState() {
+		return updateState;
+	}
+
+	/**
+	 * @param updateState the updateState to set
+	 */
+	public void setUpdateState(boolean updateState) {
+		this.updateState = updateState;
+	}
+
+	/**
+	 * @return the detailState
+	 */
+	public boolean isDetailState() {
+		return detailState;
+	}
+
+	/**
+	 * @param detailState the detailState to set
+	 */
+	public void setDetailState(boolean detailState) {
+		this.detailState = detailState;
+	}
+
+	/**
+	 * @return the idRole
+	 */
+	public Integer getIdRole() {
+		return idRole;
+	}
+
+	/**
+	 * @param idRole the idRole to set
+	 */
+	public void setIdRole(Integer idRole) {
+		this.idRole = idRole;
+	}
+
+	/**
+	 * @return the titleModal
+	 */
+	public String getTitleModal() {
+		return titleModal;
+	}
+
+	/**
+	 * @param titleModal the titleModal to set
+	 */
+	public void setTitleModal(String titleModal) {
+		this.titleModal = titleModal;
 	}
 }
