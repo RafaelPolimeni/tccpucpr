@@ -22,6 +22,8 @@ http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 	<context:annotation-config />
 	<context:component-scan base-package="br" />
 	
+	<tx:annotation-driven/>
+	
 	<security:global-method-security
 		secured-annotations="enabled">
 	</security:global-method-security>
@@ -59,25 +61,6 @@ http://www.springframework.org/schema/security/spring-security-3.0.xsd">
  		<security:authentication-provider ref="authenticationProvider"/>
 	</security:authentication-manager>
  	
- 	
-	<!-- Data Source. Used in entityManagerFactory 
-	<bean id="dataSource"
-		  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName">
-			<value>com.mysql.jdbc.Driver</value>
-		</property>
-		<property name="url">
-			<value>jdbc:mysql://localhost:3306/projeto</value>
-		</property>
-		<property name="username">
-			<value>userTCC</value>
-		</property>
-		<property name="password">
-			<value>senha123</value>
-		</property>
-	</bean>
-	-->
-	 
 	<!-- Creates a EntityManagerFactory for use with the Hibernate JPA provider and a simple in-memory data source populated with test data -->
 	<bean id="entityManagerFactory" 
 	      class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -93,6 +76,20 @@ http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 	<!-- Drives transactions using local JPA APIs -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	<bean id="defaultDaoTransactionProxy" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean" abstract="true">
+		<property name="transactionManager" ref="transactionManager"/>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="save*">PROPAGATION_REQUIRED</prop>
+				<prop key="create*">PROPAGATION_REQUIRED</prop>				
+				<prop key="update*">PROPAGATION_REQUIRED</prop>
+				<prop key="delete*">PROPAGATION_REQUIRED</prop>
+				<prop key="remove*">PROPAGATION_REQUIRED</prop>				
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>			
+			</props>
+		</property>
 	</bean>
 	
 	<!-- Enables interpretation of the @PersistenceUnit/@PersistenceContext annotations providing convenient
