@@ -54,6 +54,11 @@
 			<property-class>br.com.service.UsersService</property-class>
 			<value>#{usersServiceImpl}</value>
 		</managed-property>
+		<managed-property>
+			<property-name>roleServiceImpl</property-name>
+			<property-class>br.com.service.RoleService</property-class>
+			<value>#{roleServiceImpl}</value>
+		</managed-property>
 	</managed-bean>
 	
 	<managed-bean>
@@ -92,13 +97,13 @@
 		
 		<!-- Manage users -->
 		<navigation-case>
-			<from-outcome>users</from-outcome>
-			<to-view-id>/pages/admin/user/users.jsf</to-view-id>
+			<from-outcome>manageUsers</from-outcome>
+			<to-view-id>/pages/admin/user/user.jsf</to-view-id>
 		</navigation-case>
 		
 		<!-- Manage roles -->
 		<navigation-case>
-			<from-outcome>roles</from-outcome>
+			<from-outcome>manageRoles</from-outcome>
 			<to-view-id>/pages/admin/role/role.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>

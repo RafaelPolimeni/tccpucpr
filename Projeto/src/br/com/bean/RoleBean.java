@@ -32,7 +32,7 @@ public class RoleBean {
 
 	public String findAll(){
 		setRoles(roleServiceImpl.findAll());
-		return "roles";
+		return "manageRoles";
 	}
 	
 	public void createRole(){
@@ -46,7 +46,7 @@ public class RoleBean {
 		role.setName(name);
 		role.setDescription(description);
 		
-		roleServiceImpl.add(role);
+		roleServiceImpl.save(role);
 		
 		setRoles(roleServiceImpl.findAll());
 		clear();
@@ -81,7 +81,11 @@ public class RoleBean {
 	}
 	
 	public void confirmUpdate(){
-		//update
+		role.setName(getName());
+		role.setDescription(getDescription());
+		
+		roleServiceImpl.update(role);
+		
 		setUpdateState(false);
 		setCreateState(false);
 		setDetailState(false);
@@ -89,7 +93,7 @@ public class RoleBean {
 	}
 	
 	public void delete(){
-		//update
+		roleServiceImpl.delete(role);
 		setUpdateState(false);
 		setCreateState(false);
 		setDetailState(false);
