@@ -41,15 +41,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	private User makeUser(br.com.model.User user) {
-		return new User(user.getUserName(), user.getPassword(), true, true, true, true, makeGrantedAuthorities(user));
+ 		return new User(user.getUserName(), user.getPassword(), true, true, true, true, makeGrantedAuthorities(user));
 	}
 
 	private Collection<GrantedAuthority> makeGrantedAuthorities(br.com.model.User user) {
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
-		for (Authority authority : user.getAuthorities()) {
-			authorities.add(new GrantedAuthorityImpl(authority.getName()));
-		}
+		authorities.add(new GrantedAuthorityImpl(user.getAuthority().getName()));
+		
 		return authorities;
 	}
 

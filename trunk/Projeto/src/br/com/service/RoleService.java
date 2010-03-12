@@ -7,5 +7,10 @@ import br.com.model.Role;
 public interface RoleService {
 	List<Role> findAll();
 	
-	void add(Role role);
+	void save(Role role);
+	
+	void update(Role role);
+	
+	void delete(Role role);
 }
+

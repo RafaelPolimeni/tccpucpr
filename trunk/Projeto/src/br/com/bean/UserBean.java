@@ -24,8 +24,7 @@ public class UserBean {
 	private String userName;
 	private String password;
 	private boolean enable;
-	private List<Authority> authorities;
-	private String role;
+	private Authority authority;
 
 	@Autowired
 	private UserService userServiceImpl;
@@ -44,19 +43,6 @@ public class UserBean {
 
 		if (e == null && session.getAttribute("userNotFound") == null) {
 			BeanUtils.copyProperties(this, userServiceImpl.findByUsername(((HttpServletRequest) context.getRequest()).getParameter("j_username")));
-
-			setRole("user");
-
-			for (Authority authority : authorities) {
-				if (authority.getName().equals("ROLE_ADMIN")) {
-					setRole("admin");
-					break;
-				} else if (authority.getName().equals("ROLE_VIEW")) {
-					setRole("view");
-					break;
-				}
-			}
-
 		} 
 		FacesContext.getCurrentInstance().responseComplete();
 		// It's OK to return null here because Faces is just going to exit.
@@ -155,21 +141,6 @@ public class UserBean {
 	}
 
 	/**
-	 * @return the authorities
-	 */
-	public List<Authority> getAuthorities() {
-		return authorities;
-	}
-
-	/**
-	 * @param authorities
-	 *            the authorities to set
-	 */
-	public void setAuthorities(List<Authority> authorities) {
-		this.authorities = authorities;
-	}
-
-	/**
 	 * @return the userServiceImpl
 	 */
 	public UserService getUserServiceImpl() {
@@ -185,18 +156,16 @@ public class UserBean {
 	}
 
 	/**
-	 * @return the role
+	 * @return the authority
 	 */
-	public String getRole() {
-		return role;
+	public Authority getAuthority() {
+		return authority;
 	}
 
 	/**
-	 * @param role
-	 *            the role to set
+	 * @param authority the authority to set
 	 */
-	public void setRole(String role) {
-		this.role = role;
+	public void setAuthority(Authority authority) {
+		this.authority = authority;
 	}
-
 }

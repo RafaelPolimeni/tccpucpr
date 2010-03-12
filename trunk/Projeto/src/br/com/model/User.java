@@ -2,7 +2,6 @@ package br.com.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,7 +10,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -54,7 +52,7 @@ public class User implements EntityInterface{
 	private String email;
 	
 	@Column(name="phone")
-	private Integer phone;
+	private String phone;
 	
 	@Column(name = "userName", nullable = false)
 	private String userName;
@@ -65,8 +63,8 @@ public class User implements EntityInterface{
 	@Column(name = "enable", nullable = false)
 	private boolean enable;
 	
-	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private List<Authority> authorities;
+	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private Authority authority;
 	
 	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Role mainRole;
@@ -166,17 +164,17 @@ public class User implements EntityInterface{
 	}
 
 	/**
-	 * @return the authorities
+	 * @return the authority
 	 */
-	public List<Authority> getAuthorities() {
-		return authorities;
+	public Authority getAuthority() {
+		return authority;
 	}
 
 	/**
-	 * @param authorities the authorities to set
+	 * @param authority the authority to set
 	 */
-	public void setAuthorities(List<Authority> authorities) {
-		this.authorities = authorities;
+	public void setAuthority(Authority authority) {
+		this.authority = authority;
 	}
 
 	/**
@@ -210,14 +208,14 @@ public class User implements EntityInterface{
 	/**
 	 * @return the phone
 	 */
-	public Integer getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
 	/**
 	 * @param phone the phone to set
 	 */
-	public void setPhone(Integer phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 

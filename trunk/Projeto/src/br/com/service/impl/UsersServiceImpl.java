@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.dao.UsersDao;
+import br.com.model.Authority;
 import br.com.model.User;
 import br.com.service.UsersService;
 
@@ -16,8 +17,11 @@ public class UsersServiceImpl implements UsersService{
 	private UsersDao usersDaoImpl;
 	
 	public List<User> findAll(){
-		List<User> users = usersDaoImpl.findAll(User.class);
-		return users;
+		return usersDaoImpl.findAll(User.class);
+	}
+	
+	public List<Authority> findAllAuthorities(){
+		return usersDaoImpl.findAllAuthorities();
 	}
 	/**
 	 * @return the usersDaoImpl

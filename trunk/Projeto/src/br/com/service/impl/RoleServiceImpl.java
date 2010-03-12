@@ -20,8 +20,16 @@ public class RoleServiceImpl implements RoleService {
 		return roles;
 	}
 	
-	public void add(Role role){
+	public void save(Role role){
 		roleDaoImpl.save(role);
+	}
+	
+	public void update(Role role){
+		roleDaoImpl.update(role);
+	}
+	
+	public void delete(Role role){
+		roleDaoImpl.delete(role);
 	}
 
 	/**
