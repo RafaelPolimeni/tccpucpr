@@ -33,6 +33,9 @@ public class Authority implements EntityInterface{
 	@Column(name="name")
 	private String name;
 	
+	@Column(name="displayName")
+	private String displayName;
+	
 	public Serializable getPrimaryKey() {
 		return getIdAuthority();
 	}
@@ -65,5 +68,19 @@ public class Authority implements EntityInterface{
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the displayName
+	 */
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	/**
+	 * @param displayName the displayName to set
+	 */
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 }

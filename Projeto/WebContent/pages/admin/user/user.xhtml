@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<jsp:root version="1.2"
+      xmlns:jsp="http://java.sun.com/JSP/Page"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+	  xmlns:rich="http://richfaces.org/rich"> 
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+	<ui:composition template="/templates/main.xhtml">
+		<ui:define name="body">
+			<a4j:outputPanel ajaxRendered="true" id="mainOutputPanel">
+				<a4j:keepAlive beanName="usersBean" />
+				<a4j:form ajaxSubmit="true" id="listForm">
+				
+					<rich:dataTable value="#{usersBean.users}" var="user" width="700" align="center" 
+						reRender="dataScroller"
+						style="white-space: nowrap; overflow: auto;cursor:pointer;" sortMode="single"
+						onRowMouseOver="this.style.backgroundColor='#BED6F8'"
+	     				onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+	     				
+	     				<a4j:support action="#{usersBean.showDetails}" event="onRowClick">
+	  						<f:setPropertyActionListener value="#{user}" target="#{usersBean.user}" />
+	  					</a4j:support>
+	        					
+	       				<rich:column>
+					 		<f:facet name="header">
+								<h:outputText value="#{labels['users.name']}" />
+							</f:facet>
+							<h:outputText value="#{user.firstName} #{user.lastName}" width="200"/>
+						</rich:column>
+	           			
+	           			<rich:column>
+					 		<f:facet name="header">
+								<h:outputText value="#{labels['users.phone']}" />
+							</f:facet>
+							<h:outputText value="#{user.phone}"/>
+						</rich:column>
+						
+						<rich:column>
+					 		<f:facet name="header">
+								<h:outputText value="#{labels['users.email']}" />
+							</f:facet>
+							<h:outputText value="#{user.email}"/>
+						</rich:column>
+						
+						<rich:column>
+					 		<f:facet name="header">
+								<h:outputText value="#{labels['users.birthday']}" />
+							</f:facet>
+							<h:outputText value="#{user.birthDay}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />  
+							</h:outputText>
+						</rich:column>
+						
+						<rich:column style="text-align:center;">
+					 		<f:facet name="header">
+								<h:outputText value="#{labels['users.enable']}" />
+							</f:facet>
+							<h:graphicImage value="/img/enable.png" width="16" height="16" rendered="#{userBean.enable}" />
+							<h:graphicImage value="/img/disabled.png" width="16" height="16" rendered="#{not userBean.enable}"/>
+						</rich:column>
+						
+						<f:facet name="footer">
+	          				<rich:datascroller id="dataScroller" />
+	      				</f:facet>
+					</rich:dataTable>
+			 
+			 		<br/>
+			 		
+					<a4j:commandButton action="#{usersBean.createUser}" value="#{labels['new']}" style="margin-left:55px;"/>
+				</a4j:form>
+				
+				<rich:modalPanel showWhenRendered="true" rendered="#{usersBean.createState or usersBean.updateState or usersBean.detailState}">
+					<f:facet name="controls">
+			            <h:panelGroup>
+			            	<a4j:form id="closeModalForm" ajaxSubmit="true">
+				                <h:graphicImage value="/img/modalClose.png" id="hideModal" style="cursor:pointer;">
+				                	<a4j:support action="#{usersBean.hideModalPanelForm}" event="onclick"/>
+				                </h:graphicImage>
+			                </a4j:form>
+			            </h:panelGroup>
+					</f:facet>
+					
+					<a4j:form>
+						<h:panelGrid columns="2" width="300px;" >
+							<h:outputLabel value="#{labels['users.firstName']}:" for="firstName"/>
+							<h:inputText id="firstName" value="#{usersBean.firstName}" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:outputText value="#{usersBean.firstName}" rendered="#{usersBean.detailState}"/>
+							
+							<h:outputLabel value="#{labels['users.lastName']}:" for="lastName"/>
+							<h:inputText id="lastName" value="#{usersBean.lastName}" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:outputText value="#{usersBean.lastName}" rendered="#{usersBean.detailState}"/>
+							
+							<h:outputLabel value="#{labels['users.email']}:" for="email"/>
+							<h:inputText id="email" value="#{usersBean.email}" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:outputText value="#{usersBean.email}" rendered="#{usersBean.detailState}"/>
+													
+							<h:outputLabel value="#{labels['users.phone']}:" for="phone"/>
+							<h:inputText id="phone" value="#{usersBean.phone}" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:outputText value="#{usersBean.phone}" rendered="#{usersBean.detailState}"/>
+							
+							<h:outputLabel value="#{labels['users.profile']}:" for="profile"/>
+							<rich:inplaceSelect defaultLabel="#{labels['selectOneItem']}" id="profile">
+								<f:selectItems value="#{usersBean.possibleAuthorities}"/>
+						    </rich:inplaceSelect>
+							<h:outputText value="#{usersBean.profile}" rendered="#{usersBean.detailState}"/>
+							
+							<h:outputLabel value="#{labels['users.mainRole']}:" for="mainRole"/>
+							<rich:inplaceSelect defaultLabel="#{labels['selectOneItem']}" id="mainRole">
+								<f:selectItems value="#{usersBean.possibleRoles}"/>
+						    </rich:inplaceSelect>
+							<h:outputText value="#{usersBean.mainRole}" rendered="#{usersBean.detailState}"/>
+							
+							<h:outputLabel value="#{labels['users.username']}:" for="username"/>
+							<h:inputText id="username" value="#{usersBean.username}" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:outputText value="#{usersBean.username}" rendered="#{usersBean.detailState}"/>
+							
+							<h:outputLabel value="#{labels['users.password']}:" for="password" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:inputText id="password" value="#{usersBean.password}" rendered="#{usersBean.createState or usersBean.updateState}"/>
+						</h:panelGrid>
+						
+						<a4j:commandButton action="#{usersBean.confirmCreate}" value="#{labels['confirm']}" rendered="#{usersBean.createState}"/>
+						<a4j:commandButton action="#{usersBean.prepareUpdate}" value="#{labels['update']}" rendered="#{usersBean.detailState}"/>
+						<rich:spacer width="7" rendered="#{usersBean.detailState}"/>
+						<a4j:commandButton action="#{usersBean.delete}" value="#{labels['delete']}" rendered="#{usersBean.detailState}"/>
+						<a4j:commandButton action="#{usersBean.confirmUpdate}" value="#{labels['confirm']}" rendered="#{usersBean.updateState}"/>
+						<br />
+					</a4j:form>
+				</rich:modalPanel>
+			</a4j:outputPanel>
+		</ui:define>
+	</ui:composition>
+</html>
+</jsp:root>
