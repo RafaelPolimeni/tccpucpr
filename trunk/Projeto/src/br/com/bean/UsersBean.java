@@ -1,7 +1,10 @@
 package br.com.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.faces.model.SelectItem;
 
 import br.com.model.Authority;
 import br.com.model.Role;
@@ -25,6 +28,9 @@ public class UsersBean {
 	private String phone;
 	private String email;
 	private Date birthDay;
+	private String profile;
+	private String mainRole;
+	private boolean enable;
 	private String username;
 	private String password;
 	private List<Authority> authorities;
@@ -47,20 +53,30 @@ public class UsersBean {
 		return "manageUsers";
 	}
 	
-	public String createUser(){
-		setPossibleAuthorities(usersServiceImpl.findAllAuthorities());
-		setPossibleRoles(roleServiceImpl.findAll());
+	public void createUser(){
+		if(possibleAuthorities == null)
+			setPossibleAuthorities(usersServiceImpl.findAllAuthorities());
+		
+		if(possibleRoles == null)
+			setPossibleRoles(roleServiceImpl.findAll());
+		
 		setCreateState(true);
-		return "createUser";
 	}
+	
+	public void confirmCreate(){
+		
+	} 
 	
 	public void showDetails(){
 		setFirstName(user.getFirstName());
 		setLastName(user.getLastName());
 		setEmail(user.getEmail());
 		setPhone(user.getPhone());
+		setProfile(user.getAuthority().getDisplayName());
+		setMainRole(user.getMainRole().getName());
 		setUsername(user.getUserName());
 		setPassword(user.getPassword());
+		setEnable(user.isEnable());
 		setDetailState(true);
 		setTitleModal("Detalhe");
 	}
@@ -281,7 +297,11 @@ public class UsersBean {
 	/**
 	 * @return the possibleAuthorities
 	 */
-	public List<Authority> getPossibleAuthorities() {
+	public List<SelectItem> getPossibleAuthorities() {
+		List<SelectItem> possibleAuthorities = new ArrayList<SelectItem>();
+		for(Authority authority : this.possibleAuthorities){
+			possibleAuthorities.add(new SelectItem(authority.getIdAuthority(), authority.getDisplayName()));
+		}
 		return possibleAuthorities;
 	}
 
@@ -295,7 +315,11 @@ public class UsersBean {
 	/**
 	 * @return the possibleRoles
 	 */
-	public List<Role> getPossibleRoles() {
+	public List<SelectItem> getPossibleRoles() {
+		List<SelectItem> possibleRoles = new ArrayList<SelectItem>();
+		for(Role role : this.possibleRoles){
+			possibleRoles.add(new SelectItem(role.getIdRole(), role.getName()));
+		}
 		return possibleRoles;
 	}
 
@@ -346,5 +370,47 @@ public class UsersBean {
 	 */
 	public void setBirthDay(Date birthDay) {
 		this.birthDay = birthDay;
+	}
+
+	/**
+	 * @return the profile
+	 */
+	public String getProfile() {
+		return profile;
+	}
+
+	/**
+	 * @param profile the profile to set
+	 */
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+
+	/**
+	 * @return the mainRole
+	 */
+	public String getMainRole() {
+		return mainRole;
+	}
+
+	/**
+	 * @param mainRole the mainRole to set
+	 */
+	public void setMainRole(String mainRole) {
+		this.mainRole = mainRole;
+	}
+
+	/**
+	 * @return the enable
+	 */
+	public boolean isEnable() {
+		return enable;
+	}
+
+	/**
+	 * @param enable the enable to set
+	 */
+	public void setEnable(boolean enable) {
+		this.enable = enable;
 	}
 }
