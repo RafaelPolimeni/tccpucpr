@@ -5,7 +5,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:a4j="http://richfaces.org/a4j"
-	  xmlns:rich="http://richfaces.org/rich"> 
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	  xmlns:c="http://java.sun.com/jstl/core"> 
 
 	<html xmlns="http://www.w3.org/1999/xhtml" >
 		<head>
@@ -35,35 +37,46 @@
 				}
 			</script>
 			
-			<style>
-				.rich-inplace-select-font{ 
-					font-size : 10px/*generalSizeFont*/; 
-					font-family : arial/*generalFamilyFont*/; 
-					color : #000000/*generalTextColor*/
-				} 
-			</style>
+			<link id="mainCss" rel="stylesheet" href="css/main.css" type="text/css" >
+			</link>
 		</head>
 		<body>
-			<a4j:status onstart="showModalInfoWindow();" onstop="hideModalInfoWindow()"/>
-	   		<rich:modalPanel id="ajaxLoadingModalBox" autosized="true">
-				<f:facet name="header">
-					<h:outputText value="Request being processed"/>
-				</f:facet>
-				<h:outputText value="Your request is being processed, please wait."/>
-			</rich:modalPanel>
-			<table width="100%">
-				<tr>
-					<td style="width:200px;">&nbsp;</td>
-					<td>
-						<ui:include src="/templates/include/header.xhtml" />
-						<rich:panel style="height:600px;">
-							<ui:insert name="body"/>
-						</rich:panel>
-						<ui:include src="/templates/include/footer.xhtml" />
-					</td>
-					<td style="width:200px;">&nbsp;</td>
-				</tr>
-			</table>
+			<f:view locale="#{userBean.locale}">
+				<rich:messages binding="#{bean.errorMessage}" id="errorMessage" 
+				              showDetail="true" showSummary="true" ajaxRendered="true" rendered="false"/>
+				
+				<a4j:status onstart="showModalInfoWindow();" onstop="hideModalInfoWindow()"/>
+		   		<rich:modalPanel id="ajaxLoadingModalBox" autosized="true">
+					<f:facet name="header">
+						<h:outputText value="Request being processed"/>
+					</f:facet>
+					<h:outputText value="Your request is being processed, please wait."/>
+				</rich:modalPanel>
+				<table width="100%">
+					<tr>
+						<td style="width:200px;">&nbsp;</td>
+						<td>
+							<ui:include src="/templates/include/header.xhtml" />
+							<rich:panel style="height:600px;">
+								<h:form>
+									<a4j:repeat value="#{bean.breadCrumb}" var="item" rowKeyVar="index">
+										<h:panelGroup layout="block" rendered="#{index == (fn:length(bean.breadCrumb) - 1)}">
+											<h:outputText value="#{item.description}" styleClass="breadCrumb"/>	
+										</h:panelGroup>
+										<h:panelGroup layout="block" rendered="#{index != (fn:length(bean.breadCrumb) - 1)}">
+											<h:commandLink action="logout" value="#{item.description}" styleClass="breadCrumbLink"/>
+											<h:outputText value=" - " styleClass="breadCrumb"/>
+										</h:panelGroup>
+									</a4j:repeat>
+								</h:form>
+								<ui:insert name="body"/>
+							</rich:panel>
+							<ui:include src="/templates/include/footer.xhtml" />
+						</td>
+						<td style="width:200px;">&nbsp;</td>
+					</tr>
+				</table>
+			</f:view>
 		</body>
 	</html>
 </jsp:root>

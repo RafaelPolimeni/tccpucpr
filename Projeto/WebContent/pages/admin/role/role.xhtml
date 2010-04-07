@@ -9,6 +9,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
 	<ui:composition template="/templates/main.xhtml">
+		<ui:param name="bean" value="#{roleBean}" />
 		<ui:define name="body">
 			<a4j:outputPanel ajaxRendered="true" id="mainOutputPanel">
 				<a4j:keepAlive beanName="roleBean" />
@@ -39,10 +40,10 @@
 					<a4j:commandButton action="#{roleBean.createRole}" value="#{labels['new']}" style="margin-left:45px;"/>
 				</a4j:form>
 				
-				<rich:modalPanel autosized="true" showWhenRendered="true" keepVisualState="true" 
+				<rich:modalPanel autosized="true" showWhenRendered="true" 
 					rendered="#{roleBean.createState or roleBean.updateState or roleBean.detailState}">
 					<f:facet name="header">
-						<h:outputText value="Teste" />
+						<h:outputText value="#{roleBean.modalPanelTitle}" />
 					</f:facet>
 					
 					<f:facet name="controls">

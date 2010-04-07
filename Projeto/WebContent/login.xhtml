@@ -9,6 +9,7 @@
 
 	<html xmlns="http://www.w3.org/1999/xhtml" >
 		<ui:composition template="/templates/main.xhtml">
+			<ui:param name="bean" value="#{userBean}" />
 			<ui:define name="body">
 				<f:view>
 					<h:form id="loginForm" prependId="false" rendered="#{empty userBean.authority}">

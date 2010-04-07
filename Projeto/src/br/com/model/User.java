@@ -69,6 +69,9 @@ public class User implements EntityInterface{
 	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Role mainRole;
 	
+	@Column
+	private String locale;
+	
 	public Serializable getPrimaryKey() {
 		return getIdUser();
 	}
@@ -231,5 +234,19 @@ public class User implements EntityInterface{
 	 */
 	public void setMainRole(Role mainRole) {
 		this.mainRole = mainRole;
+	}
+
+	/**
+	 * @return the locale
+	 */
+	public String getLocale() {
+		return locale;
+	}
+
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(String locale) {
+		this.locale = locale;
 	}
 }

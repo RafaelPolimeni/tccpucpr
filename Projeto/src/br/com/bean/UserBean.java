@@ -1,7 +1,5 @@
 package br.com.bean;
 
-import java.util.List;
-
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.RequestDispatcher;
@@ -17,7 +15,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import br.com.model.Authority;
 import br.com.service.UserService;
 
-public class UserBean {
+public class UserBean extends AbstractBean{
 	private Integer idUser;
 	private String firstName;
 	private String lastName;
@@ -25,6 +23,7 @@ public class UserBean {
 	private String password;
 	private boolean enable;
 	private Authority authority;
+	private String locale;
 
 	@Autowired
 	private UserService userServiceImpl;
@@ -167,5 +166,19 @@ public class UserBean {
 	 */
 	public void setAuthority(Authority authority) {
 		this.authority = authority;
+	}
+
+	/**
+	 * @return the locale
+	 */
+	public String getLocale() {
+		return locale == null || "".equals(locale) ? "pt_BR" : locale;
+	}
+
+	/**
+	 * @param locale the locale to set
+	 */
+	public void setLocale(String locale) {
+		this.locale = locale;
 	}
 }

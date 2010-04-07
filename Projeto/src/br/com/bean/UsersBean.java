@@ -6,13 +6,18 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import org.hibernate.validator.Length;
+import org.hibernate.validator.NotEmpty;
+import org.hibernate.validator.Pattern;
+import org.richfaces.component.html.HtmlRichMessage;
+
 import br.com.model.Authority;
 import br.com.model.Role;
 import br.com.model.User;
 import br.com.service.RoleService;
 import br.com.service.UsersService;
 
-public class UsersBean {
+public class UsersBean extends AbstractBean{
 	private UsersService usersServiceImpl;
 	private RoleService roleServiceImpl;
 	
@@ -23,6 +28,10 @@ public class UsersBean {
 	
 	//User data
 	private Integer idUser;
+	
+	@NotEmpty(message="Deve ser preenchido")
+	@Pattern(regex=".*[^\\s].*", message="This string contain only spaces")
+	@Length(min=3, max=10, message="Length errado")
 	private String firstName;
 	private String lastName;
 	private String phone;
@@ -36,11 +45,7 @@ public class UsersBean {
 	private List<Authority> authorities;
 	private User user;
 	
-	// States
-	private boolean createState;
-	private boolean updateState;
-	private boolean detailState;
-	private String titleModal;
+	private HtmlRichMessage messageFirstName;
 	
 	public UsersBean() {
 		setCreateState(false);
@@ -61,6 +66,7 @@ public class UsersBean {
 			setPossibleRoles(roleServiceImpl.findAll());
 		
 		setCreateState(true);
+		setModalPanelTitle(getLabels().getString("create"));
 	}
 	
 	public void confirmCreate(){
@@ -78,12 +84,13 @@ public class UsersBean {
 		setPassword(user.getPassword());
 		setEnable(user.isEnable());
 		setDetailState(true);
-		setTitleModal("Detalhe");
+		setModalPanelTitle(getLabels().getString("detail"));
 	}
 	
 	public void prepareUpdate(){
 		setDetailState(false);
 		setUpdateState(true);
+		setModalPanelTitle(getLabels().getString("update"));
 	}
 	
 	public void confirmUpdate(){
@@ -239,62 +246,6 @@ public class UsersBean {
 	}
 
 	/**
-	 * @return the createState
-	 */
-	public boolean isCreateState() {
-		return createState;
-	}
-
-	/**
-	 * @param createState the createState to set
-	 */
-	public void setCreateState(boolean createState) {
-		this.createState = createState;
-	}
-
-	/**
-	 * @return the updateState
-	 */
-	public boolean isUpdateState() {
-		return updateState;
-	}
-
-	/**
-	 * @param updateState the updateState to set
-	 */
-	public void setUpdateState(boolean updateState) {
-		this.updateState = updateState;
-	}
-
-	/**
-	 * @return the detailState
-	 */
-	public boolean isDetailState() {
-		return detailState;
-	}
-
-	/**
-	 * @param detailState the detailState to set
-	 */
-	public void setDetailState(boolean detailState) {
-		this.detailState = detailState;
-	}
-
-	/**
-	 * @return the titleModal
-	 */
-	public String getTitleModal() {
-		return titleModal;
-	}
-
-	/**
-	 * @param titleModal the titleModal to set
-	 */
-	public void setTitleModal(String titleModal) {
-		this.titleModal = titleModal;
-	}
-
-	/**
 	 * @return the possibleAuthorities
 	 */
 	public List<SelectItem> getPossibleAuthorities() {
@@ -412,5 +363,19 @@ public class UsersBean {
 	 */
 	public void setEnable(boolean enable) {
 		this.enable = enable;
+	}
+
+	/**
+	 * @return the messageFirstName
+	 */
+	public HtmlRichMessage getMessageFirstName() {
+		return messageFirstName;
+	}
+
+	/**
+	 * @param messageFirstName the messageFirstName to set
+	 */
+	public void setMessageFirstName(HtmlRichMessage messageFirstName) {
+		this.messageFirstName = messageFirstName;
 	}
 }
