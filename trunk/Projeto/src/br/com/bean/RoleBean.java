@@ -5,7 +5,7 @@ import java.util.List;
 import br.com.model.Role;
 import br.com.service.RoleService;
 
-public class RoleBean {
+public class RoleBean extends AbstractBean{
 	
 	private Integer idRole;
 	private String name;
@@ -14,12 +14,6 @@ public class RoleBean {
 	private List<Role> roles;
 	
 	private Role role;
-	
-	// States
-	private boolean createState;
-	private boolean updateState;
-	private boolean detailState;
-	private String titleModal;
 	
 	// Service
 	private RoleService roleServiceImpl;
@@ -38,7 +32,7 @@ public class RoleBean {
 	public void createRole(){
 		clear();
 		setCreateState(true);
-		setTitleModal("Inclusão");
+		setModalPanelTitle(getLabels().getString("create"));
 	}
 	
 	public void confirmCreate(){
@@ -59,7 +53,7 @@ public class RoleBean {
 		setIdRole(role.getIdRole());
 		
 		setDetailState(true);
-		setTitleModal("Detalhe");
+		setModalPanelTitle(getLabels().getString("detail"));
 	}
 	
 	public void hideModalPanelForm(){
@@ -68,16 +62,11 @@ public class RoleBean {
 		setDetailState(false);
 	}
 	
-	public void updateRole(){
-		setCreateState(false);
-		setUpdateState(true);
-		setTitleModal("Atualização");
-	}
-	
 	public void prepareUpdate(){
 		setUpdateState(true);
 		setCreateState(false);
 		setDetailState(false);
+		setModalPanelTitle(getLabels().getString("update"));
 	}
 	
 	public void confirmUpdate(){
@@ -176,48 +165,6 @@ public class RoleBean {
 	}
 
 	/**
-	 * @return the createState
-	 */
-	public boolean isCreateState() {
-		return createState;
-	}
-
-	/**
-	 * @param createState the createState to set
-	 */
-	public void setCreateState(boolean createState) {
-		this.createState = createState;
-	}
-
-	/**
-	 * @return the updateState
-	 */
-	public boolean isUpdateState() {
-		return updateState;
-	}
-
-	/**
-	 * @param updateState the updateState to set
-	 */
-	public void setUpdateState(boolean updateState) {
-		this.updateState = updateState;
-	}
-
-	/**
-	 * @return the detailState
-	 */
-	public boolean isDetailState() {
-		return detailState;
-	}
-
-	/**
-	 * @param detailState the detailState to set
-	 */
-	public void setDetailState(boolean detailState) {
-		this.detailState = detailState;
-	}
-
-	/**
 	 * @return the idRole
 	 */
 	public Integer getIdRole() {
@@ -229,19 +176,5 @@ public class RoleBean {
 	 */
 	public void setIdRole(Integer idRole) {
 		this.idRole = idRole;
-	}
-
-	/**
-	 * @return the titleModal
-	 */
-	public String getTitleModal() {
-		return titleModal;
-	}
-
-	/**
-	 * @param titleModal the titleModal to set
-	 */
-	public void setTitleModal(String titleModal) {
-		this.titleModal = titleModal;
 	}
 }

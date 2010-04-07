@@ -6,3 +6,18 @@ body{
 	margin-top: 0px;
 	overflow: auto;
 }
+
+.breadCrumbLink{
+	text-decoration: none;
+	font-size: 12pt;
+}
+
+.breadCrumb{
+	font-size: 12pt;
+}
+
+.rich-inplace-select-font{ 
+	font-size : 10px; 
+	font-family : arial; 
+	color : #000000;
+}
