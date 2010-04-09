@@ -2,6 +2,8 @@ package br.com.bean;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import br.com.model.Role;
 import br.com.service.RoleService;
 
@@ -16,23 +18,22 @@ public class RoleBean extends AbstractBean{
 	private Role role;
 	
 	// Service
+	@Autowired
 	private RoleService roleServiceImpl;
 	
 	public RoleBean() {
-		setCreateState(false);
-		setUpdateState(false);
-		setDetailState(false);
+		setListState();
 	}
 
 	public String findAll(){
 		setRoles(roleServiceImpl.findAll());
+		setListState();
 		return "manageRoles";
 	}
 	
 	public void createRole(){
 		clear();
-		setCreateState(true);
-		setModalPanelTitle(getLabels().getString("create"));
+		setCreateState();
 	}
 	
 	public void confirmCreate(){
@@ -44,7 +45,7 @@ public class RoleBean extends AbstractBean{
 		
 		setRoles(roleServiceImpl.findAll());
 		clear();
-		setCreateState(false);	
+		setListState();
 	}
 	
 	public void showDetails(){
@@ -52,21 +53,11 @@ public class RoleBean extends AbstractBean{
 		setDescription(role.getDescription());
 		setIdRole(role.getIdRole());
 		
-		setDetailState(true);
-		setModalPanelTitle(getLabels().getString("detail"));
-	}
-	
-	public void hideModalPanelForm(){
-		setCreateState(false);
-		setUpdateState(false);
-		setDetailState(false);
+		setDetailState();
 	}
 	
 	public void prepareUpdate(){
-		setUpdateState(true);
-		setCreateState(false);
-		setDetailState(false);
-		setModalPanelTitle(getLabels().getString("update"));
+		setUpdateState();
 	}
 	
 	public void confirmUpdate(){
@@ -75,17 +66,13 @@ public class RoleBean extends AbstractBean{
 		
 		roleServiceImpl.update(role);
 		
-		setUpdateState(false);
-		setCreateState(false);
-		setDetailState(false);
+		setListState();
 		setRoles(roleServiceImpl.findAll());
 	}
 	
 	public void delete(){
 		roleServiceImpl.delete(role);
-		setUpdateState(false);
-		setCreateState(false);
-		setDetailState(false);
+		setListState();
 		setRoles(roleServiceImpl.findAll());
 	} 
 	

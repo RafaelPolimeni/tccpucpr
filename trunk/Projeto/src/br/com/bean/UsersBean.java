@@ -10,6 +10,7 @@ import org.hibernate.validator.Length;
 import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.Pattern;
 import org.richfaces.component.html.HtmlRichMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.model.Authority;
 import br.com.model.Role;
@@ -18,7 +19,9 @@ import br.com.service.RoleService;
 import br.com.service.UsersService;
 
 public class UsersBean extends AbstractBean{
+	@Autowired
 	private UsersService usersServiceImpl;
+	@Autowired
 	private RoleService roleServiceImpl;
 	
 	private List<Authority> possibleAuthorities;
@@ -48,13 +51,12 @@ public class UsersBean extends AbstractBean{
 	private HtmlRichMessage messageFirstName;
 	
 	public UsersBean() {
-		setCreateState(false);
-		setUpdateState(false);
-		setDetailState(false);
+		setListState();
 	}
 	
 	public String findAll(){
 		setUsers(usersServiceImpl.findAll());
+		setListState();
 		return "manageUsers";
 	}
 	
@@ -65,12 +67,11 @@ public class UsersBean extends AbstractBean{
 		if(possibleRoles == null)
 			setPossibleRoles(roleServiceImpl.findAll());
 		
-		setCreateState(true);
-		setModalPanelTitle(getLabels().getString("create"));
+		setCreateState();
 	}
 	
 	public void confirmCreate(){
-		
+		setListState();
 	} 
 	
 	public void showDetails(){
@@ -83,26 +84,17 @@ public class UsersBean extends AbstractBean{
 		setUsername(user.getUserName());
 		setPassword(user.getPassword());
 		setEnable(user.isEnable());
-		setDetailState(true);
-		setModalPanelTitle(getLabels().getString("detail"));
+		
+		setDetailState();
 	}
 	
 	public void prepareUpdate(){
-		setDetailState(false);
-		setUpdateState(true);
-		setModalPanelTitle(getLabels().getString("update"));
+		setUpdateState();
 	}
 	
 	public void confirmUpdate(){
-		//update
-		setUpdateState(false);
+		setListState();
 		setUsers(usersServiceImpl.findAll());
-	}
-	
-	public void hideModalPanelForm(){
-		setCreateState(false);
-		setUpdateState(false);
-		setDetailState(false);
 	}
 	
 	/**
