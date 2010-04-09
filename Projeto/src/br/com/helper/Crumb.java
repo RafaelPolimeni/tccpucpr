@@ -1,10 +1,13 @@
 package br.com.helper;
 
-public class BreadCrumb {
+public class Crumb {
 	private String description;
-	private String link;
 	
-	public BreadCrumb() {
+	public Crumb() {
+	}
+	
+	public Crumb(String description){
+		this.description = description;
 	}
 
 	/**
@@ -19,19 +22,5 @@ public class BreadCrumb {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	/**
-	 * @return the link
-	 */
-	public String getLink() {
-		return link;
-	}
-
-	/**
-	 * @param link the link to set
-	 */
-	public void setLink(String link) {
-		this.link = link;
 	}
 }

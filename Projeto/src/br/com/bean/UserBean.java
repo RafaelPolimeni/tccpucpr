@@ -181,4 +181,9 @@ public class UserBean extends AbstractBean{
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
+	
+	public String findAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

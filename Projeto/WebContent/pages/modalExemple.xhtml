@@ -11,37 +11,52 @@
 	<ui:composition template="/templates/main.xhtml">
 		<ui:param name="bean" value="#{roleBean}" />
 		<ui:define name="body">
-			
+			<a4j:outputPanel ajaxRendered="true" id="mainOutputPanel">
 				<a4j:keepAlive beanName="roleBean" />
 				<a4j:form ajaxSubmit="true" id="listForm">
-					<h:panelGroup layout="block" id="listPanel" rendered="#{roleBean.listState}">
-						<rich:dataTable value="#{roleBean.roles}" var="role" 
-								width="700" align="center" rows="10" id="roles" reRender="dataScroller"
-								style="white-space: nowrap; overflow: auto;cursor:pointer;" sortMode="single"
-								onRowMouseOver="this.style.backgroundColor='#BED6F8'"
-	        					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
-	        					
-	       					<a4j:support action="#{roleBean.showDetails}" event="onRowClick">
-	       						<f:setPropertyActionListener value="#{role}" target="#{roleBean.role}" />
-	       					</a4j:support>
-	        
-						 	<rich:column sortBy="#{role.name}" style="text-align:left;" >
-						 		<f:facet name="header">
-									<h:outputText value="#{labels['roles.name']}" />
-								</f:facet>
-								<h:outputText value="#{role.name}" width="200"/>
-							</rich:column>
-							<f:facet name="footer">
-	               				<rich:datascroller id="dataScroller" />
-	           				</f:facet>
-						</rich:dataTable>
-						
-						<br />
+					<rich:dataTable value="#{roleBean.roles}" var="role" 
+							width="700" align="center" rows="10" id="roles" reRender="dataScroller"
+							style="white-space: nowrap; overflow: auto;cursor:pointer;" sortMode="single"
+							onRowMouseOver="this.style.backgroundColor='#BED6F8'"
+        					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+        					
+       					<a4j:support action="#{roleBean.showDetails}" event="onRowClick">
+       						<f:setPropertyActionListener value="#{role}" target="#{roleBean.role}" />
+       					</a4j:support>
+        
+					 	<rich:column sortBy="#{role.name}" style="text-align:left;" >
+					 		<f:facet name="header">
+								<h:outputText value="#{labels['roles.name']}" />
+							</f:facet>
+							<h:outputText value="#{role.name}" width="200"/>
+						</rich:column>
+						<f:facet name="footer">
+               				<rich:datascroller id="dataScroller" />
+           				</f:facet>
+					</rich:dataTable>
 					
-						<a4j:commandButton action="#{roleBean.createRole}" value="#{labels['new']}" style="margin-left:55px;"/>
-					</h:panelGroup>
+					<br />
+				
+					<a4j:commandButton action="#{roleBean.createRole}" value="#{labels['new']}" style="margin-left:45px;"/>
+				</a4j:form>
+				
+				<rich:modalPanel autosized="true" showWhenRendered="true" 
+					rendered="#{roleBean.createState or roleBean.updateState or roleBean.detailState}">
+					<f:facet name="header">
+						<h:outputText value="#{roleBean.modalPanelTitle}" />
+					</f:facet>
 					
-					<h:panelGroup layout="block" id="detailPanel" rendered="#{roleBean.createState or roleBean.updateState or roleBean.detailState}">
+					<f:facet name="controls">
+			            <h:panelGroup>
+			            	<a4j:form id="closeModalForm" ajaxSubmit="true">
+				                <h:graphicImage value="/img/modalClose.png" id="hideModal" style="cursor:pointer;">
+				                	<a4j:support action="#{roleBean.hideModalPanelForm}" event="onclick"/>
+				                </h:graphicImage>
+			                </a4j:form>
+			            </h:panelGroup>
+					</f:facet>
+					
+					<a4j:form id="modalForm" ajaxSubmit="true">			
 						<h:panelGrid columns="2" width="300px;" style="height:100%;">
 							<h:outputLabel value="#{labels['roles.name']}:" for="name"/>
 							<h:inputText id="name" value="#{roleBean.name}" rendered="#{roleBean.createState or roleBean.updateState}"/>
@@ -59,8 +74,9 @@
 						<rich:spacer width="7" rendered="#{roleBean.detailState}"/>
 						<a4j:commandButton action="#{roleBean.delete}" value="#{labels['delete']}" rendered="#{roleBean.detailState}"/>
 						<a4j:commandButton action="#{roleBean.confirmUpdate}" value="#{labels['confirm']}" rendered="#{roleBean.updateState}"/>
-					</h:panelGroup>
-				</a4j:form>
+					</a4j:form>		
+				</rich:modalPanel>
+			</a4j:outputPanel>
 		</ui:define>
 	</ui:composition>
 </html>

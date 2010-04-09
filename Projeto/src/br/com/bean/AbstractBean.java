@@ -1,6 +1,5 @@
 package br.com.bean;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -10,35 +9,37 @@ import javax.servlet.http.HttpSession;
 
 import org.richfaces.component.html.HtmlRichMessages;
 
-import br.com.helper.BreadCrumb;
-
-public class AbstractBean {
+public abstract class AbstractBean {
 	private HtmlRichMessages errorMessage;
 	private HtmlRichMessages infoMessage;
 	private ResourceBundle labels;
 	
 	// States for CRUD
+	private boolean listState;
 	private boolean createState;
 	private boolean updateState;
 	private boolean detailState;
-	private String modalPanelTitle;
+	
+	//
+	private String title;
 	
 	// Bream Crumb
-	private List<BreadCrumb> breadCrumb;
+	private List<String> breadCrumb;
 	
 	public AbstractBean() {
 		UserBean userBean = (UserBean)((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("userBean");
 		setLabels(ResourceBundle.getBundle("br.com.messageresource.Labels", new Locale(userBean == null ? "pt_BR" : userBean.getLocale())));
-		breadCrumb = new ArrayList<BreadCrumb>();
-		BreadCrumb bread1 = new BreadCrumb();
-		bread1.setDescription("bread1");
-		
-		BreadCrumb bread2 = new BreadCrumb();
-		bread2.setDescription("bread2");
-		
-		breadCrumb.add(bread1);
-		breadCrumb.add(bread2);
 	}
+	
+	/**
+	 * Responsible for go back to the list state
+	 */
+	public void backToList(){
+		setListState();
+		this.findAll();
+	}
+	
+	public abstract String findAll();
 	
 	/**
 	 * @return the errorMessage
@@ -78,6 +79,24 @@ public class AbstractBean {
 	}
 
 	/**
+	 * @return the listState
+	 */
+	public boolean isListState() {
+		return listState;
+	}
+
+	/**
+	 * 
+	 */
+	public void setListState() {
+		this.listState = true;
+		this.createState = false;
+		this.updateState = false;
+		this.detailState = false;
+		getLabels().getString("list");
+	}
+
+	/**
 	 * @return the createState
 	 */
 	public boolean isCreateState() {
@@ -85,10 +104,14 @@ public class AbstractBean {
 	}
 
 	/**
-	 * @param createState the createState to set
+	 * 
 	 */
-	public void setCreateState(boolean createState) {
-		this.createState = createState;
+	public void setCreateState() {
+		this.listState = false;
+		this.createState = true;
+		this.updateState = false;
+		this.detailState = false;
+		getLabels().getString("create");
 	}
 
 	/**
@@ -99,10 +122,14 @@ public class AbstractBean {
 	}
 
 	/**
-	 * @param updateState the updateState to set
+	 * 
 	 */
-	public void setUpdateState(boolean updateState) {
-		this.updateState = updateState;
+	public void setUpdateState() {
+		this.listState = false;
+		this.createState = false;
+		this.updateState = true;
+		this.detailState = false;
+		getLabels().getString("update");
 	}
 
 	/**
@@ -113,37 +140,41 @@ public class AbstractBean {
 	}
 
 	/**
-	 * @param detailState the detailState to set
+	 * 
 	 */
-	public void setDetailState(boolean detailState) {
-		this.detailState = detailState;
-	}
-
-	/**
-	 * @return the modalPanelTitle
-	 */
-	public String getModalPanelTitle() {
-		return modalPanelTitle;
-	}
-
-	/**
-	 * @param modalPanelTitle the modalPanelTitle to set
-	 */
-	public void setModalPanelTitle(String modalPanelTitle) {
-		this.modalPanelTitle = modalPanelTitle;
+	public void setDetailState() {
+		this.listState = false;
+		this.createState = false;
+		this.updateState = false;
+		this.detailState = true;
+		getLabels().getString("detail");
 	}
 
 	/**
 	 * @return the breadCrumb
 	 */
-	public List<BreadCrumb> getBreadCrumb() {
+	public List<String> getBreadCrumb() {
 		return breadCrumb;
 	}
 
 	/**
 	 * @param breadCrumb the breadCrumb to set
 	 */
-	public void setBreadCrumb(List<BreadCrumb> breadCrumb) {
+	public void setBreadCrumb(List<String> breadCrumb) {
 		this.breadCrumb = breadCrumb;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public void setTitle(String title) {
+		this.title = title;
 	}
 }

@@ -32,47 +32,6 @@
         <variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
     </application>
 
-	<managed-bean>
-		<description>User Bean</description>
-		<managed-bean-name>userBean</managed-bean-name>
-		<managed-bean-class>br.com.bean.UserBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-		<managed-property>
-			<property-name>userServiceImpl</property-name>
-			<property-class>br.com.service.UserService</property-class>
-			<value>#{userServiceImpl}</value>
-		</managed-property>
-	</managed-bean>
-	
-	<managed-bean>
-		<description>Users Bean</description>
-		<managed-bean-name>usersBean</managed-bean-name>
-		<managed-bean-class>br.com.bean.UsersBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-		<managed-property>
-			<property-name>usersServiceImpl</property-name>
-			<property-class>br.com.service.UsersService</property-class>
-			<value>#{usersServiceImpl}</value>
-		</managed-property>
-		<managed-property>
-			<property-name>roleServiceImpl</property-name>
-			<property-class>br.com.service.RoleService</property-class>
-			<value>#{roleServiceImpl}</value>
-		</managed-property>
-	</managed-bean>
-	
-	<managed-bean>
-		<description>Role Bean</description>
-		<managed-bean-name>roleBean</managed-bean-name>
-		<managed-bean-class>br.com.bean.RoleBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-		<managed-property>
-			<property-name>roleServiceImpl</property-name>
-			<property-class>br.com.service.RoleService</property-class>
-			<value>#{roleServiceImpl}</value>
-		</managed-property>
-	</managed-bean>
-	
 	<navigation-rule>
 		<from-view-id>/login.xhtml</from-view-id>
 		<navigation-case>

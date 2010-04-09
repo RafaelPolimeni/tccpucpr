@@ -37,7 +37,7 @@
 				}
 			</script>
 			
-			<link id="mainCss" rel="stylesheet" href="css/main.css" type="text/css" >
+			<link id="mainCss" rel="stylesheet" href="/Projeto/css/main.css" type="text/css" >
 			</link>
 		</head>
 		<body>
@@ -58,18 +58,25 @@
 						<td>
 							<ui:include src="/templates/include/header.xhtml" />
 							<rich:panel style="height:600px;">
-								<h:form>
-									<a4j:repeat value="#{bean.breadCrumb}" var="item" rowKeyVar="index">
-										<h:panelGroup layout="block" rendered="#{index == (fn:length(bean.breadCrumb) - 1)}">
-											<h:outputText value="#{item.description}" styleClass="breadCrumb"/>	
+								<a4j:outputPanel ajaxRendered="true">
+									<a4j:form>
+										<h:panelGroup layout="block" rendered="#{not empty userBean.authority and not empty bean.breadCrumb}">
+											<a4j:repeat value="#{bean.breadCrumb}" var="item" rowKeyVar="index">
+												<h:panelGroup layout="block" rendered="#{index == (fn:length(bean.breadCrumb) - 1)}">
+													<h:outputText value="#{item}" />
+													<h:outputText value="" />
+												</h:panelGroup>	
+												<h:panelGroup layout="block" rendered="#{index != (fn:length(bean.breadCrumb) - 1)}">
+													<h:outputText value="#{item}" />
+													<h:outputText value="  >  " />
+												</h:panelGroup>
+											</a4j:repeat>
+											<br />
+											<br />
 										</h:panelGroup>
-										<h:panelGroup layout="block" rendered="#{index != (fn:length(bean.breadCrumb) - 1)}">
-											<h:commandLink action="logout" value="#{item.description}" styleClass="breadCrumbLink"/>
-											<h:outputText value=" - " styleClass="breadCrumb"/>
-										</h:panelGroup>
-									</a4j:repeat>
-								</h:form>
-								<ui:insert name="body"/>
+									</a4j:form>
+									<ui:insert name="body"/>
+								</a4j:outputPanel>
 							</rich:panel>
 							<ui:include src="/templates/include/footer.xhtml" />
 						</td>
