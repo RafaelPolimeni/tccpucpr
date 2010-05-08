@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE facelet-taglib PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
+  "https://facelets.dev.java.net/source/browse/*checkout*/facelets/src/etc/facelet-taglib_1_0.dtd">
+<facelet-taglib>
+	<namespace>validators</namespace>
+	<tag>
+		<tag-name>dateValidator</tag-name>
+		<validator>
+			<validator-id>dateValidator</validator-id>
+			<handler-class>br.com.tags.EqualTag</handler-class>
+		</validator>
+	</tag>
+</facelet-taglib>

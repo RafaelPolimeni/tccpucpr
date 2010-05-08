@@ -13,24 +13,25 @@
     	
     	<locale-config>
 			<default-locale>pt_BR</default-locale>
-			<supported-locale>en</supported-locale>
+			<supported-locale>en_US</supported-locale>
 		</locale-config>
 		
 		<resource-bundle>  
        		<base-name>br.com.messageresource.Labels</base-name>  
-       		<!-- Var define nome do mapa de variaveis que contem as mensagens -->  
        		<var>labels</var>  
    		</resource-bundle>
-	   	<!--
-	   		<resource-bundle>  
-	       		<base-name>br.com.messageresource.Messages</base-name>  
-	       		 Var define nome do mapa de variaveis que contem as mensagens  
-	       		<var>messages</var>  
-	   		</resource-bundle> 
-	   	-->
+   		<resource-bundle>  
+       		<base-name>br.com.messageresource.Messages</base-name>    
+       		<var>messages</var>
+   		</resource-bundle> 
 	   	<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
         <variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
     </application>
+
+	<validator>
+		<validator-id>equalValidator</validator-id>
+		<validator-class>br.com.validator.EqualValidator</validator-class>
+	</validator>
 
 	<navigation-rule>
 		<from-view-id>/login.xhtml</from-view-id>
