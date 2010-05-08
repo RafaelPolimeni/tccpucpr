@@ -26,16 +26,7 @@
 	
 	<bean id="userBean" class="br.com.bean.UserBean" scope="session" />
 	
-	<bean id="roleBean" class="br.com.bean.RoleBean" scope="request" >
-		<property name="breadCrumb">
-			<list>
-				<value>Página Inicial</value>
-				<value>Manutenção</value>
-				<value>Papéis</value>
-				<value>Lista</value>
-			</list>				
-		</property>
-	</bean>
+	<bean id="roleBean" class="br.com.bean.RoleBean" scope="request" />
 	
 	<bean id="usersBean" class="br.com.bean.UsersBean" scope="request" />
 </beans>

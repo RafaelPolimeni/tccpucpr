@@ -1,22 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<jsp:root version="1.2"
-      xmlns:jsp="http://java.sun.com/JSP/Page"
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:jsp="http://java.sun.com/JSP/Page"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:a4j="http://richfaces.org/a4j"
-	  xmlns:rich="http://richfaces.org/rich"> 
-
-<html xmlns="http://www.w3.org/1999/xhtml" >
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:validators="validators">
 	<ui:composition template="/templates/main.xhtml">
 		<ui:param name="bean" value="#{roleBean}" />
-		<ui:define name="body">
-			
+		<ui:define name="body">			
 				<a4j:keepAlive beanName="roleBean" />
 				<a4j:form ajaxSubmit="true" id="listForm">
 					<h:panelGroup layout="block" id="listPanel" rendered="#{roleBean.listState}">
 						<rich:dataTable value="#{roleBean.roles}" var="role" 
-								width="700" align="center" rows="10" id="roles" reRender="dataScroller"
+								width="700" align="center" rows="2" id="roles" reRender="dataScroller"
 								style="white-space: nowrap; overflow: auto;cursor:pointer;" sortMode="single"
 								onRowMouseOver="this.style.backgroundColor='#BED6F8'"
 	        					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
@@ -38,17 +37,27 @@
 						
 						<br />
 					
-						<a4j:commandButton action="#{roleBean.createRole}" value="#{labels['new']}" style="margin-left:55px;"/>
+						<a4j:commandButton action="#{roleBean.createRole}" value="#{labels['new']}" style="margin-left:61px;"/>
 					</h:panelGroup>
 					
-					<h:panelGroup layout="block" id="detailPanel" rendered="#{roleBean.createState or roleBean.updateState or roleBean.detailState}">
-						<h:panelGrid columns="2" width="300px;" style="height:100%;">
+					<h:panelGroup layout="block" id="detailPanel" rendered="#{not roleBean.listState}">
+						<h:panelGrid columns="3" >
 							<h:outputLabel value="#{labels['roles.name']}:" for="name"/>
-							<h:inputText id="name" value="#{roleBean.name}" rendered="#{roleBean.createState or roleBean.updateState}"/>
+							<h:inputText id="name" value="#{roleBean.name}" maxlength="100" 
+								rendered="#{roleBean.createState or roleBean.updateState}">
+								<validators:dateValidator attribute="teste"/>
+								<rich:ajaxValidator event="onsubmit" />
+							</h:inputText>
+							<rich:message for="name" style="color:red;"/>
 							<h:outputText value="#{roleBean.name}" rendered="#{roleBean.detailState}"/>
 							
 							<h:outputLabel value="#{labels['roles.description']}:" for="description" />
-							<h:inputTextarea id="description" rows="3" cols="70" value="#{roleBean.description}" rendered="#{roleBean.createState or roleBean.updateState}"/>
+							<h:inputTextarea id="description" rows="3" cols="70" value="#{roleBean.description}"
+								rendered="#{roleBean.createState or roleBean.updateState}"
+								onkeyup="javascript:limitText(this, 600);">
+								<rich:ajaxValidator event="onsubmit"/> 
+							</h:inputTextarea>
+							<rich:message for="description" style="color:red;"/>
 							<h:outputText value="#{roleBean.description}" rendered="#{roleBean.detailState}"/>
 						</h:panelGrid>
 						
@@ -59,9 +68,10 @@
 						<rich:spacer width="7" rendered="#{roleBean.detailState}"/>
 						<a4j:commandButton action="#{roleBean.delete}" value="#{labels['delete']}" rendered="#{roleBean.detailState}"/>
 						<a4j:commandButton action="#{roleBean.confirmUpdate}" value="#{labels['confirm']}" rendered="#{roleBean.updateState}"/>
+						<rich:spacer width="7" rendered="#{not roleBean.listState}"/>
+						<a4j:commandButton action="#{roleBean.backToList}" value="#{labels['cancel']}" rendered="#{not roleBean.listState}" immediate="true"/>
 					</h:panelGroup>
 				</a4j:form>
 		</ui:define>
 	</ui:composition>
 </html>
-</jsp:root>

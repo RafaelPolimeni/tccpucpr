@@ -102,6 +102,36 @@
 							<h:inputText id="lastName" value="#{usersBean.lastName}" rendered="#{usersBean.createState or usersBean.updateState}"/>
 							<h:outputText value="#{usersBean.lastName}" rendered="#{usersBean.detailState}"/>
 							<rich:message for="lastName"/>
+							
+							<h:outputLabel value="Nascimento" for="userBirthday" />
+							<rich:calendar id="userBirthday" datePattern="dd/MM/yyyy HH:mm" value="#{usersBean.birthDay}" />
+							
+							<h:outputLabel value="#{labels['users.email']}:" for="email"/>
+							<h:inputText id="email" value="#{usersBean.email}" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:outputText value="#{usersBean.email}" rendered="#{usersBean.detailState}"/>
+													
+							<h:outputLabel value="#{labels['users.phone']}:" for="phone"/>
+							<h:inputText id="phone" value="#{usersBean.phone}" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:outputText value="#{usersBean.phone}" rendered="#{usersBean.detailState}"/>
+							
+							<h:outputLabel value="#{labels['users.profile']}:" for="profile"/>
+							<rich:inplaceSelect defaultLabel="#{labels['selectOneItem']}" id="profile">
+								<f:selectItems value="#{usersBean.possibleAuthorities}"/>
+						    </rich:inplaceSelect>
+							<h:outputText value="#{usersBean.profile}" rendered="#{usersBean.detailState}"/>
+							
+							<h:outputLabel value="#{labels['users.mainRole']}:" for="mainRole"/>
+							<rich:inplaceSelect defaultLabel="#{labels['selectOneItem']}" id="mainRole">
+								<f:selectItems value="#{usersBean.possibleRoles}"/>
+						    </rich:inplaceSelect>
+							<h:outputText value="#{usersBean.mainRole}" rendered="#{usersBean.detailState}"/>
+							
+							<h:outputLabel value="#{labels['users.username']}:" for="username"/>
+							<h:inputText id="username" value="#{usersBean.username}" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:outputText value="#{usersBean.username}" rendered="#{usersBean.detailState}"/>
+							
+							<h:outputLabel value="#{labels['users.password']}:" for="password" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:inputText id="password" value="#{usersBean.password}" rendered="#{usersBean.createState or usersBean.updateState}"/>
 						</h:panelGrid>
 						
 						<br />

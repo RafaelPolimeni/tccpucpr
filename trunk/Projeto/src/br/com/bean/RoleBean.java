@@ -1,6 +1,8 @@
 package br.com.bean;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,23 +19,35 @@ public class RoleBean extends AbstractBean{
 	
 	private Role role;
 	
-	// Service
 	@Autowired
 	private RoleService roleServiceImpl;
 	
 	public RoleBean() {
 		setListState();
+		ResourceBundle labels = getLabels();
+		List<String> breadCrumb = new ArrayList<String>();
+		breadCrumb.add(labels.getString("breadCrumb.homePage"));
+		breadCrumb.add(labels.getString("breadCrumb.maintenance"));
+		breadCrumb.add(labels.getString("breadCrumb.roles.list"));
+		
+		this.setBreadCrumb(breadCrumb);
 	}
 
 	public String findAll(){
 		setRoles(roleServiceImpl.findAll());
 		setListState();
+		setPageMessage(getLabels().getString("listPage"));
+		
 		return "manageRoles";
 	}
 	
 	public void createRole(){
 		clear();
 		setCreateState();
+		getBreadCrumb().remove(getBreadCrumb().size() - 1);
+		getBreadCrumb().add(getLabels().getString("breadCrumb.roles.create"));
+		
+		setPageMessage(getLabels().getString("createPage"));
 	}
 	
 	public void confirmCreate(){
@@ -41,11 +55,15 @@ public class RoleBean extends AbstractBean{
 		role.setName(name);
 		role.setDescription(description);
 		
-		roleServiceImpl.save(role);
+//		roleServiceImpl.save(role);
 		
 		setRoles(roleServiceImpl.findAll());
 		clear();
 		setListState();
+		getBreadCrumb().remove(getBreadCrumb().size() - 1);
+		getBreadCrumb().add(getLabels().getString("breadCrumb.roles.list"));
+		
+		setPageMessage(getLabels().getString("listPage"));
 	}
 	
 	public void showDetails(){
@@ -54,10 +72,20 @@ public class RoleBean extends AbstractBean{
 		setIdRole(role.getIdRole());
 		
 		setDetailState();
+		
+		getBreadCrumb().remove(getBreadCrumb().size() - 1);
+		getBreadCrumb().add(getLabels().getString("breadCrumb.roles.detail"));
+		
+		setPageMessage(getLabels().getString("detailPage"));
 	}
 	
 	public void prepareUpdate(){
 		setUpdateState();
+		
+		getBreadCrumb().remove(getBreadCrumb().size() - 1);
+		getBreadCrumb().add(getLabels().getString("breadCrumb.roles.update"));
+		
+		setPageMessage(getLabels().getString("updatePage"));
 	}
 	
 	public void confirmUpdate(){
@@ -68,17 +96,28 @@ public class RoleBean extends AbstractBean{
 		
 		setListState();
 		setRoles(roleServiceImpl.findAll());
+		
+		getBreadCrumb().remove(getBreadCrumb().size() - 1);
+		getBreadCrumb().add(getLabels().getString("breadCrumb.roles.list"));
+		
+		setPageMessage(getLabels().getString("listPage"));
 	}
 	
 	public void delete(){
 		roleServiceImpl.delete(role);
 		setListState();
 		setRoles(roleServiceImpl.findAll());
+		
+		getBreadCrumb().remove(getBreadCrumb().size() - 1);
+		getBreadCrumb().add(getLabels().getString("breadCrumb.roles.list"));
+		
+		setPageMessage(getLabels().getString("listPage"));
 	} 
 	
 	private void clear(){
-		setName("");
-		setDescription("");
+		setIdRole(null);
+		setName(null);
+		setDescription(null);
 		setRole(null);
 	}
 	/**

@@ -21,27 +21,29 @@
 			<script type="text/javascript">
 				var infoWindowAMShown = false;
 				var infoWindowAMTimer;
-				function showModalInfoWindow()
-				{
+				
+				function showModalInfoWindow(){
 					infoWindowAMTimer = setTimeout("if(!infoWindowAMShown){Richfaces.showModalPanel('ajaxLoadingModalBox');infoWindowAMShown=true;}", 1);
 				}
-				function hideModalInfoWindow()
-				{
-					if (infoWindowAMShown) {
+				function hideModalInfoWindow(){
+					if (infoWindowAMShown){
 						Richfaces.hideModalPanel('ajaxLoadingModalBox');
 						infoWindowAMShown=false;
-					} else { 
+					}else{
 						if(infoWindowAMTimer)
 							clearTimeout(infoWindowAMTimer);
 					}
 				}
 			</script>
 			
-			<link id="mainCss" rel="stylesheet" href="/Projeto/css/main.css" type="text/css" >
-			</link>
+			<link id="mainCss" rel="stylesheet" href="/Projeto/css/main.css" type="text/css" />
+			<script type="text/javascript" src="/Projeto/js/main.js"></script>
+			<noscript>
+				Yout browser does not suppor javascript!
+			</noscript>
 		</head>
 		<body>
-			<f:view locale="#{userBean.locale}">
+			<f:view>
 				<rich:messages binding="#{bean.errorMessage}" id="errorMessage" 
 				              showDetail="true" showSummary="true" ajaxRendered="true" rendered="false"/>
 				
@@ -63,8 +65,7 @@
 										<h:panelGroup layout="block" rendered="#{not empty userBean.authority and not empty bean.breadCrumb}">
 											<a4j:repeat value="#{bean.breadCrumb}" var="item" rowKeyVar="index">
 												<h:panelGroup layout="block" rendered="#{index == (fn:length(bean.breadCrumb) - 1)}">
-													<h:outputText value="#{item}" />
-													<h:outputText value="" />
+													<h:outputText value="#{item}" styleClass="lastBreadCrumb" />
 												</h:panelGroup>	
 												<h:panelGroup layout="block" rendered="#{index != (fn:length(bean.breadCrumb) - 1)}">
 													<h:outputText value="#{item}" />
@@ -75,6 +76,13 @@
 											<br />
 										</h:panelGroup>
 									</a4j:form>
+									<h:panelGroup layout="block" rendered="#{not empty userBean.authority}">
+										<br />
+										<h:outputText value="#{bean.pageMessage}" styleClass="pageMessage"/>
+										<br />
+										<br />
+										<br />
+									</h:panelGroup>
 									<ui:insert name="body"/>
 								</a4j:outputPanel>
 							</rich:panel>

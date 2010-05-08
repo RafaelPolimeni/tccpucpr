@@ -7,13 +7,25 @@ body{
 	overflow: auto;
 }
 
-.breadCrumbLink{
-	text-decoration: none;
-	font-size: 12pt;
+.pageMessage{
+	
+	color: #696969;
+	font: normal Arial;
+	font-size: 11px;
+	
+}
+
+.lastBreadCrumb{
+	font-weight: bolder;
+	font-size: 9pt;
 }
 
 .rich-inplace-select-font{ 
 	font-size : 10px; 
 	font-family : arial; 
 	color : #000000;
+}
+
+.rich-table-footer {
+	background-color: white;
 }

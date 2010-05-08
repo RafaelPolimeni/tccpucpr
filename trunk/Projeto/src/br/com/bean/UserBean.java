@@ -23,7 +23,6 @@ public class UserBean extends AbstractBean{
 	private String password;
 	private boolean enable;
 	private Authority authority;
-	private String locale;
 
 	@Autowired
 	private UserService userServiceImpl;
@@ -168,20 +167,6 @@ public class UserBean extends AbstractBean{
 		this.authority = authority;
 	}
 
-	/**
-	 * @return the locale
-	 */
-	public String getLocale() {
-		return locale == null || "".equals(locale) ? "pt_BR" : locale;
-	}
-
-	/**
-	 * @param locale the locale to set
-	 */
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
-	
 	public String findAll() {
 		// TODO Auto-generated method stub
 		return null;

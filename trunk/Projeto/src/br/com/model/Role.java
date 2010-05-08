@@ -30,10 +30,10 @@ public class Role implements EntityInterface{
 	@Column(name = "idRole", nullable = false)
 	private Integer idRole;
 	
-	@Column(name="name")
+	@Column(name="name", length=100, nullable=false)
 	private String name;
 	
-	@Column(name="description")
+	@Column(name="description", length=600, nullable=false)
 	private String description;
 	
 	public Serializable getPrimaryKey() {

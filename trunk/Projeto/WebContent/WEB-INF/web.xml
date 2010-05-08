@@ -4,6 +4,15 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>Projeto</display-name>
 	
+	<!-- Facelets -->
+	<context-param>
+		<param-name>facelets.LIBRARIES</param-name>
+		<param-value>/WEB-INF/tags/validators.taglib.xml</param-value>
+		<!--
+		<param-value>/WEB-INF/tags/validators.taglib.xml; /WEB-INF/taglib/functions.taglib.xml</param-value> 
+		 -->
+	</context-param>
+	
 	<!-- JSF -->
 	<listener>
 		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>

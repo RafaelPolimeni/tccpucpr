@@ -1,11 +1,9 @@
 package br.com.bean;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 import org.richfaces.component.html.HtmlRichMessages;
 
@@ -20,15 +18,14 @@ public abstract class AbstractBean {
 	private boolean updateState;
 	private boolean detailState;
 	
-	//
-	private String title;
 	
-	// Bream Crumb
+	private String pageMessage;
+	
+	// Bread Crumb
 	private List<String> breadCrumb;
 	
 	public AbstractBean() {
-		UserBean userBean = (UserBean)((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).getAttribute("userBean");
-		setLabels(ResourceBundle.getBundle("br.com.messageresource.Labels", new Locale(userBean == null ? "pt_BR" : userBean.getLocale())));
+		
 	}
 	
 	/**
@@ -65,18 +62,6 @@ public abstract class AbstractBean {
 	public void setInfoMessage(HtmlRichMessages infoMessage) {
 		this.infoMessage = infoMessage;
 	}
-	/**
-	 * @return the labels
-	 */
-	public ResourceBundle getLabels() {
-		return labels;
-	}
-	/**
-	 * @param labels the labels to set
-	 */
-	public void setLabels(ResourceBundle labels) {
-		this.labels = labels;
-	}
 
 	/**
 	 * @return the listState
@@ -93,7 +78,6 @@ public abstract class AbstractBean {
 		this.createState = false;
 		this.updateState = false;
 		this.detailState = false;
-		getLabels().getString("list");
 	}
 
 	/**
@@ -111,7 +95,6 @@ public abstract class AbstractBean {
 		this.createState = true;
 		this.updateState = false;
 		this.detailState = false;
-		getLabels().getString("create");
 	}
 
 	/**
@@ -129,7 +112,6 @@ public abstract class AbstractBean {
 		this.createState = false;
 		this.updateState = true;
 		this.detailState = false;
-		getLabels().getString("update");
 	}
 
 	/**
@@ -147,7 +129,6 @@ public abstract class AbstractBean {
 		this.createState = false;
 		this.updateState = false;
 		this.detailState = true;
-		getLabels().getString("detail");
 	}
 
 	/**
@@ -165,16 +146,38 @@ public abstract class AbstractBean {
 	}
 
 	/**
-	 * @return the title
+	 * @return the messages
 	 */
-	public String getTitle() {
-		return title;
+	public ResourceBundle getLabels() {
+		setLabels(FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels"));
+		return labels;
 	}
 
 	/**
-	 * @param title the title to set
+	 * @param messages the messages to set
 	 */
-	public void setTitle(String title) {
-		this.title = title;
+	public void setLabels(ResourceBundle labels) {
+		this.labels = labels;
+	}
+
+	/**
+	 * @return the locale
+	 */
+	public String getLocale() {
+		return FacesContext.getCurrentInstance().getViewRoot().getLocale().toString();
+	}
+
+	/**
+	 * @return the pageMessage
+	 */
+	public String getPageMessage() {
+		return pageMessage;
+	}
+
+	/**
+	 * @param pageMessage the pageMessage to set
+	 */
+	public void setPageMessage(String pageMessage) {
+		this.pageMessage = pageMessage;
 	}
 }
