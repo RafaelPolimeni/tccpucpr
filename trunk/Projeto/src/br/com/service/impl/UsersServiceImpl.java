@@ -3,14 +3,14 @@ package br.com.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import br.com.dao.UsersDao;
 import br.com.model.Authority;
 import br.com.model.User;
 import br.com.service.UsersService;
 
-@Component
+@Service
 public class UsersServiceImpl implements UsersService{
 	
 	@Autowired

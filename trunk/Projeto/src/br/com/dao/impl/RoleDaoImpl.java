@@ -9,7 +9,7 @@ import br.com.dao.RoleDao;
 import br.com.model.Role;
 
 @Repository
-public class RoleDaoImpl extends CrudDAOImpl<Role> implements RoleDao {
+public class RoleDaoImpl extends CrudDaoImpl<Role> implements RoleDao {
 
 	@PersistenceContext
 	EntityManager entityManager;

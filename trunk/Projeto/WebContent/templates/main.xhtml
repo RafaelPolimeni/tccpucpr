@@ -46,13 +46,12 @@
 			<f:view>
 				<rich:messages binding="#{bean.errorMessage}" id="errorMessage" 
 				              showDetail="true" showSummary="true" ajaxRendered="true" rendered="false"/>
-				
+				<rich:messages binding="#{bean.infoMessage}" id="infoMessage" 
+				              showDetail="true" showSummary="true" ajaxRendered="true" rendered="false"/>
+				              
 				<a4j:status onstart="showModalInfoWindow();" onstop="hideModalInfoWindow()"/>
-		   		<rich:modalPanel id="ajaxLoadingModalBox" autosized="true">
-					<f:facet name="header">
-						<h:outputText value="Request being processed"/>
-					</f:facet>
-					<h:outputText value="Your request is being processed, please wait."/>
+		   		<rich:modalPanel id="ajaxLoadingModalBox" height="50" width="200" style="text-align:center;">
+					<h:outputText value="#{labels['requestBeingProcessedWait']}"/>
 				</rich:modalPanel>
 				<table width="100%">
 					<tr>

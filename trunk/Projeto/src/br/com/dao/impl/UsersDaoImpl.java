@@ -12,7 +12,7 @@ import br.com.model.Authority;
 import br.com.model.User;
 
 @Repository
-public class UsersDaoImpl extends CrudDAOImpl<User> implements UsersDao {
+public class UsersDaoImpl extends CrudDaoImpl<User> implements UsersDao {
 
 	@PersistenceContext
 	EntityManager entityManager;

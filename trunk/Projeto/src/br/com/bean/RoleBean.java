@@ -41,7 +41,7 @@ public class RoleBean extends AbstractBean{
 		return "manageRoles";
 	}
 	
-	public void createRole(){
+	public void prepareCreate(){
 		clear();
 		setCreateState();
 		getBreadCrumb().remove(getBreadCrumb().size() - 1);
@@ -55,7 +55,7 @@ public class RoleBean extends AbstractBean{
 		role.setName(name);
 		role.setDescription(description);
 		
-//		roleServiceImpl.save(role);
+		roleServiceImpl.save(role);
 		
 		setRoles(roleServiceImpl.findAll());
 		clear();
