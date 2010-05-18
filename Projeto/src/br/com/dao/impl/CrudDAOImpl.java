@@ -9,16 +9,16 @@ import javax.persistence.Query;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.dao.CrudDAO;
+import br.com.dao.CrudDao;
 import br.com.dao.helper.Parameter;
 import br.com.model.EntityInterface;
 
-public class CrudDAOImpl<T extends EntityInterface> implements CrudDAO<T> {
+public class CrudDaoImpl<T extends EntityInterface> implements CrudDao<T> {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
 
-	public CrudDAOImpl() {
+	public CrudDaoImpl() {
 	}
 
 	@Transactional

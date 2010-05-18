@@ -28,10 +28,12 @@
         <variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
     </application>
 
+	<!-- validators -->
 	<validator>
 		<validator-id>equalValidator</validator-id>
 		<validator-class>br.com.validator.EqualValidator</validator-class>
 	</validator>
+	<!-- validators -->
 
 	<navigation-rule>
 		<from-view-id>/login.xhtml</from-view-id>

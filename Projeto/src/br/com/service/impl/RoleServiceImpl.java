@@ -3,13 +3,13 @@ package br.com.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import br.com.dao.RoleDao;
 import br.com.model.Role;
 import br.com.service.RoleService;
 
-@Component
+@Service
 public class RoleServiceImpl implements RoleService {
 
 	@Autowired

@@ -37,15 +37,16 @@
 						
 						<br />
 					
-						<a4j:commandButton action="#{roleBean.createRole}" value="#{labels['new']}" style="margin-left:61px;"/>
+						<a4j:commandButton action="#{roleBean.prepareCreate}" value="#{labels['new']}" style="margin-left:61px;"/>
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" id="detailPanel" rendered="#{not roleBean.listState}">
 						<h:panelGrid columns="3" >
 							<h:outputLabel value="#{labels['roles.name']}:" for="name"/>
 							<h:inputText id="name" value="#{roleBean.name}" maxlength="100" 
-								rendered="#{roleBean.createState or roleBean.updateState}">
-								<validators:dateValidator attribute="teste"/>
+								rendered="#{roleBean.createState or roleBean.updateState}"
+								required="true" requiredMessage="#{messages['validation.empty']}">
+								
 								<rich:ajaxValidator event="onsubmit" />
 							</h:inputText>
 							<rich:message for="name" style="color:red;"/>
@@ -54,7 +55,9 @@
 							<h:outputLabel value="#{labels['roles.description']}:" for="description" />
 							<h:inputTextarea id="description" rows="3" cols="70" value="#{roleBean.description}"
 								rendered="#{roleBean.createState or roleBean.updateState}"
-								onkeyup="javascript:limitText(this, 600);">
+								onkeyup="javascript:limitText(this, 600);"
+								required="true" requiredMessage="#{messages['validation.empty']}">
+								
 								<rich:ajaxValidator event="onsubmit"/> 
 							</h:inputTextarea>
 							<rich:message for="description" style="color:red;"/>
