@@ -6,7 +6,9 @@ import java.util.ResourceBundle;
 import javax.faces.context.FacesContext;
 
 import org.richfaces.component.html.HtmlRichMessages;
+import org.springframework.stereotype.Service;
 
+@Service
 public abstract class AbstractBean {
 	private HtmlRichMessages errorMessage;
 	private HtmlRichMessages infoMessage;
@@ -27,16 +29,6 @@ public abstract class AbstractBean {
 	public AbstractBean() {
 		
 	}
-	
-	/**
-	 * Responsible for go back to the list state
-	 */
-	public void backToList(){
-		setListState();
-		this.findAll();
-	}
-	
-	public abstract String findAll();
 	
 	/**
 	 * @return the errorMessage

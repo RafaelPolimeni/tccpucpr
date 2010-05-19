@@ -13,15 +13,15 @@
 		<ui:define name="body">			
 				<a4j:keepAlive beanName="roleBean" />
 				<a4j:form ajaxSubmit="true" id="listForm">
-					<h:panelGroup layout="block" id="listPanel" rendered="#{roleBean.listState}">
+					<h:panelGroup layout="block" id="listPanel" rendered="#{roleServiceImpl.roleBean.listState}">
 						<rich:dataTable value="#{roleBean.roles}" var="role" 
-								width="700" align="center" rows="2" id="roles" reRender="dataScroller"
+								width="700" align="center" rows="10" id="roles" reRender="dataScroller"
 								style="white-space: nowrap; overflow: auto;cursor:pointer;" sortMode="single"
 								onRowMouseOver="this.style.backgroundColor='#BED6F8'"
 	        					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
 	        					
-	       					<a4j:support action="#{roleBean.showDetails}" event="onRowClick">
-	       						<f:setPropertyActionListener value="#{role}" target="#{roleBean.role}" />
+	       					<a4j:support action="#{roleServiceImpl.showDetails}" event="onRowClick">
+	       						<f:setPropertyActionListener value="#{role}" target="#{roleServiceImpl.roleBean.role}" />
 	       					</a4j:support>
 	        
 						 	<rich:column sortBy="#{role.name}" style="text-align:left;" >
@@ -37,42 +37,47 @@
 						
 						<br />
 					
-						<a4j:commandButton action="#{roleBean.prepareCreate}" value="#{labels['new']}" style="margin-left:61px;"/>
+						<a4j:commandButton action="#{roleServiceImpl.prepareCreate}" value="#{labels['new']}" style="margin-left:61px;"/>
 					</h:panelGroup>
 					
-					<h:panelGroup layout="block" id="detailPanel" rendered="#{not roleBean.listState}">
-						<h:panelGrid columns="3" >
-							<h:outputLabel value="#{labels['roles.name']}:" for="name"/>
-							<h:inputText id="name" value="#{roleBean.name}" maxlength="100" 
-								rendered="#{roleBean.createState or roleBean.updateState}"
-								required="true" requiredMessage="#{messages['validation.empty']}">
+					<h:panelGroup layout="block" id="detailPanel" rendered="#{not roleServiceImpl.roleBean.listState}">
+						<fieldset>
+							<legend>Dados do papel</legend>
+							<h:panelGrid columns="3" >
+								<h:outputLabel value="#{labels['roles.name']}:" for="name"/>
+								<h:inputText id="name" value="#{roleServiceImpl.roleBean.name}" maxlength="100" 
+									rendered="#{roleServiceImpl.roleBean.createState or roleServiceImpl.roleBean.updateState}"
+									required="true" requiredMessage="#{messages['validation.empty']}">
+									<f:validator validatorId="validaObrigatorio"/>
+									<rich:ajaxValidator event="onsubmit" />
+								</h:inputText>
+								<rich:message for="name" style="color:red;"/>
+								<h:outputText value="#{roleServiceImpl.roleBean.name}" rendered="#{roleServiceImpl.roleBean.detailState}"/>
 								
-								<rich:ajaxValidator event="onsubmit" />
-							</h:inputText>
-							<rich:message for="name" style="color:red;"/>
-							<h:outputText value="#{roleBean.name}" rendered="#{roleBean.detailState}"/>
+								<h:outputLabel value="#{labels['roles.description']}:" for="description" />
+								<h:inputTextarea id="description" rows="3" cols="70" value="#{roleServiceImpl.roleBean.description}"
+									rendered="#{roleServiceImpl.roleBean.createState or roleServiceImpl.roleBean.updateState}"
+									onkeyup="javascript:limitText(this, 600);"
+									required="true" requiredMessage="#{messages['validation.empty']}">
+									<f:validator validatorId="validaObrigatorio"/>
+									<rich:ajaxValidator event="onsubmit"/> 
+								</h:inputTextarea>
+								<rich:message for="description" style="color:red;"/>
+								<h:outputText value="#{roleServiceImpl.roleBean.description}" rendered="#{roleServiceImpl.roleBean.detailState}" escape="false">
+									<f:converter converterId="textAreaConverter"/>
+								</h:outputText>
+							</h:panelGrid>
 							
-							<h:outputLabel value="#{labels['roles.description']}:" for="description" />
-							<h:inputTextarea id="description" rows="3" cols="70" value="#{roleBean.description}"
-								rendered="#{roleBean.createState or roleBean.updateState}"
-								onkeyup="javascript:limitText(this, 600);"
-								required="true" requiredMessage="#{messages['validation.empty']}">
-								
-								<rich:ajaxValidator event="onsubmit"/> 
-							</h:inputTextarea>
-							<rich:message for="description" style="color:red;"/>
-							<h:outputText value="#{roleBean.description}" rendered="#{roleBean.detailState}"/>
-						</h:panelGrid>
-						
-						<br />
-											
-						<a4j:commandButton action="#{roleBean.confirmCreate}" value="#{labels['confirm']}" rendered="#{roleBean.createState}"/>
-						<a4j:commandButton action="#{roleBean.prepareUpdate}" value="#{labels['update']}" rendered="#{roleBean.detailState}"/>
-						<rich:spacer width="7" rendered="#{roleBean.detailState}"/>
-						<a4j:commandButton action="#{roleBean.delete}" value="#{labels['delete']}" rendered="#{roleBean.detailState}"/>
-						<a4j:commandButton action="#{roleBean.confirmUpdate}" value="#{labels['confirm']}" rendered="#{roleBean.updateState}"/>
-						<rich:spacer width="7" rendered="#{not roleBean.listState}"/>
-						<a4j:commandButton action="#{roleBean.backToList}" value="#{labels['cancel']}" rendered="#{not roleBean.listState}" immediate="true"/>
+							<br />
+												
+							<a4j:commandButton action="#{roleServiceImpl.confirmCreate}" value="#{labels['confirm']}" rendered="#{roleServiceImpl.roleBean.createState}"/>
+							<a4j:commandButton action="#{roleServiceImpl.prepareUpdate}" value="#{labels['update']}" rendered="#{roleServiceImpl.roleBean.detailState}"/>
+							<rich:spacer width="7" rendered="#{roleServiceImpl.roleBean.detailState}"/>
+							<a4j:commandButton action="#{roleServiceImpl.delete}" value="#{labels['delete']}" rendered="#{roleServiceImpl.roleBean.detailState}"/>
+							<a4j:commandButton action="#{roleServiceImpl.confirmUpdate}" value="#{labels['confirm']}" rendered="#{roleServiceImpl.roleBean.updateState}"/>
+							<rich:spacer width="7" rendered="#{not roleServiceImpl.roleBean.listState}"/>
+							<a4j:commandButton action="#{roleServiceImpl.backToList}" value="#{labels['cancel']}" rendered="#{not roleServiceImpl.roleBean.listState}" immediate="true"/>
+						</fieldset>
 					</h:panelGroup>
 				</a4j:form>
 		</ui:define>

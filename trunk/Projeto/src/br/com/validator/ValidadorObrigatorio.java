@@ -8,14 +8,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-public class EmptyValidator implements Validator {
+public class ValidadorObrigatorio implements Validator {
 	
 	@Override
 	public void validate(FacesContext facesContext, UIComponent component, Object fieldValue) throws ValidatorException {
-		ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-		
 		String value = (String) fieldValue;
 		if(value == null || value.trim().equals("")){
+			ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 			throw new ValidatorException(new FacesMessage(messages.getString("validation.empty")));
 		}	
 	}
