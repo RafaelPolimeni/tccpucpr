@@ -61,11 +61,11 @@ public class UsersBean extends AbstractBean{
 	}
 	
 	public void createUser(){
-		if(possibleAuthorities == null)
-			setPossibleAuthorities(usersServiceImpl.findAllAuthorities());
-		
-		if(possibleRoles == null)
-			setPossibleRoles(roleServiceImpl.findAll());
+//		if(possibleAuthorities == null)
+//			setPossibleAuthorities(usersServiceImpl.findAllAuthorities());
+//		
+//		if(possibleRoles == null)
+//			setPossibleRoles(roleServiceImpl.findAll());
 		
 		setCreateState();
 	}

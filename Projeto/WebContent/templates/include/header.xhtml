@@ -34,7 +34,7 @@
 			                	<rich:menuItem submitMode="server" value="#{labels['menu.users']}" 
 			                        action="#{usersBean.findAll}" />
 			                	<rich:menuItem submitMode="server" value="#{labels['menu.roles']}" 
-			                        action="#{roleBean.findAll}" />
+			                        action="#{roleServiceImpl.findAll}" />
 		                	</rich:menuGroup>
 			           	</rich:dropDownMenu>
 						

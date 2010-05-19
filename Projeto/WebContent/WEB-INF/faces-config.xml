@@ -30,11 +30,17 @@
 
 	<!-- validators -->
 	<validator>
-		<validator-id>equalValidator</validator-id>
-		<validator-class>br.com.validator.EqualValidator</validator-class>
+		<validator-id>validaObrigatorio</validator-id>
+		<validator-class>br.com.validator.ValidadorObrigatorio</validator-class>
 	</validator>
 	<!-- validators -->
-
+	
+	<!-- converters -->
+	<converter>
+		<converter-id>textAreaConverter</converter-id>
+		<converter-class>br.com.converter.TextAreaConverter</converter-class>
+	</converter>
+	
 	<navigation-rule>
 		<from-view-id>/login.xhtml</from-view-id>
 		<navigation-case>
