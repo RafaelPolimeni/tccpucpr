@@ -6,21 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.dao.UsersDao;
-import br.com.model.Authority;
-import br.com.model.User;
-import br.com.service.UsersService;
+import br.com.model.Autoridade;
+import br.com.model.Recurso;
+import br.com.service.RecursoService;
 
 @Service
-public class UsersServiceImpl implements UsersService{
+public class RecursoServiceImpl implements RecursoService{
 	
 	@Autowired
 	private UsersDao usersDaoImpl;
 	
-	public List<User> findAll(){
-		return usersDaoImpl.findAll(User.class);
+	public List<Recurso> findAll(){
+		return usersDaoImpl.findAll(Recurso.class);
 	}
 	
-	public List<Authority> findAllAuthorities(){
+	public List<Autoridade> findAllAuthorities(){
 		return usersDaoImpl.findAllAuthorities();
 	}
 	/**

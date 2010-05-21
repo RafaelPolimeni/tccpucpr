@@ -5,11 +5,6 @@
 	<persistence-unit name="Projeto" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		
-		<!--
-			Mapeias as classes se preciso
-			<class>entity.Person</class> 
-		-->
-		
 		<properties>
 			<!-- Setting data source -->
 			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />

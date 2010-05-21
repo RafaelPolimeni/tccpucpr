@@ -16,7 +16,7 @@
 			<a4j:form>
 				<rich:toolBar id="toolBar">
 					<rich:toolBarGroup location="left">
-						<rich:dropDownMenu rendered="#{(not empty userBean.authority) and (userBean.authority.name == 'ROLE_USER' or userBean.authority.name == 'ROLE_ADMIN')}">
+						<rich:dropDownMenu rendered="#{(not empty userBean.autoridade) and (userBean.autoridade.nome == 'ROLE_USER' or userBean.autoridade.nome == 'ROLE_ADMIN')}">
 			                <f:facet name="label"> 
 			                    <h:panelGroup>
 			                        <h:outputText value="Atividades"/>
@@ -24,28 +24,28 @@
 			                </f:facet>
 			           	</rich:dropDownMenu>
 			           	
-						<rich:dropDownMenu rendered="#{(not empty userBean.authority) and userBean.authority.name == 'ROLE_ADMIN'}">
-			                <f:facet name="label"> 
+						<rich:dropDownMenu rendered="#{(not empty userBean.autoridade) and userBean.autoridade.nome == 'ROLE_ADMIN'}">
+			                <f:facet name="label">
 			                    <h:panelGroup>
-			                        <h:outputText value="#{labels['menu.maintenance']}"/>
+			                        <h:outputText value="#{labels['menu.manutencao']}"/>
 			                    </h:panelGroup>
 			                </f:facet>
 			                <rich:menuGroup value="Cadastros">
-			                	<rich:menuItem submitMode="server" value="#{labels['menu.users']}" 
+			                	<rich:menuItem submitMode="server" value="#{labels['menu.recursos']}" 
 			                        action="#{usersBean.findAll}" />
-			                	<rich:menuItem submitMode="server" value="#{labels['menu.roles']}" 
-			                        action="#{roleServiceImpl.findAll}" />
+			                	<rich:menuItem submitMode="server" value="#{labels['menu.papeis']}"
+			                        action="#{papelServiceImpl.findAll}" />
 		                	</rich:menuGroup>
 			           	</rich:dropDownMenu>
 						
-						<h:outputText value="#{labels['menu.login']}" rendered="#{empty userBean.authority}"/>			            	
+						<h:outputText value="#{labels['menu.login']}" rendered="#{empty userBean.autoridade}"/>			            	
 		            </rich:toolBarGroup>
 							            
 		            <rich:toolBarGroup location="right">
-		             	<h:inputText styleClass="barsearch" size="20" rendered="#{not empty userBean.authority}" />
-                		<h:commandButton styleClass="barsearchbutton" onclick="return false;"  value="#{labels['menu.search']}" rendered="#{not empty userBean.authority}"/>
-						<a4j:commandLink value="#{userBean.firstName} #{userBean.lastName}" style="text-decoration: none; color: black;" rendered="#{not empty userBean.authority}"/>
-						<a4j:commandLink action="logout" value="#{labels['menu.exit']}" style="text-decoration: none" rendered="#{not empty userBean.authority}"/>
+		             	<h:inputText styleClass="barsearch" size="20" rendered="#{not empty userBean.autoridade}" />
+                		<h:commandButton styleClass="barsearchbutton" onclick="return false;"  value="#{labels['menu.pesquisar']}" rendered="#{not empty userBean.autoridade}"/>
+						<a4j:commandLink value="#{userBean.nome} #{userBean.sobrenome}" style="text-decoration: none; color: black;" rendered="#{not empty userBean.autoridade}"/>
+						<a4j:commandLink action="logout" value="#{labels['menu.sair']}" style="text-decoration: none" rendered="#{not empty userBean.autoridade}"/>
 					</rich:toolBarGroup>
 		    	</rich:toolBar>
 			</a4j:form>

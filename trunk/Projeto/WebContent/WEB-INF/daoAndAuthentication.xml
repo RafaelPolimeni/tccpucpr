@@ -43,7 +43,7 @@
  		<security:intercept-url
 			pattern="/pages/admin/**"
 			access="ROLE_ADMIN" />
-			
+		
 		<security:form-login
 			login-processing-url="/j_spring_security_check"
 			login-page="/login.jsf"

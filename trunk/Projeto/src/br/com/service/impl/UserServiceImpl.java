@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.faces.context.FacesContext;
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.dao.UserDao;
+import br.com.model.Recurso;
 import br.com.service.UserService;
 
 @Service
@@ -28,31 +30,33 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException, DataAccessException {
-		br.com.model.User user = userDaoImpl.findUserByName(userName);
-
-		if (user == null){
+		Recurso recurso = null;
+		
+		try{
+			recurso = userDaoImpl.findUserByName(userName);
+		}catch (NoResultException e) {
 			HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 			session.setAttribute("userNotFound", "userNotFound");
 			return null;
-		}else {
-			return makeUser(user);
 		}
+
+		return makeUser(recurso);
 	}
 
-	private User makeUser(br.com.model.User user) {
- 		return new User(user.getUserName(), user.getPassword(), true, true, true, true, makeGrantedAuthorities(user));
+	private User makeUser(Recurso recurso) {
+ 		return new User(recurso.getUsuario(), recurso.getSenha(), true, true, true, true, makeGrantedAuthorities(recurso));
 	}
 
-	private Collection<GrantedAuthority> makeGrantedAuthorities(br.com.model.User user) {
-		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+	private Collection<GrantedAuthority> makeGrantedAuthorities(Recurso recurso) {
+		Collection<GrantedAuthority> autoridades = new ArrayList<GrantedAuthority>();
 
-		authorities.add(new GrantedAuthorityImpl(user.getAuthority().getName()));
+		autoridades.add(new GrantedAuthorityImpl(recurso.getAutoridade().getNome()));
 		
-		return authorities;
+		return autoridades;
 	}
 
-	public br.com.model.User findByUsername(String userName) {
-		br.com.model.User user = userDaoImpl.findUserByName(userName);
+	public br.com.model.Recurso findByUsername(String userName) {
+		br.com.model.Recurso user = userDaoImpl.findUserByName(userName);
 		return user;
 	}
 }

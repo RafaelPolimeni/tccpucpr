@@ -4,10 +4,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import br.com.model.User;
+import br.com.model.Recurso;
 
 public interface UserService {
 	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException;
 	
-	User findByUsername(String username);
+	Recurso findByUsername(String username);
 }

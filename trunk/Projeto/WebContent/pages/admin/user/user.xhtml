@@ -69,7 +69,7 @@
 			 
 			 		<br/>
 			 		
-					<a4j:commandButton action="#{usersBean.createUser}" value="#{labels['new']}" style="margin-left:55px;"/>
+					<a4j:commandButton action="#{usersBean.createUser}" value="#{labels['novo']}" style="margin-left:55px;"/>
 				</a4j:form>
 				
 				<rich:modalPanel showWhenRendered="true" autosized="true" width="400"
@@ -115,13 +115,13 @@
 							<h:outputText value="#{usersBean.phone}" rendered="#{usersBean.detailState}"/>
 							
 							<h:outputLabel value="#{labels['users.profile']}:" for="profile"/>
-							<rich:inplaceSelect defaultLabel="#{labels['selectOneItem']}" id="profile">
+							<rich:inplaceSelect defaultLabel="#{labels['selecioneUmItem']}" id="profile">
 								<f:selectItems value="#{usersBean.possibleAuthorities}"/>
 						    </rich:inplaceSelect>
 							<h:outputText value="#{usersBean.profile}" rendered="#{usersBean.detailState}"/>
 							
 							<h:outputLabel value="#{labels['users.mainRole']}:" for="mainRole"/>
-							<rich:inplaceSelect defaultLabel="#{labels['selectOneItem']}" id="mainRole">
+							<rich:inplaceSelect defaultLabel="#{labels['selecioneUmItem']}" id="mainRole">
 								<f:selectItems value="#{usersBean.possibleRoles}"/>
 						    </rich:inplaceSelect>
 							<h:outputText value="#{usersBean.mainRole}" rendered="#{usersBean.detailState}"/>
@@ -136,11 +136,11 @@
 						
 						<br />
 												
-						<a4j:commandButton action="#{usersBean.confirmCreate}" value="#{labels['confirm']}" rendered="#{usersBean.createState}"/>
-						<a4j:commandButton action="#{usersBean.prepareUpdate}" value="#{labels['update']}" rendered="#{usersBean.detailState}"/>
+						<a4j:commandButton action="#{usersBean.confirmCreate}" value="#{labels['confirmar']}" rendered="#{usersBean.createState}"/>
+						<a4j:commandButton action="#{usersBean.prepareUpdate}" value="#{labels['alterar']}" rendered="#{usersBean.detailState}"/>
 						<rich:spacer width="7" rendered="#{usersBean.detailState}"/>
-						<a4j:commandButton action="#{usersBean.delete}" value="#{labels['delete']}" rendered="#{usersBean.detailState}"/>
-						<a4j:commandButton action="#{usersBean.confirmUpdate}" value="#{labels['confirm']}" rendered="#{usersBean.updateState}"/>
+						<a4j:commandButton action="#{usersBean.delete}" value="#{labels['excluir']}" rendered="#{usersBean.detailState}"/>
+						<a4j:commandButton action="#{usersBean.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{usersBean.updateState}"/>
 						
 						<br />
 					</a4j:form>

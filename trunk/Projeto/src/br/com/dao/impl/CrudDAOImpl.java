@@ -21,7 +21,6 @@ public class CrudDaoImpl<T extends EntityInterface> implements CrudDao<T> {
 	public CrudDaoImpl() {
 	}
 
-	@Transactional
 	public void delete(T objeto) {
 		entityManager.remove(entityManager.find(objeto.getClass(), objeto.getPrimaryKey()));
 	}
