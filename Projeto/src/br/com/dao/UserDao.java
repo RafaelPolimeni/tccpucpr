@@ -1,7 +1,7 @@
 package br.com.dao;
 
-import br.com.model.User;
+import br.com.model.Recurso;
 
-public interface UserDao extends CrudDao<User>{
-	User findUserByName(String userName);
+public interface UserDao extends CrudDao<Recurso>{
+	Recurso findUserByName(String userName);
 }

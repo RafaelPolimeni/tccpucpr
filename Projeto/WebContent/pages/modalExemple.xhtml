@@ -26,7 +26,7 @@
         
 					 	<rich:column sortBy="#{role.name}" style="text-align:left;" >
 					 		<f:facet name="header">
-								<h:outputText value="#{labels['roles.name']}" />
+								<h:outputText value="#{labels['papel.nome']}" />
 							</f:facet>
 							<h:outputText value="#{role.name}" width="200"/>
 						</rich:column>
@@ -37,7 +37,7 @@
 					
 					<br />
 				
-					<a4j:commandButton action="#{roleBean.createRole}" value="#{labels['new']}" style="margin-left:45px;"/>
+					<a4j:commandButton action="#{roleBean.createRole}" value="#{labels['novo']}" style="margin-left:45px;"/>
 				</a4j:form>
 				
 				<rich:modalPanel autosized="true" showWhenRendered="true" 
@@ -58,22 +58,22 @@
 					
 					<a4j:form id="modalForm" ajaxSubmit="true">			
 						<h:panelGrid columns="2" width="300px;" style="height:100%;">
-							<h:outputLabel value="#{labels['roles.name']}:" for="name"/>
+							<h:outputLabel value="#{labels['papel.nome']}:" for="name"/>
 							<h:inputText id="name" value="#{roleBean.name}" rendered="#{roleBean.createState or roleBean.updateState}"/>
 							<h:outputText value="#{roleBean.name}" rendered="#{roleBean.detailState}"/>
 							
-							<h:outputLabel value="#{labels['roles.description']}:" for="description" />
+							<h:outputLabel value="#{labels['papel.descricao']}:" for="description" />
 							<h:inputTextarea id="description" rows="3" cols="70" value="#{roleBean.description}" rendered="#{roleBean.createState or roleBean.updateState}"/>
 							<h:outputText value="#{roleBean.description}" rendered="#{roleBean.detailState}"/>
 						</h:panelGrid>
 						
 						<br />
 											
-						<a4j:commandButton action="#{roleBean.confirmCreate}" value="#{labels['confirm']}" rendered="#{roleBean.createState}"/>
-						<a4j:commandButton action="#{roleBean.prepareUpdate}" value="#{labels['update']}" rendered="#{roleBean.detailState}"/>
+						<a4j:commandButton action="#{roleBean.confirmCreate}" value="#{labels['confirmar']}" rendered="#{roleBean.createState}"/>
+						<a4j:commandButton action="#{roleBean.prepareUpdate}" value="#{labels['alterar']}" rendered="#{roleBean.detailState}"/>
 						<rich:spacer width="7" rendered="#{roleBean.detailState}"/>
-						<a4j:commandButton action="#{roleBean.delete}" value="#{labels['delete']}" rendered="#{roleBean.detailState}"/>
-						<a4j:commandButton action="#{roleBean.confirmUpdate}" value="#{labels['confirm']}" rendered="#{roleBean.updateState}"/>
+						<a4j:commandButton action="#{roleBean.delete}" value="#{labels['excluir']}" rendered="#{roleBean.detailState}"/>
+						<a4j:commandButton action="#{roleBean.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{roleBean.updateState}"/>
 					</a4j:form>		
 				</rich:modalPanel>
 			</a4j:outputPanel>

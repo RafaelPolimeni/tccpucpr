@@ -8,17 +8,17 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import br.com.dao.UsersDao;
-import br.com.model.Authority;
-import br.com.model.User;
+import br.com.model.Autoridade;
+import br.com.model.Recurso;
 
 @Repository
-public class UsersDaoImpl extends CrudDaoImpl<User> implements UsersDao {
+public class UsersDaoImpl extends CrudDaoImpl<Recurso> implements UsersDao {
 
 	@PersistenceContext
 	EntityManager entityManager;
 	
-	public List<Authority> findAllAuthorities(){
-		return entityManager.createNamedQuery(Authority.class.getSimpleName() + ".findAll").getResultList();
+	public List<Autoridade> findAllAuthorities(){
+		return entityManager.createNamedQuery(Autoridade.class.getSimpleName() + ".findAll").getResultList();
 	}
 	
 }

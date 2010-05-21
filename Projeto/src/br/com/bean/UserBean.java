@@ -10,19 +10,23 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.stereotype.Service;
 
-import br.com.model.Authority;
+import br.com.model.Autoridade;
 import br.com.service.UserService;
 
-public class UserBean extends AbstractBean{
-	private Integer idUser;
-	private String firstName;
-	private String lastName;
-	private String userName;
-	private String password;
-	private boolean enable;
-	private Authority authority;
+@Service
+@Scope(value="session")
+public class UserBean extends BeanAbstrato{
+	private Integer idUsuario;
+	private String nome;
+	private String sobrenome;
+	private String usuario;
+	private String senha;
+	private boolean habilitado;
+	private Autoridade autoridade;
 
 	@Autowired
 	private UserService userServiceImpl;
@@ -48,96 +52,7 @@ public class UserBean extends AbstractBean{
 		return null;
 	}
 
-	/**
-	 * @return the idUser
-	 */
-	public Integer getIdUser() {
-		return idUser;
-	}
-
-	/**
-	 * @param idUser
-	 *            the idUser to set
-	 */
-	public void setIdUser(Integer idUser) {
-		this.idUser = idUser;
-	}
-
-	/**
-	 * @return the firstName
-	 */
-	public String getFirstName() {
-		return firstName;
-	}
-
-	/**
-	 * @param firstName
-	 *            the firstName to set
-	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName() {
-		return lastName;
-	}
-
-	/**
-	 * @param lastName
-	 *            the lastName to set
-	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	/**
-	 * @return the userName
-	 */
-	public String getUserName() {
-		return userName;
-	}
-
-	/**
-	 * @param userName
-	 *            the userName to set
-	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	/**
-	 * @param password
-	 *            the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	/**
-	 * @return the enable
-	 */
-	public boolean isEnable() {
-		return enable;
-	}
-
-	/**
-	 * @param enable
-	 *            the enable to set
-	 */
-	public void setEnable(boolean enable) {
-		this.enable = enable;
-	}
-
+	
 	/**
 	 * @return the userServiceImpl
 	 */
@@ -153,22 +68,115 @@ public class UserBean extends AbstractBean{
 		this.userServiceImpl = userServiceImpl;
 	}
 
-	/**
-	 * @return the authority
-	 */
-	public Authority getAuthority() {
-		return authority;
-	}
 
 	/**
-	 * @param authority the authority to set
+	 * @return the idUsuario
 	 */
-	public void setAuthority(Authority authority) {
-		this.authority = authority;
+	public Integer getIdUsuario() {
+		return idUsuario;
 	}
 
-	public String findAll() {
-		// TODO Auto-generated method stub
-		return null;
+
+	/**
+	 * @param idUsuario the idUsuario to set
+	 */
+	public void setIdUsuario(Integer idUsuario) {
+		this.idUsuario = idUsuario;
+	}
+
+
+	/**
+	 * @return the nome
+	 */
+	public String getNome() {
+		return nome;
+	}
+
+
+	/**
+	 * @param nome the nome to set
+	 */
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+	/**
+	 * @return the sobrenome
+	 */
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+
+	/**
+	 * @param sobrenome the sobrenome to set
+	 */
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
+	}
+
+
+	/**
+	 * @return the usuario
+	 */
+	public String getUsuario() {
+		return usuario;
+	}
+
+
+	/**
+	 * @param usuario the usuario to set
+	 */
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+
+
+	/**
+	 * @return the senha
+	 */
+	public String getSenha() {
+		return senha;
+	}
+
+
+	/**
+	 * @param senha the senha to set
+	 */
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+
+	/**
+	 * @return the habilitado
+	 */
+	public boolean isHabilitado() {
+		return habilitado;
+	}
+
+
+	/**
+	 * @param habilitado the habilitado to set
+	 */
+	public void setHabilitado(boolean habilitado) {
+		this.habilitado = habilitado;
+	}
+
+
+	/**
+	 * @return the autoridade
+	 */
+	public Autoridade getAutoridade() {
+		return autoridade;
+	}
+
+
+	/**
+	 * @param autoridade the autoridade to set
+	 */
+	public void setAutoridade(Autoridade autoridade) {
+		this.autoridade = autoridade;
 	}
 }

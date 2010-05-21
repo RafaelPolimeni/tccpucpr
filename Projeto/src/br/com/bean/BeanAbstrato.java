@@ -9,7 +9,7 @@ import org.richfaces.component.html.HtmlRichMessages;
 import org.springframework.stereotype.Service;
 
 @Service
-public abstract class AbstractBean {
+public abstract class BeanAbstrato {
 	private HtmlRichMessages errorMessage;
 	private HtmlRichMessages infoMessage;
 	private ResourceBundle labels;
@@ -19,6 +19,7 @@ public abstract class AbstractBean {
 	private boolean createState;
 	private boolean updateState;
 	private boolean detailState;
+	private boolean showModal;
 	
 	
 	private String pageMessage;
@@ -26,7 +27,7 @@ public abstract class AbstractBean {
 	// Bread Crumb
 	private List<String> breadCrumb;
 	
-	public AbstractBean() {
+	public BeanAbstrato() {
 		
 	}
 	
@@ -171,5 +172,13 @@ public abstract class AbstractBean {
 	 */
 	public void setPageMessage(String pageMessage) {
 		this.pageMessage = pageMessage;
+	}
+
+	public boolean isShowModal() {
+		return showModal;
+	}
+
+	public void setShowModal(boolean showModal) {
+		this.showModal = showModal;
 	}
 }

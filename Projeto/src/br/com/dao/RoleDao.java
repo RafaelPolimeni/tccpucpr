@@ -1,6 +1,6 @@
 package br.com.dao;
 
-import br.com.model.Role;
+import br.com.model.Papel;
 
-public interface RoleDao extends CrudDao<Role>{
+public interface RoleDao extends CrudDao<Papel>{
 }

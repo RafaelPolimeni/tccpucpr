@@ -25,6 +25,7 @@
 				function showModalInfoWindow(){
 					infoWindowAMTimer = setTimeout("if(!infoWindowAMShown){Richfaces.showModalPanel('ajaxLoadingModalBox');infoWindowAMShown=true;}", 1);
 				}
+				
 				function hideModalInfoWindow(){
 					if (infoWindowAMShown){
 						Richfaces.hideModalPanel('ajaxLoadingModalBox');
@@ -51,7 +52,7 @@
 				              
 				<a4j:status onstart="showModalInfoWindow();" onstop="hideModalInfoWindow()"/>
 		   		<rich:modalPanel id="ajaxLoadingModalBox" height="50" width="200" style="text-align:center;">
-					<h:outputText value="#{labels['requestBeingProcessedWait']}"/>
+					<h:outputText value="#{labels['info.aguardeSuaRequisicao']}"/>
 				</rich:modalPanel>
 				<table width="100%">
 					<tr>
@@ -61,7 +62,7 @@
 							<rich:panel style="height:600px;">
 								<a4j:outputPanel ajaxRendered="true">
 									<a4j:form>
-										<h:panelGroup layout="block" rendered="#{not empty userBean.authority and not empty bean.breadCrumb}">
+										<h:panelGroup layout="block" rendered="#{not empty userBean.autoridade and not empty bean.breadCrumb}">
 											<a4j:repeat value="#{bean.breadCrumb}" var="item" rowKeyVar="index">
 												<h:panelGroup layout="block" rendered="#{index == (fn:length(bean.breadCrumb) - 1)}">
 													<h:outputText value="#{item}" styleClass="lastBreadCrumb" />
@@ -75,7 +76,7 @@
 											<br />
 										</h:panelGroup>
 									</a4j:form>
-									<h:panelGroup layout="block" rendered="#{not empty userBean.authority}">
+									<h:panelGroup layout="block" rendered="#{not empty userBean.autoridade}">
 										<br />
 										<h:outputText value="#{bean.pageMessage}" styleClass="pageMessage"/>
 										<br />

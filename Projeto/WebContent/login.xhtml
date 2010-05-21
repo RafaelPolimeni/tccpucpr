@@ -12,7 +12,7 @@
 			<ui:param name="bean" value="#{userBean}" />
 			<ui:define name="body">
 				<f:view>
-					<h:form id="loginForm" prependId="false" rendered="#{empty userBean.authority}">
+					<h:form id="loginForm" prependId="false" rendered="#{empty userBean.autoridade}">
 						<rich:messages id="errors" showSummary="true" showDetail="true"/>
 						<h:panelGrid columns="2">
 			            	<h:outputLabel value="#{labels['users.username']}:" for="j_username" />
