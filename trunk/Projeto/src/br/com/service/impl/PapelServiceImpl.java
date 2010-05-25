@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import br.com.bean.PapelBean;
-import br.com.dao.RoleDao;
+import br.com.dao.PapelDao;
 import br.com.model.Papel;
 import br.com.service.PapelService;
 
@@ -18,7 +18,7 @@ import br.com.service.PapelService;
 public class PapelServiceImpl implements PapelService {
 
 	@Autowired
-	private RoleDao roleDaoImpl;
+	private PapelDao roleDaoImpl;
 	@Autowired
 	private PapelBean papelBean;
 
@@ -31,9 +31,8 @@ public class PapelServiceImpl implements PapelService {
 		List<String> breadCrumb = new ArrayList<String>();
 		breadCrumb.add(labels.getString("breadCrumb.homePage"));
 		breadCrumb.add(labels.getString("breadCrumb.maintenance"));
-		breadCrumb.add(labels.getString("breadCrumb.roles.list"));
+		breadCrumb.add(labels.getString("breadCrumb.papel.list"));
 		
-		papelBean.setListState();
 		papelBean.setBreadCrumb(breadCrumb);
 		papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
 		papelBean.setListState();
@@ -46,7 +45,7 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.clear();
 		papelBean.setCreateState();
 		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.roles.create"));
+		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.papel.create"));
 		
 		papelBean.setPageMessage(papelBean.getLabels().getString("info.paginaInclusao"));
 	}
@@ -63,7 +62,7 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.clear();
 		papelBean.setListState();
 		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.roles.list"));
+		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.papel.list"));
 		
 		papelBean.setPageMessage(papelBean.getLabels().getString("info.paginaLista"));
 	}
@@ -76,7 +75,7 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.setDetailState();
 		
 		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.roles.detail"));
+		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.papel.detail"));
 		
 		papelBean.setPageMessage(papelBean.getLabels().getString("info.paginaDetalhe"));
 	}
@@ -86,7 +85,7 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.setUpdateState();
 		
 		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.roles.update"));
+		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.papel.update"));
 		
 		papelBean.setPageMessage(papelBean.getLabels().getString("info.paginaAlteracao"));
 	}
@@ -101,7 +100,7 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
 		
 		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.roles.list"));
+		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.papel.list"));
 		
 		papelBean.setPageMessage(papelBean.getLabels().getString("info.paginaLista"));
 	}
@@ -120,7 +119,7 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
 		
 		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.roles.list"));
+		papelBean.getBreadCrumb().add(papelBean.getLabels().getString("breadCrumb.papel.list"));
 		
 		papelBean.setPageMessage(papelBean.getLabels().getString("info.paginaLista"));
 		
@@ -131,6 +130,7 @@ public class PapelServiceImpl implements PapelService {
 	 * Responsible for go back to the list state
 	 */
 	public void backToList(){
+		papelBean.clear();
 		papelBean.setListState();
 		papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
 		papelBean.setPageMessage(papelBean.getLabels().getString("info.paginaLista"));
@@ -147,7 +147,7 @@ public class PapelServiceImpl implements PapelService {
 	/**
 	 * @return the roleDaoImpl
 	 */
-	public RoleDao getRoleDaoImpl() {
+	public PapelDao getRoleDaoImpl() {
 		return roleDaoImpl;
 	}
 
@@ -155,7 +155,7 @@ public class PapelServiceImpl implements PapelService {
 	 * @param roleDaoImpl
 	 *            the roleDaoImpl to set
 	 */
-	public void setRoleDaoImpl(RoleDao roleDaoImpl) {
+	public void setRoleDaoImpl(PapelDao roleDaoImpl) {
 		this.roleDaoImpl = roleDaoImpl;
 	}
 

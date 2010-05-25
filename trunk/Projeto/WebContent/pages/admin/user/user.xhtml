@@ -9,57 +9,58 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" >
 	<ui:composition template="/templates/main.xhtml">
-		<ui:param name="bean" value="#{userBean}" />
+		<ui:param name="bean" value="#{recursoBean}" />
 		<ui:define name="body">
-			<a4j:outputPanel ajaxRendered="true" id="mainOutputPanel">
-				<a4j:keepAlive beanName="usersBean" />
-				<a4j:form ajaxSubmit="true" id="listForm">
-					<rich:dataTable value="#{usersBean.users}" var="user" width="700"
-						reRender="dataScroller" sortMode="single" align="center"
-						style="white-space: nowrap; overflow: auto;cursor:pointer;"
+			<a4j:keepAlive beanName="recursoBean" />
+			<a4j:form ajaxSubmit="true" id="recursoForm" prependId="false">
+				<h:panelGroup layout="block" id="listPanel" rendered="#{recursoServiceImpl.recursoBean.listState}">
+					<rich:dataTable value="#{recursoBean.recursos}" var="recurso" width="700"
+						reRender="dataScroller" sortMode="single" align="center" 
+						style="white-space: nowrap; overflow: auto; cursor:pointer;"
 						onRowMouseOver="this.style.backgroundColor='#BED6F8'"
-	     				onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+	     				onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+	     				headerClass="table-align-center">
 	     				
-	     				<a4j:support action="#{usersBean.showDetails}" event="onRowClick">
-	  						<f:setPropertyActionListener value="#{user}" target="#{usersBean.user}" />
+	     				<a4j:support action="#{recursoServiceImpl.showDetail}" event="onRowClick">
+	  						<f:setPropertyActionListener value="#{recurso}" target="#{recursoServiceImpl.recursoBean.recurso}" />
 	  					</a4j:support>
 	        					
 	       				<rich:column>
 					 		<f:facet name="header">
-								<h:outputText value="#{labels['users.name']}" />
+								<h:outputText value="#{labels['recurso.nome']}" />
 							</f:facet>
-							<h:outputText value="#{user.firstName} #{user.lastName}" width="200"/>
+							<h:outputText value="#{recurso.nome} #{recurso.sobrenome}" width="200"/>
 						</rich:column>
 	           			
 	           			<rich:column>
 					 		<f:facet name="header">
-								<h:outputText value="#{labels['users.phone']}" />
+								<h:outputText value="#{labels['recurso.telefone']}" />
 							</f:facet>
-							<h:outputText value="#{user.phone}"/>
+							<h:outputText value="#{recurso.telefone}"/>
 						</rich:column>
 						
 						<rich:column>
 					 		<f:facet name="header">
-								<h:outputText value="#{labels['users.email']}" />
+								<h:outputText value="#{labels['recurso.email']}" />
 							</f:facet>
-							<h:outputText value="#{user.email}"/>
+							<h:outputText value="#{recurso.email}"/>
 						</rich:column>
 						
 						<rich:column>
 					 		<f:facet name="header">
-								<h:outputText value="#{labels['users.birthday']}" />
+								<h:outputText value="#{labels['recurso.dataNascimento']}" />
 							</f:facet>
-							<h:outputText value="#{user.birthDay}">
+							<h:outputText value="#{recurso.dataNascimento}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />  
 							</h:outputText>
 						</rich:column>
 						
 						<rich:column style="text-align:center;">
 					 		<f:facet name="header">
-								<h:outputText value="#{labels['users.enable']}" />
+								<h:outputText value="#{labels['recurso.habilitado']}" />
 							</f:facet>
-							<h:graphicImage value="/img/enable.png" width="16" height="16" rendered="#{userBean.enable}" />
-							<h:graphicImage value="/img/disabled.png" width="16" height="16" rendered="#{not userBean.enable}"/>
+							<h:graphicImage value="/img/enable.png" width="16" height="16" rendered="#{recurso.habilitado}" />
+							<h:graphicImage value="/img/disabled.png" width="16" height="16" rendered="#{not recurso.habilitado}"/>
 						</rich:column>
 						
 						<f:facet name="footer">
@@ -69,83 +70,172 @@
 			 
 			 		<br/>
 			 		
-					<a4j:commandButton action="#{usersBean.createUser}" value="#{labels['novo']}" style="margin-left:55px;"/>
-				</a4j:form>
+					<a4j:commandButton action="#{recursoServiceImpl.prepareCreate}" 
+						value="#{labels['novo']}" style="margin-left:61px;"/>
+				</h:panelGroup>
 				
-				<rich:modalPanel showWhenRendered="true" autosized="true" width="400"
-					rendered="#{usersBean.createState or usersBean.updateState or usersBean.detailState}">
-					
-					<f:facet name="header">
-						<h:outputText value="#{usersBean.modalPanelTitle}" />
-					</f:facet>
-					
-					<f:facet name="controls">
-			            <h:panelGroup>
-			            	<a4j:form id="closeModalForm" ajaxSubmit="true">
-				                <h:graphicImage value="/img/modalClose.png" id="hideModal" style="cursor:pointer;">
-				                	<a4j:support action="#{usersBean.hideModalPanelForm}" event="onclick"/>
-				                </h:graphicImage>
-			                </a4j:form>
-			            </h:panelGroup>
-					</f:facet>
-					
-					<a4j:form>
+				<h:panelGroup layout="block" id="detailPanel" rendered="#{not recursoServiceImpl.recursoBean.listState}">
+					<fieldset>
+						<legend>Dados do recurso</legend>
+						
 						<h:panelGrid columns="3" >
-							<h:outputLabel value="#{labels['users.firstName']}:" for="firstName"/>
-							<h:inputText id="firstName" value="#{usersBean.firstName}" rendered="#{usersBean.createState or usersBean.updateState}">
-								<rich:beanValidator />
+							<h:outputLabel value="#{labels['recurso.nome']}:" for="nome"/>
+							<h:inputText id="nome" value="#{recursoServiceImpl.recursoBean.nome}" 
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
+								required="true" requiredMessage="#{messages['validation.empty']}">
+								<f:validator validatorId="validaObrigatorio"/>
+								<rich:ajaxValidator event="onsubmit"/>
 							</h:inputText>
-							<h:outputText value="#{usersBean.firstName}" rendered="#{usersBean.detailState}"/>
-							<rich:message for="firstName" style="color:red;"/>
+							<h:outputText value="#{recursoServiceImpl.recursoBean.nome}" 
+								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+							<rich:message for="nome" style="color:red;"/>
 														
-							<h:outputLabel value="#{labels['users.lastName']}:" for="lastName"/>
-							<h:inputText id="lastName" value="#{usersBean.lastName}" rendered="#{usersBean.createState or usersBean.updateState}"/>
-							<h:outputText value="#{usersBean.lastName}" rendered="#{usersBean.detailState}"/>
-							<rich:message for="lastName"/>
+							<h:outputLabel value="#{labels['recurso.sobrenome']}:" for="sobrenome"/>
+							<h:inputText id="sobrenome" value="#{recursoServiceImpl.recursoBean.sobrenome}" 
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
+								required="true" requiredMessage="#{messages['validation.empty']}"
+								size="50">
+								<f:validator validatorId="validaObrigatorio"/>
+								<rich:ajaxValidator event="onsubmit"/>
+							</h:inputText>
+							<h:outputText value="#{recursoServiceImpl.recursoBean.sobrenome}" 
+								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+							<rich:message for="sobrenome" id="sobrenomeMessage" style="color:red;"/>
 							
-							<h:outputLabel value="Nascimento" for="userBirthday" />
-							<rich:calendar id="userBirthday" datePattern="dd/MM/yyyy HH:mm" value="#{usersBean.birthDay}" />
+							<h:outputLabel value="#{labels['recurso.dataNascimento']}:" for="dataNascimento" />
+							<rich:calendar id="dataNascimento" datePattern="dd/MM/yyyy" 
+								value="#{recursoServiceImpl.recursoBean.dataNascimento}" 
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
+								required="true" requiredMessage="#{messages['validation.empty']}"
+								size="50">
+								<rich:ajaxValidator event="onsubmit"/>
+							</rich:calendar>
+							<h:outputText value="#{recursoServiceImpl.recursoBean.dataNascimento}"
+								rendered="#{recursoServiceImpl.recursoBean.detailState}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+							<rich:message for="dataNascimento" id="dataNascimentoMessage" style="color:red;"/>
 							
-							<h:outputLabel value="#{labels['users.email']}:" for="email"/>
-							<h:inputText id="email" value="#{usersBean.email}" rendered="#{usersBean.createState or usersBean.updateState}"/>
-							<h:outputText value="#{usersBean.email}" rendered="#{usersBean.detailState}"/>
-													
-							<h:outputLabel value="#{labels['users.phone']}:" for="phone"/>
-							<h:inputText id="phone" value="#{usersBean.phone}" rendered="#{usersBean.createState or usersBean.updateState}"/>
-							<h:outputText value="#{usersBean.phone}" rendered="#{usersBean.detailState}"/>
+							<h:outputLabel value="#{labels['recurso.email']}:" for="email"/>
+							<h:inputText id="email" value="#{recursoServiceImpl.recursoBean.email}" 
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
+								required="true" requiredMessage="#{messages['validation.empty']}">
+								<f:validator validatorId="validaObrigatorio"/>
+								<rich:ajaxValidator event="onsubmit"/>
+							</h:inputText>
+							<h:outputText value="#{recursoServiceImpl.recursoBean.email}" 
+								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+							<rich:message for="email" id="emailMessage" style="color:red;"/>
 							
-							<h:outputLabel value="#{labels['users.profile']}:" for="profile"/>
-							<rich:inplaceSelect defaultLabel="#{labels['selecioneUmItem']}" id="profile">
-								<f:selectItems value="#{usersBean.possibleAuthorities}"/>
+							<h:outputLabel value="#{labels['recurso.telefone']}:" for="telefone"/>
+							<h:inputText id="telefone" value="#{recursoServiceImpl.recursoBean.telefone}" 
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
+								required="true" requiredMessage="#{messages['validation.empty']}">
+								<f:validator validatorId="validaObrigatorio"/>
+								<rich:ajaxValidator event="onsubmit"/>
+							</h:inputText>
+							<h:outputText value="#{recursoServiceImpl.recursoBean.telefone}" 
+								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+							<rich:message for="telefone" id="telefoneMessage" style="color:red;"/>
+							
+							<h:outputLabel value="#{labels['recurso.perfil']}:" for="profile"/>
+							<rich:inplaceSelect defaultLabel="#{labels['selecioneUmItem']}" id="autoridade"
+								value="#{recursoServiceImpl.recursoBean.idAutoridade}"
+								required="true" requiredMessage="#{messages['validation.empty']}"
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}">
+								<f:selectItems value="#{recursoServiceImpl.recursoBean.autoridades}" />
+								<rich:ajaxValidator event="onsubmit"/>
 						    </rich:inplaceSelect>
-							<h:outputText value="#{usersBean.profile}" rendered="#{usersBean.detailState}"/>
+							<h:outputText value="#{recursoServiceImpl.recursoBean.autoridade.nomeVisivel}"
+								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+							<rich:message for="autoridade" id="autoridadeMessage" style="color:red;"/>
 							
-							<h:outputLabel value="#{labels['users.mainRole']}:" for="mainRole"/>
-							<rich:inplaceSelect defaultLabel="#{labels['selecioneUmItem']}" id="mainRole">
-								<f:selectItems value="#{usersBean.possibleRoles}"/>
-						    </rich:inplaceSelect>
-							<h:outputText value="#{usersBean.mainRole}" rendered="#{usersBean.detailState}"/>
+							<h:outputLabel value="#{labels['recurso.usuario']}:" for="usuario"/>
+							<h:inputText id="usuario" value="#{recursoServiceImpl.recursoBean.usuario}"
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
+								required="true" requiredMessage="#{messages['validation.empty']}"
+								size="40">
+								<f:validator validatorId="validaObrigatorio"/>
+								<rich:ajaxValidator event="onsubmit"/>
+							</h:inputText>
+							<h:outputText value="#{recursoServiceImpl.recursoBean.usuario}" 
+								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+							<rich:message for="usuario" style="color:red;"/>
 							
-							<h:outputLabel value="#{labels['users.username']}:" for="username"/>
-							<h:inputText id="username" value="#{usersBean.username}" rendered="#{usersBean.createState or usersBean.updateState}"/>
-							<h:outputText value="#{usersBean.username}" rendered="#{usersBean.detailState}"/>
+							<h:outputLabel value="#{labels['recurso.senha']}:" for="senha"
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"/>
+							<h:inputSecret id="senha" value="#{recursoServiceImpl.recursoBean.senha}" 
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
+								required="true" requiredMessage="#{messages['validation.empty']}" redisplay="true">
+								<f:validator validatorId="validaObrigatorio"/>
+								<rich:ajaxValidator event="onsubmit"/>
+							</h:inputSecret>
+							<rich:message for="senha" style="color:red;" id="messageSenha" 
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"/>
 							
-							<h:outputLabel value="#{labels['users.password']}:" for="password" rendered="#{usersBean.createState or usersBean.updateState}"/>
-							<h:inputText id="password" value="#{usersBean.password}" rendered="#{usersBean.createState or usersBean.updateState}"/>
+							<h:outputLabel value="#{labels['recurso.confirmarSenha']}:" for="confirmarSenha"
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"/>
+							<h:inputSecret id="confirmarSenha" value="#{recursoServiceImpl.recursoBean.confirmarSenha}" 
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
+								required="true" requiredMessage="#{messages['validation.empty']}" redisplay="true">
+								<f:validator validatorId="validaObrigatorio"/>
+								<rich:ajaxValidator event="onsubmit"/>
+							</h:inputSecret>
+							<rich:message for="senha" style="color:red;" id="messageConfirmarSenha" 
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"/>
+							
+							<h:outputLabel value="#{labels['recurso.habilitado']}:" for="habilitado" />
+							<h:selectBooleanCheckbox id="habilitado" 
+								value="#{recursoServiceImpl.recursoBean.habilitado}" 
+								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"/>
+							<h:panelGroup layout="block" 
+								rendered="#{recursoServiceImpl.recursoBean.detailState and recursoServiceImpl.recursoBean.habilitado}">
+								<h:outputText value="#{labels['sim']}" />
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" 
+								rendered="#{recursoServiceImpl.recursoBean.detailState and (not recursoServiceImpl.recursoBean.habilitado)}">
+								<h:outputText value="#{labels['nao']}" />
+							</h:panelGroup>							
+							<rich:message for="habilitado" style="color:red;"/>
 						</h:panelGrid>
 						
+						<h:panelGrid columns="3">
+							<h:outputLabel value="#{labels['recurso.papeis']}:" for="papeis" />
+							<rich:listShuttle id="papeis"
+										   var="item"
+										   targetValue="#{recursoServiceImpl.recursoBean.papeis}" 
+										   sourceValue="#{recursoServiceImpl.recursoBean.possiveisPapeis}" 
+										   copyAllControlLabel="Todos"
+										   removeAllControlLabel="Todos"
+										   copyControlLabel="Adicionar"
+										   removeControlLabel="Remover"
+										   orderControlsVisible="false"
+										   fastOrderControlsVisible="false" 
+										   rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
+										   validator="validadorObrigatorioShuttle"
+										   converter="listShuttleConverter">
+								<rich:column> 
+					            	<h:outputText value="#{item.nome}" />
+					        	</rich:column>
+							</rich:listShuttle>
+							 <rich:dataList value="#{recursoServiceImpl.recursoBean.papeis}" var="item" 
+							 	rendered="#{recursoServiceImpl.recursoBean.detailState}"> 
+				                    <h:outputText value="#{item.nome}"/>
+				            </rich:dataList> 
+							<rich:message for="papeis" style="color:red;"/>
+						</h:panelGrid>
 						<br />
-												
-						<a4j:commandButton action="#{usersBean.confirmCreate}" value="#{labels['confirmar']}" rendered="#{usersBean.createState}"/>
-						<a4j:commandButton action="#{usersBean.prepareUpdate}" value="#{labels['alterar']}" rendered="#{usersBean.detailState}"/>
-						<rich:spacer width="7" rendered="#{usersBean.detailState}"/>
-						<a4j:commandButton action="#{usersBean.delete}" value="#{labels['excluir']}" rendered="#{usersBean.detailState}"/>
-						<a4j:commandButton action="#{usersBean.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{usersBean.updateState}"/>
-						
-						<br />
-					</a4j:form>
-				</rich:modalPanel>
-			</a4j:outputPanel>
+									
+						<a4j:commandButton action="#{recursoServiceImpl.confirmCreate}" value="#{labels['confirmar']}" rendered="#{recursoServiceImpl.recursoBean.createState}" reRender="messageSenha"/>
+						<a4j:commandButton action="#{recursoServiceImpl.prepareUpdate}" value="#{labels['alterar']}" rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+						<rich:spacer width="7" rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+						<a4j:commandButton action="#{recursoServiceImpl.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{recursoServiceImpl.recursoBean.updateState}"/>
+						<rich:spacer width="7" rendered="#{not recursoServiceImpl.recursoBean.listState}"/>
+						<a4j:commandButton action="#{recursoServiceImpl.backToList}" value="#{labels['cancelar']}" rendered="#{not recursoServiceImpl.recursoBean.listState}" immediate="true"/>
+					</fieldset>
+				</h:panelGroup>
+			</a4j:form>
 		</ui:define>
 	</ui:composition>
 </html>

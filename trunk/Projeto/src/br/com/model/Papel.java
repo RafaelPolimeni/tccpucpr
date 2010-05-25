@@ -12,11 +12,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Papel")
-@NamedQueries( {
-		@NamedQuery(name = "Papel.findAll", query = "SELECT p FROM Papel p order by p.nome")})
-public class Papel implements EntityInterface{
-	
+@Table(name = "Papel")
+@NamedQueries( { @NamedQuery(name = "Papel.findAll", query = "SELECT p FROM Papel p order by p.nome") })
+public class Papel implements EntityInterface {
+
 	/**
 	 * 
 	 */
@@ -24,18 +23,19 @@ public class Papel implements EntityInterface{
 
 	public Papel() {
 	}
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "idPapel", nullable = false)
 	private Integer idPapel;
-	
-	@Column(name="nome", length=100, nullable=false)
+
+	@Column(name = "nome", length = 100, nullable = false)
 	private String nome;
-	
-	@Column(name="descricao", length=600, nullable=false)
+
+	@Column(name = "descricao", length = 600, nullable = false)
 	private String descricao;
-	
+
+	@Override
 	public Serializable getPrimaryKey() {
 		return getIdPapel();
 	}
@@ -48,7 +48,8 @@ public class Papel implements EntityInterface{
 	}
 
 	/**
-	 * @param idPapel the idPapel to set
+	 * @param idPapel
+	 *            the idPapel to set
 	 */
 	public void setIdPapel(Integer idPapel) {
 		this.idPapel = idPapel;
@@ -62,7 +63,8 @@ public class Papel implements EntityInterface{
 	}
 
 	/**
-	 * @param nome the nome to set
+	 * @param nome
+	 *            the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -76,7 +78,8 @@ public class Papel implements EntityInterface{
 	}
 
 	/**
-	 * @param descricao the descricao to set
+	 * @param descricao
+	 *            the descricao to set
 	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;

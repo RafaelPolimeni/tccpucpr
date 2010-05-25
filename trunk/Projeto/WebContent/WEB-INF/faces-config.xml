@@ -33,12 +33,22 @@
 		<validator-id>validaObrigatorio</validator-id>
 		<validator-class>br.com.validator.ValidadorObrigatorio</validator-class>
 	</validator>
+	
+	<validator>
+		<validator-id>validadorObrigatorioShuttle</validator-id>
+		<validator-class>br.com.validator.ValidadorObrigatorioShuttle</validator-class>
+	</validator>
 	<!-- validators -->
 	
 	<!-- converters -->
 	<converter>
 		<converter-id>textAreaConverter</converter-id>
 		<converter-class>br.com.converter.TextAreaConverter</converter-class>
+	</converter>
+	
+	<converter>
+		<converter-id>listShuttleConverter</converter-id>
+		<converter-class>br.com.converter.ListShuttleConverter</converter-class>
 	</converter>
 	
 	<navigation-rule>

@@ -7,18 +7,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.dao.CrudDao;
+import br.com.dao.CrudDAO;
 import br.com.dao.helper.Parameter;
 import br.com.model.EntityInterface;
 
-public class CrudDaoImpl<T extends EntityInterface> implements CrudDao<T> {
+public class CrudDAOImpl<T extends EntityInterface> implements CrudDAO<T> {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
 
-	public CrudDaoImpl() {
+	public CrudDAOImpl() {
 	}
 
 	public void delete(T objeto) {
@@ -56,7 +57,7 @@ public class CrudDaoImpl<T extends EntityInterface> implements CrudDao<T> {
 		return list;
 	}
 
-	@Transactional
+	@Transactional 
 	public void save(T objeto) {
 		entityManager.persist(objeto);
 	}

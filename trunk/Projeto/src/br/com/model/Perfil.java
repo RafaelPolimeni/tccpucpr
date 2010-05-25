@@ -12,16 +12,16 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Autoridade")
+@Table(name="Perfil")
 @NamedQueries( {
-		@NamedQuery(name = "Autoridade.findAll", query = "SELECT a FROM Autoridade a order by a.nome")})
-public class Autoridade implements EntityInterface{
+		@NamedQuery(name = "Perfil.findAll", query = "SELECT p FROM Perfil p order by p.nome")})
+public class Perfil implements EntityInterface{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4097851825814202918L;
 
-	public Autoridade() {
+	public Perfil() {
 		
 	}
 	

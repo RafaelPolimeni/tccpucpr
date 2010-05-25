@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.stereotype.Service;
 
-import br.com.model.Autoridade;
+import br.com.model.Perfil;
 import br.com.service.UserService;
 
 @Service
@@ -26,7 +26,7 @@ public class UserBean extends BeanAbstrato{
 	private String usuario;
 	private String senha;
 	private boolean habilitado;
-	private Autoridade autoridade;
+	private Perfil autoridade;
 
 	@Autowired
 	private UserService userServiceImpl;
@@ -168,7 +168,7 @@ public class UserBean extends BeanAbstrato{
 	/**
 	 * @return the autoridade
 	 */
-	public Autoridade getAutoridade() {
+	public Perfil getAutoridade() {
 		return autoridade;
 	}
 
@@ -176,7 +176,7 @@ public class UserBean extends BeanAbstrato{
 	/**
 	 * @param autoridade the autoridade to set
 	 */
-	public void setAutoridade(Autoridade autoridade) {
+	public void setAutoridade(Perfil autoridade) {
 		this.autoridade = autoridade;
 	}
 }
