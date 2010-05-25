@@ -2,14 +2,15 @@ package br.com.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -63,11 +64,11 @@ public class Recurso implements EntityInterface{
 	@Column(name = "habilitado", nullable = false)
 	private boolean habilitado;
 	
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Autoridade autoridade;
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Perfil autoridade;
 	
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Papel papelPrincipal;
+	@ManyToMany(fetch=FetchType.EAGER)
+	private List<Papel> papeis;
 	
 	@Column
 	private String locale;
@@ -205,29 +206,36 @@ public class Recurso implements EntityInterface{
 	/**
 	 * @return the autoridadee
 	 */
-	public Autoridade getAutoridade() {
+	public Perfil getAutoridade() {
 		return autoridade;
 	}
 
 	/**
 	 * @param autoridadee the autoridadee to set
 	 */
-	public void setAutoridadee(Autoridade autoridade) {
+	public void setAutoridadee(Perfil autoridade) {
 		this.autoridade = autoridade;
 	}
 
 	/**
-	 * @return the papelPrincipal
+	 * @return the papeis
 	 */
-	public Papel getPapelPrincipal() {
-		return papelPrincipal;
+	public List<Papel> getPapeis() {
+		return papeis;
 	}
 
 	/**
-	 * @param papelPrincipal the papelPrincipal to set
+	 * @param papeis the papeis to set
 	 */
-	public void setPapelPrincipal(Papel papelPrincipal) {
-		this.papelPrincipal = papelPrincipal;
+	public void setPapeis(List<Papel> papeis) {
+		this.papeis = papeis;
+	}
+
+	/**
+	 * @param autoridade the autoridade to set
+	 */
+	public void setAutoridade(Perfil autoridade) {
+		this.autoridade = autoridade;
 	}
 
 	/**

@@ -13,6 +13,7 @@ public abstract class BeanAbstrato {
 	private HtmlRichMessages errorMessage;
 	private HtmlRichMessages infoMessage;
 	private ResourceBundle labels;
+	private ResourceBundle messages;
 	
 	// States for CRUD
 	private boolean listState;
@@ -151,6 +152,21 @@ public abstract class BeanAbstrato {
 	 */
 	public void setLabels(ResourceBundle labels) {
 		this.labels = labels;
+	}
+	
+	/**
+	 * @return the messages
+	 */
+	public ResourceBundle getMessages() {
+		setMessages(FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages"));
+		return messages;
+	}
+
+	/**
+	 * @param messages the messages to set
+	 */
+	public void setMessages(ResourceBundle messages) {
+		this.messages = messages;
 	}
 
 	/**

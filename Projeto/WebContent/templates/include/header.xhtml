@@ -32,7 +32,7 @@
 			                </f:facet>
 			                <rich:menuGroup value="Cadastros">
 			                	<rich:menuItem submitMode="server" value="#{labels['menu.recursos']}" 
-			                        action="#{usersBean.findAll}" />
+			                        action="#{recursoServiceImpl.findAll}" />
 			                	<rich:menuItem submitMode="server" value="#{labels['menu.papeis']}"
 			                        action="#{papelServiceImpl.findAll}" />
 		                	</rich:menuGroup>

@@ -15,10 +15,10 @@
 					<h:form id="loginForm" prependId="false" rendered="#{empty userBean.autoridade}">
 						<rich:messages id="errors" showSummary="true" showDetail="true"/>
 						<h:panelGrid columns="2">
-			            	<h:outputLabel value="#{labels['users.username']}:" for="j_username" />
+			            	<h:outputLabel value="#{labels['recurso.usuario']}:" for="j_username" />
 			                <h:inputText id="j_username" size="40" maxlength="80" value="victor"></h:inputText>
 			                
-			                <h:outputLabel value="#{labels['users.password']}:" for="j_password" />
+			                <h:outputLabel value="#{labels['recurso.senha']}:" for="j_password" />
 			                <h:inputSecret id="j_password"  size="40" maxlength="80" value="senha" redisplay="true"></h:inputSecret>
 			                
 			                <!-- 

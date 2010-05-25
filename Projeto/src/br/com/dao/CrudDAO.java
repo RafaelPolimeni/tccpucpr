@@ -5,7 +5,7 @@ import java.util.List;
 
 import br.com.model.EntityInterface;
 
-public interface CrudDao<T extends EntityInterface> {
+public interface CrudDAO<T extends EntityInterface> {
 
 	/**
 	 * Atualia o objeto

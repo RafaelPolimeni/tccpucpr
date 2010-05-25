@@ -5,13 +5,13 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
 
-import br.com.dao.RoleDao;
+import br.com.dao.PapelDao;
 import br.com.model.Papel;
 
 @Repository
-public class RoleDaoImpl extends CrudDaoImpl<Papel> implements RoleDao {
+public class PapelDaoImpl extends CrudDAOImpl<Papel> implements PapelDao {
 
 	@PersistenceContext
 	EntityManager entityManager;
-	
+
 }

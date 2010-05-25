@@ -2,11 +2,10 @@ package br.com.service;
 
 import java.util.List;
 
-import br.com.model.Autoridade;
-import br.com.model.Recurso;
+import br.com.model.Perfil;
 
 public interface RecursoService {
-	List<Recurso> findAll();
+	String findAll();
 	
-	List<Autoridade> findAllAuthorities();
+	List<Perfil> findAllAuthorities();
 }

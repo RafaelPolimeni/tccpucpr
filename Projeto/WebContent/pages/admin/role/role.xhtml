@@ -12,7 +12,7 @@
 		<ui:param name="bean" value="#{papelBean}" />
 		<ui:define name="body">			
 				<a4j:keepAlive beanName="papelBean" />
-				<a4j:form ajaxSubmit="true" id="listForm">
+				<a4j:form ajaxSubmit="true" id="papelForm">
 					<h:panelGroup layout="block" id="listPanel" rendered="#{papelServiceImpl.papelBean.listState}">
 						<rich:dataTable value="#{papelBean.papeis}" var="papel" 
 								width="700" align="center" rows="10" id="papeis" reRender="dataScroller"
@@ -37,7 +37,8 @@
 						
 						<br />
 					
-						<a4j:commandButton action="#{papelServiceImpl.prepareCreate}" value="#{labels['novo']}" style="margin-left:61px;"/>
+						<a4j:commandButton action="#{papelServiceImpl.prepareCreate}"
+							 value="#{labels['novo']}" style="margin-left:61px;"/>
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" id="detailPanel" rendered="#{not papelServiceImpl.papelBean.listState}">
