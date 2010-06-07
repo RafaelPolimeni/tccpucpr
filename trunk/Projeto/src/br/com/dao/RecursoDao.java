@@ -9,4 +9,7 @@ public interface RecursoDao extends CrudDAO<Recurso> {
 	
 	List<Perfil> findAllPerfis();
 	
+	List<Recurso> consultarObservadores();
+	
+	List<Recurso> consultarGerentes();
 }

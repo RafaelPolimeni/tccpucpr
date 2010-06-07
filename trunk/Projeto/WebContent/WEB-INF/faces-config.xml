@@ -47,9 +47,15 @@
 	</converter>
 	
 	<converter>
-		<converter-id>listShuttleConverter</converter-id>
-		<converter-class>br.com.converter.ListShuttleConverter</converter-class>
+		<converter-id>listShuttleConverterPapel</converter-id>
+		<converter-class>br.com.converter.ListShuttleConverterPapel</converter-class>
 	</converter>
+	
+	<converter>
+		<converter-id>listShuttleConverterRecurso</converter-id>
+		<converter-class>br.com.converter.ListShuttleConverterRecurso</converter-class>
+	</converter>
+	
 	
 	<navigation-rule>
 		<from-view-id>/login.xhtml</from-view-id>
@@ -75,14 +81,21 @@
 		
 		<!-- Manage users -->
 		<navigation-case>
-			<from-outcome>manageUsers</from-outcome>
-			<to-view-id>/pages/admin/user/user.jsf</to-view-id>
+			<from-outcome>gerenciarRecursos</from-outcome>
+			<to-view-id>/pages/admin/recursos.jsf</to-view-id>
 		</navigation-case>
 		
 		<!-- Manage roles -->
 		<navigation-case>
-			<from-outcome>manageRoles</from-outcome>
-			<to-view-id>/pages/admin/role/role.jsf</to-view-id>
+			<from-outcome>gerenciarPapeis</from-outcome>
+			<to-view-id>/pages/admin/papeis.jsf</to-view-id>
 		</navigation-case>
+		
+		<!-- Gerenciar Projetos -->
+		<navigation-case>
+			<from-outcome>gerenciarProjetos</from-outcome>
+			<to-view-id>/pages/admin/projetos.jsf</to-view-id>
+		</navigation-case>
+		
 	</navigation-rule>
 </faces-config>

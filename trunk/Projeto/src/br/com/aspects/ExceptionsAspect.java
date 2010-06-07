@@ -18,7 +18,7 @@ public class ExceptionsAspect {
 	}
 
 	@AfterThrowing(pointcut = "br.com.poincuts.Pointcuts.allDao()", throwing = "ex", argNames = "ex")
-	public void dataIntegrityViolationException(JoinPoint joinPoint, Exception ex) throws Throwable {
+	public void exception(JoinPoint joinPoint, Exception ex) throws Throwable {
 		Logger logger = Logger.getLogger(joinPoint.getTarget().getClass());
 		logger.error(ex.getMessage());
 		logger.error(ex.getStackTrace());

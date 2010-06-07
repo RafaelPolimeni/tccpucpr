@@ -20,63 +20,60 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "Recurso")
-@NamedQueries( {
-		@NamedQuery(name = "Recurso.findAll", query = "SELECT r FROM Recurso r order by r.nome"),
-		@NamedQuery(name = "Recurso.findByUsername", query = "SELECT r FROM Recurso r WHERE r.usuario = :userName")})
-public class Recurso implements EntityInterface{
+@NamedQueries( { @NamedQuery(name = "Recurso.findAll", query = "SELECT r FROM Recurso r order by r.nome"),
+		@NamedQuery(name = "Recurso.findByUsername", query = "SELECT r FROM Recurso r WHERE r.usuario = :userName"),
+		@NamedQuery(name = "Recurso.observadores", query = "SELECT r FROM Recurso r WHERE r.autoridade.idAutoridade = 4"),
+		@NamedQuery(name = "Recurso.gerentes", query = "SELECT r FROM Recurso r WHERE r.autoridade.idAutoridade = 1 or r.autoridade.idAutoridade = 2") })
+public class Recurso implements EntityInterface {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6663378091231662507L;
-
-	public Recurso() {
-		
-	}
+	private static final long serialVersionUID = 1062671905024286633L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "idRecurso", nullable = false)
 	private Integer idRecurso;
 
-	@Column(name = "nome", nullable = false)
+	@Column(length = 50, nullable = false)
 	private String nome;
 
-	@Column(name = "sobrenome", nullable = false)
+	@Column(length = 100, nullable = false)
 	private String sobrenome;
 
-	@Column(name = "dataNascimento", nullable = false)
+	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date dataNascimento;
-	
-	@Column(name="email")
+
+	@Column(length = 100, nullable = false)
 	private String email;
-	
-	@Column(name="telefone")
+
+	@Column(length = 20, nullable = true)
 	private String telefone;
-	
-	@Column(name = "usuario", nullable = false)
+
+	@Column(length = 30, nullable = false)
 	private String usuario;
 
-	@Column(name = "senha", nullable = false)
+	@Column(length = 20, nullable = false)
 	private String senha;
 
-	@Column(name = "habilitado", nullable = false)
+	@Column(nullable = false)
 	private boolean habilitado;
-	
-	@ManyToOne(fetch=FetchType.EAGER)
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Perfil autoridade;
-	
-	@ManyToMany(fetch=FetchType.EAGER)
+
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Papel> papeis;
-	
-	@Column
+
+	@Column(length = 6, nullable = false)
 	private String locale;
-	
+
 	public Serializable getPrimaryKey() {
 		return getIdRecurso();
 	}
-	
+
 	/**
 	 * @return the idRecurso
 	 */
@@ -85,7 +82,8 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param idRecurso the idRecurso to set
+	 * @param idRecurso
+	 *            the idRecurso to set
 	 */
 	public void setIdRecurso(Integer idRecurso) {
 		this.idRecurso = idRecurso;
@@ -99,7 +97,8 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param nome the nome to set
+	 * @param nome
+	 *            the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -113,7 +112,8 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param sobrenome the sobrenome to set
+	 * @param sobrenome
+	 *            the sobrenome to set
 	 */
 	public void setSobrenome(String sobrenome) {
 		this.sobrenome = sobrenome;
@@ -127,7 +127,8 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param dataNascimento the dataNascimento to set
+	 * @param dataNascimento
+	 *            the dataNascimento to set
 	 */
 	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
@@ -141,7 +142,8 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param email the email to set
+	 * @param email
+	 *            the email to set
 	 */
 	public void setEmail(String email) {
 		this.email = email;
@@ -155,7 +157,8 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param telefone the telefone to set
+	 * @param telefone
+	 *            the telefone to set
 	 */
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
@@ -169,7 +172,8 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param usuario the usuario to set
+	 * @param usuario
+	 *            the usuario to set
 	 */
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
@@ -183,7 +187,8 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param senha the senha to set
+	 * @param senha
+	 *            the senha to set
 	 */
 	public void setSenha(String senha) {
 		this.senha = senha;
@@ -197,7 +202,8 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param habilitado the habilitado to set
+	 * @param habilitado
+	 *            the habilitado to set
 	 */
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
@@ -211,7 +217,8 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param autoridadee the autoridadee to set
+	 * @param autoridadee
+	 *            the autoridadee to set
 	 */
 	public void setAutoridadee(Perfil autoridade) {
 		this.autoridade = autoridade;
@@ -225,14 +232,16 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param papeis the papeis to set
+	 * @param papeis
+	 *            the papeis to set
 	 */
 	public void setPapeis(List<Papel> papeis) {
 		this.papeis = papeis;
 	}
 
 	/**
-	 * @param autoridade the autoridade to set
+	 * @param autoridade
+	 *            the autoridade to set
 	 */
 	public void setAutoridade(Perfil autoridade) {
 		this.autoridade = autoridade;
@@ -246,9 +255,109 @@ public class Recurso implements EntityInterface{
 	}
 
 	/**
-	 * @param locale the locale to set
+	 * @param locale
+	 *            the locale to set
 	 */
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((autoridade == null) ? 0 : autoridade.hashCode());
+		result = prime * result + ((dataNascimento == null) ? 0 : dataNascimento.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + (habilitado ? 1231 : 1237);
+		result = prime * result + ((idRecurso == null) ? 0 : idRecurso.hashCode());
+		result = prime * result + ((locale == null) ? 0 : locale.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((papeis == null) ? 0 : papeis.hashCode());
+		result = prime * result + ((senha == null) ? 0 : senha.hashCode());
+		result = prime * result + ((sobrenome == null) ? 0 : sobrenome.hashCode());
+		result = prime * result + ((telefone == null) ? 0 : telefone.hashCode());
+		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Recurso other = (Recurso) obj;
+		if (autoridade == null) {
+			if (other.autoridade != null)
+				return false;
+		} else if (!autoridade.equals(other.autoridade))
+			return false;
+		if (dataNascimento == null) {
+			if (other.dataNascimento != null)
+				return false;
+		} else if (!dataNascimento.equals(other.dataNascimento))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (habilitado != other.habilitado)
+			return false;
+		if (idRecurso == null) {
+			if (other.idRecurso != null)
+				return false;
+		} else if (!idRecurso.equals(other.idRecurso))
+			return false;
+		if (locale == null) {
+			if (other.locale != null)
+				return false;
+		} else if (!locale.equals(other.locale))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (papeis == null) {
+			if (other.papeis != null)
+				return false;
+		} else if (!papeis.equals(other.papeis))
+			return false;
+		if (senha == null) {
+			if (other.senha != null)
+				return false;
+		} else if (!senha.equals(other.senha))
+			return false;
+		if (sobrenome == null) {
+			if (other.sobrenome != null)
+				return false;
+		} else if (!sobrenome.equals(other.sobrenome))
+			return false;
+		if (telefone == null) {
+			if (other.telefone != null)
+				return false;
+		} else if (!telefone.equals(other.telefone))
+			return false;
+		if (usuario == null) {
+			if (other.usuario != null)
+				return false;
+		} else if (!usuario.equals(other.usuario))
+			return false;
+		return true;
+	}
+
 }

@@ -38,7 +38,7 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.setListState();
 		papelBean.setPageMessage(papelBean.getLabels().getString("info.paginaLista"));
 		
-		return "manageRoles";
+		return "gerenciarPapeis";
 	}
 	
 	public void prepareCreate(){

@@ -48,7 +48,7 @@ public class RecursoServiceImpl implements RecursoService {
 		recursoBean.setListState();
 		recursoBean.setPageMessage(recursoBean.getLabels().getString("info.paginaLista"));
 
-		return "manageUsers";
+		return "gerenciarRecursos";
 	}
 
 	public void prepareCreate() {
@@ -77,6 +77,7 @@ public class RecursoServiceImpl implements RecursoService {
 			if (recursoBean.getSenha().equals(recursoBean.getConfirmarSenha())) {
 				BeanUtils.copyProperties(recurso, recursoBean);
 				recurso.setIdRecurso(null);
+				recurso.setLocale("pt_BR");
 				Perfil autoridade = new Perfil();
 				autoridade.setIdAutoridade(recursoBean.getIdAutoridade());
 				recurso.setAutoridade(autoridade);

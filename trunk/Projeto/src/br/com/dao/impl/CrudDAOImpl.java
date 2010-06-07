@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.dao.CrudDAO;
@@ -21,7 +20,8 @@ public class CrudDAOImpl<T extends EntityInterface> implements CrudDAO<T> {
 
 	public CrudDAOImpl() {
 	}
-
+	
+	@Transactional
 	public void delete(T objeto) {
 		entityManager.remove(entityManager.find(objeto.getClass(), objeto.getPrimaryKey()));
 	}
