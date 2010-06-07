@@ -21,18 +21,14 @@ public class Papel implements EntityInterface {
 	 */
 	private static final long serialVersionUID = -5316922761586243805L;
 
-	public Papel() {
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "idPapel", nullable = false)
 	private Integer idPapel;
 
-	@Column(name = "nome", length = 100, nullable = false)
+	@Column(length = 100, nullable = false)
 	private String nome;
 
-	@Column(name = "descricao", length = 600, nullable = false)
+	@Column(length = 1000, nullable = false)
 	private String descricao;
 
 	@Override

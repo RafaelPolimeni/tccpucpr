@@ -21,4 +21,12 @@ public class RecursoDaoImpl extends CrudDAOImpl<Recurso> implements RecursoDao {
 		return entityManager.createNamedQuery(Perfil.class.getSimpleName() + ".findAll").getResultList();
 	}
 
+	public List<Recurso> consultarObservadores() {
+		return entityManager.createNamedQuery("Recurso.observadores").getResultList();
+	}
+	
+	@Override
+	public List<Recurso> consultarGerentes() {
+		return entityManager.createNamedQuery("Recurso.gerentes").getResultList();
+	}
 }

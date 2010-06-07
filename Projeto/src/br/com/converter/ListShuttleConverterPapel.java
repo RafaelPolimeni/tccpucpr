@@ -11,7 +11,7 @@ import org.richfaces.component.html.HtmlListShuttle;
 
 import br.com.model.Papel;
 
-public class ListShuttleConverter implements Converter {
+public class ListShuttleConverterPapel implements Converter {
 
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {

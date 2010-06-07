@@ -214,7 +214,7 @@
 										   fastOrderControlsVisible="false" 
 										   rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
 										   validator="validadorObrigatorioShuttle"
-										   converter="listShuttleConverter">
+										   converter="listShuttleConverterPapel">
 								<rich:column> 
 					            	<h:outputText value="#{item.nome}" />
 					        	</rich:column>
@@ -229,7 +229,6 @@
 									
 						<a4j:commandButton action="#{recursoServiceImpl.confirmCreate}" value="#{labels['confirmar']}" rendered="#{recursoServiceImpl.recursoBean.createState}" reRender="messageSenha"/>
 						<a4j:commandButton action="#{recursoServiceImpl.prepareUpdate}" value="#{labels['alterar']}" rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
-						<rich:spacer width="7" rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
 						<a4j:commandButton action="#{recursoServiceImpl.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{recursoServiceImpl.recursoBean.updateState}"/>
 						<rich:spacer width="7" rendered="#{not recursoServiceImpl.recursoBean.listState}"/>
 						<a4j:commandButton action="#{recursoServiceImpl.backToList}" value="#{labels['cancelar']}" rendered="#{not recursoServiceImpl.recursoBean.listState}" immediate="true"/>

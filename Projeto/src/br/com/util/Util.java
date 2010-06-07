@@ -3,6 +3,10 @@ package br.com.util;
 import java.util.Iterator;
 
 import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
+import br.com.bean.UserBean;
 
 public class Util {
 
@@ -19,5 +23,11 @@ public class Util {
 			}
 		}
 		return null;
+	}
+	
+	public static Object getFromSession(String id){
+		HttpSession sessao = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		
+		return sessao.getAttribute(id);
 	}
 }

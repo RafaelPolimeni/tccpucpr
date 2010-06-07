@@ -19,9 +19,14 @@
 						<rich:dropDownMenu rendered="#{(not empty userBean.autoridade) and (userBean.autoridade.nome == 'ROLE_USER' or userBean.autoridade.nome == 'ROLE_ADMIN')}">
 			                <f:facet name="label"> 
 			                    <h:panelGroup>
-			                        <h:outputText value="Atividades"/>
+			                        <h:outputText value="#{labels['menu.acompanhar']}"/>
 			                    </h:panelGroup>
 			                </f:facet>
+			                
+		                	<rich:menuItem submitMode="server" value="#{labels['menu.minhasAtividades']}" 
+		                        action="#{recursoServiceImpl.findAll}" rendered="#{(not empty userBean.autoridade)}"/>
+		                	<rich:menuItem submitMode="server" value="#{labels['menu.meusProjetos']}"
+		                        action="#{papelServiceImpl.findAll}" rendered="#{(not empty userBean.autoridade) and (userBean.autoridade.nome == 'ROLE_MANAG') or (userBean.autoridade.nome == 'ROLE_ADMIN')}"/>
 			           	</rich:dropDownMenu>
 			           	
 						<rich:dropDownMenu rendered="#{(not empty userBean.autoridade) and userBean.autoridade.nome == 'ROLE_ADMIN'}">
@@ -35,6 +40,8 @@
 			                        action="#{recursoServiceImpl.findAll}" />
 			                	<rich:menuItem submitMode="server" value="#{labels['menu.papeis']}"
 			                        action="#{papelServiceImpl.findAll}" />
+		                        <rich:menuItem submitMode="server" value="#{labels['menu.projetos']}"
+			                        action="#{projetoServiceImpl.findAll}" />
 		                	</rich:menuGroup>
 			           	</rich:dropDownMenu>
 						
@@ -42,8 +49,6 @@
 		            </rich:toolBarGroup>
 							            
 		            <rich:toolBarGroup location="right">
-		             	<h:inputText styleClass="barsearch" size="20" rendered="#{not empty userBean.autoridade}" />
-                		<h:commandButton styleClass="barsearchbutton" onclick="return false;"  value="#{labels['menu.pesquisar']}" rendered="#{not empty userBean.autoridade}"/>
 						<a4j:commandLink value="#{userBean.nome} #{userBean.sobrenome}" style="text-decoration: none; color: black;" rendered="#{not empty userBean.autoridade}"/>
 						<a4j:commandLink action="logout" value="#{labels['menu.sair']}" style="text-decoration: none" rendered="#{not empty userBean.autoridade}"/>
 					</rich:toolBarGroup>

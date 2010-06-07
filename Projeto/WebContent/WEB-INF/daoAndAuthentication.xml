@@ -38,11 +38,15 @@
 			
  		<security:intercept-url
 			pattern="/pages/user/**"
-			access="ROLE_USER,ROLE_ADMIN" />
+			access="ROLE_USER,ROLE_MANAG,ROLE_ADMIN" />
  		
  		<security:intercept-url
 			pattern="/pages/admin/**"
 			access="ROLE_ADMIN" />
+		
+		<security:intercept-url
+			pattern="/pages/manag/**"
+			access="ROLE_MANAG, ROLE_ADMIN" />	
 		
 		<security:form-login
 			login-processing-url="/j_spring_security_check"
