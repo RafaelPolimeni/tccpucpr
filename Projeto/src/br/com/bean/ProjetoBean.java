@@ -37,6 +37,8 @@ public class ProjetoBean extends BeanAbstrato {
 	private boolean showModalObservadores;
 	
 	private Selection selecaoObservadores;
+	private Selection selecaoGerentes;
+	private Selection selecaoParticipantes;
 
 	public void clear() {
 		setIdProjeto(null);
@@ -346,5 +348,33 @@ public class ProjetoBean extends BeanAbstrato {
 	 */
 	public void setSelecaoObservadores(Selection selecaoObservadores) {
 		this.selecaoObservadores = selecaoObservadores;
+	}
+
+	/**
+	 * @return the selecaoGerentes
+	 */
+	public Selection getSelecaoGerentes() {
+		return selecaoGerentes;
+	}
+
+	/**
+	 * @param selecaoGerentes the selecaoGerentes to set
+	 */
+	public void setSelecaoGerentes(Selection selecaoGerentes) {
+		this.selecaoGerentes = selecaoGerentes;
+	}
+
+	/**
+	 * @return the selecaoParticipantes
+	 */
+	public Selection getSelecaoParticipantes() {
+		return selecaoParticipantes;
+	}
+
+	/**
+	 * @param selecaoParticipantes the selecaoParticipantes to set
+	 */
+	public void setSelecaoParticipantes(Selection selecaoParticipantes) {
+		this.selecaoParticipantes = selecaoParticipantes;
 	}
 }

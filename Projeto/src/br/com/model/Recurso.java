@@ -21,6 +21,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "Recurso")
 @NamedQueries( { @NamedQuery(name = "Recurso.findAll", query = "SELECT r FROM Recurso r order by r.nome"),
+	    @NamedQuery(name = "Recurso.habilitados", query = "SELECT r FROM Recurso r where r.habilitado = true order by r.nome"),
 		@NamedQuery(name = "Recurso.findByUsername", query = "SELECT r FROM Recurso r WHERE r.usuario = :userName"),
 		@NamedQuery(name = "Recurso.observadores", query = "SELECT r FROM Recurso r WHERE r.autoridade.idAutoridade = 4"),
 		@NamedQuery(name = "Recurso.gerentes", query = "SELECT r FROM Recurso r WHERE r.autoridade.idAutoridade = 1 or r.autoridade.idAutoridade = 2") })
