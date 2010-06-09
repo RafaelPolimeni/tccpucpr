@@ -220,7 +220,8 @@
 					        	</rich:column>
 							</rich:listShuttle>
 							 <rich:dataList value="#{recursoServiceImpl.recursoBean.papeis}" var="item" 
-							 	rendered="#{recursoServiceImpl.recursoBean.detailState}"> 
+							 	rendered="#{recursoServiceImpl.recursoBean.detailState}"
+							 	style="list-style: disc outside url('/Projeto/img/bullet_arrow.gif');"> 
 				                    <h:outputText value="#{item.nome}"/>
 				            </rich:dataList> 
 							<rich:message for="papeis" style="color:red;"/>

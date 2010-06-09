@@ -10,9 +10,10 @@
 	  xmlns:validators="validators">
 	<ui:composition template="/templates/main.xhtml">
 		<ui:param name="bean" value="#{projetoBean}" />
-		<ui:define name="body">			
-			<a4j:keepAlive beanName="projetoBean" />
-			<a4j:form ajaxSubmit="true" id="papelForm">
+		<ui:define name="body">
+			<a4j:keepAlive beanName="projetoServiceImpl"/>
+			<a4j:keepAlive beanName="projetoBean"/>		
+			<a4j:form ajaxSubmit="true" id="papelForm" >
 				<h:panelGroup layout="block" id="listPanel" rendered="#{projetoServiceImpl.projetoBean.listState}">
 					<rich:dataTable value="#{projetoBean.projetos}" var="projeto" 
 							width="700" align="center" rows="10" id="projetos" reRender="dataScroller"
@@ -36,7 +37,7 @@
 					</rich:dataTable>
 					
 					<br />
-				
+					
 					<a4j:commandButton action="#{projetoServiceImpl.prepareCreate}"
 						 value="#{labels['novo']}" style="margin-left:61px;"/>
 				</h:panelGroup>
@@ -105,7 +106,7 @@
 									<f:facet name="header">
 										Nome
 									</f:facet>
-									<h:outputText value="#{item.nome}#{item.sobrenome}"></h:outputText>	
+									<h:outputText value="#{item.nome} #{item.sobrenome}"></h:outputText>	
 								</rich:column>
 								
 								<rich:column style="text-align: center;">
@@ -126,7 +127,9 @@
 							<rich:message for="observadores" style="color:red;"/>
 							
 							<h:outputText value=" " />
-							<a4j:commandButton action="#{projetoServiceImpl.showModalAddObserver}" value="#{labels['adicionar']}" immediate="true"/>
+							
+							<a4j:commandButton action="#{projetoServiceImpl.mostrarModalObservadores}" 
+									value="#{labels['adicionar']}" immediate="true"/>
 							<h:outputText value=" " />
 						</h:panelGrid>
 						
@@ -141,31 +144,36 @@
 				</h:panelGroup>
 			</a4j:form>
 			
-			<rich:modalPanel rendered="#{projetoServiceImpl.projetoBean.showModalObservadores}" 
+			<rich:modalPanel id="modalPanelObserver" rendered="#{projetoServiceImpl.projetoBean.showModalObservadores}" 
 				autosized="true" showWhenRendered="true" width="450">
 				<f:facet name="header">
 					<h:outputText value="#{labels['projeto.observadores']}" />
 				</f:facet>
-				
-				<a4j:form id="modalFormObservadores" ajaxSubmit="true">			
-					<rich:extendedDataTable id="possiveisObservadores" var="item" rows="4"
+					
+				<a4j:form id="modalFormObservadores" ajaxSubmit="true" reRender="nome">
+					<rich:extendedDataTable id="possiveisObservadores" var="item" rows="6"
 						value="#{projetoServiceImpl.projetoBean.possiveisObservadores}"
-						selectionMode="multiple" height="200px">
+						selectionMode="multiple" height="200px" style="cursor: pointer;"
+						selection="#{projetoServiceImpl.projetoBean.selecaoObservadores}">
 						<rich:column>
 							<f:facet name="header">
 								Nome
 							</f:facet>
-							<h:outputText value="#{item.nome}#{item.sobrenome}"></h:outputText>	
+							<h:outputText value="#{item.nome} #{item.sobrenome}"></h:outputText>	
 						</rich:column>
 						
 						<f:facet name="footer">
 		            		<rich:datascroller id="dataScrollerObservadores" />
 		            	</f:facet>
 		            </rich:extendedDataTable>
-				
-					<a4j:commandButton action="#{papelServiceImpl.delete}" value="#{labels['excluir']}"/>
+					
+					<br />
+					
+					<a4j:commandButton action="#{projetoServiceImpl.selecionarObservadores}" 
+						value="#{labels['selecionar']}" reRender="observadores"/>
 					<rich:spacer width="7"/>
-					<a4j:commandButton action="#{papelServiceImpl.cancelDelete}" value="#{labels['cancelar']}"/>
+					<a4j:commandButton action="#{projetoServiceImpl.esconderModalObservadores}" 
+						value="#{labels['cancelar']}" reRender="observadores"/>
 				</a4j:form>		
 			</rich:modalPanel>
 		</ui:define>
