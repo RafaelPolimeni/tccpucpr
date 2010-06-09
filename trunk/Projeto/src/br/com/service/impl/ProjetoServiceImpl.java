@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -116,43 +116,171 @@ public class ProjetoServiceImpl implements ProjetoService {
 
 	public void excluirObservador() {
 		projetoBean.getObservadores().remove(projetoBean.getRecursoTemp());
-	}
 
-	public void mostrarModalObservadores() {
 		List<Recurso> possiveisObservadores = recursoDaoImpl.consultarObservadores();
-		
-		if(projetoBean.getObservadores() != null){
-			for(Recurso recurso : projetoBean.getObservadores()){
+
+		if (projetoBean.getObservadores() != null) {
+			for (Recurso recurso : projetoBean.getObservadores()) {
 				possiveisObservadores.remove(recurso);
 			}
 		}
-		
+
 		projetoBean.setPossiveisObservadores(possiveisObservadores);
-		projetoBean.setShowModalObservadores(true);
 	}
 	
-	public void esconderModalObservadores(){
-		projetoBean.setShowModalObservadores(false);
+	public void excluirGerente() {
+		projetoBean.getGerentes().remove(projetoBean.getRecursoTemp());
+
+		List<Recurso> possiveisGerentes = recursoDaoImpl.consultarGerentes();
+
+		if (projetoBean.getGerentes() != null) {
+			for (Recurso recurso : projetoBean.getGerentes()) {
+				possiveisGerentes.remove(recurso);
+			}
+		}
+
+		projetoBean.setPossiveisGerentes(possiveisGerentes);
 	}
 	
-	public void selecionarObservadores(){
+	public void excluirParticipantes() {
+		projetoBean.getParticipantes().remove(projetoBean.getRecursoTemp());
+
+		List<Recurso> possiveisParticipantes = recursoDaoImpl.consultarHabilitados();
+
+		if (projetoBean.getParticipantes() != null) {
+			for (Recurso recurso : projetoBean.getParticipantes()) {
+				possiveisParticipantes.remove(recurso);
+			}
+		}
+
+		projetoBean.setPossiveisParticipantes(possiveisParticipantes);
+	}
+
+	public void selecionarObservadores() {
 		Iterator iterator = projetoBean.getSelecaoObservadores().getKeys();
-		
+
 		List<Recurso> recursosSelecionados = new ArrayList();
-		
-		while(iterator.hasNext()){
-			Integer index = (Integer)iterator.next();
+
+		while (iterator.hasNext()) {
+			Integer index = (Integer) iterator.next();
 			recursosSelecionados.add(projetoBean.getPossiveisObservadores().get(index));
 		}
-		
-		if(projetoBean.getObservadores() == null){
+
+		if (projetoBean.getObservadores() == null) {
 			projetoBean.setObservadores(recursosSelecionados);
-		}else{
+		} else {
 			projetoBean.getObservadores().addAll(recursosSelecionados);
 		}
-		
-		projetoBean.setShowModalObservadores(false);
+
 		projetoBean.setSelecaoObservadores(null);
+
+		List<Recurso> possiveisObservadores = recursoDaoImpl.consultarObservadores();
+
+		if (projetoBean.getObservadores() != null) {
+			for (Recurso recurso : projetoBean.getObservadores()) {
+				possiveisObservadores.remove(recurso);
+			}
+		}
+
+		projetoBean.setPossiveisObservadores(possiveisObservadores);
+	}
+
+	public void selecionarGerentes() {
+		Iterator iterator = projetoBean.getSelecaoGerentes().getKeys();
+
+		List<Recurso> gerentesSelecionados = new ArrayList();
+
+		while (iterator.hasNext()) {
+			Integer index = (Integer) iterator.next();
+			gerentesSelecionados.add(projetoBean.getPossiveisGerentes().get(index));
+		}
+
+		if (projetoBean.getGerentes() == null) {
+			projetoBean.setGerentes(gerentesSelecionados);
+		} else {
+			projetoBean.getGerentes().addAll(gerentesSelecionados);
+		}
+
+		projetoBean.setSelecaoGerentes(null);
+
+		List<Recurso> possiveisGerentes = recursoDaoImpl.consultarGerentes();
+
+		if (projetoBean.getGerentes() != null) {
+			for (Recurso recurso : projetoBean.getGerentes()) {
+				possiveisGerentes.remove(recurso);
+			}
+		}
+
+		projetoBean.setPossiveisGerentes(possiveisGerentes);
+	}
+	
+	public void selecionarParticipantes() {
+		Iterator iterator = projetoBean.getSelecaoParticipantes().getKeys();
+
+		List<Recurso> participantesSelecionados = new ArrayList();
+
+		while (iterator.hasNext()) {
+			Integer index = (Integer) iterator.next();
+			participantesSelecionados.add(projetoBean.getPossiveisParticipantes().get(index));
+		}
+
+		if (projetoBean.getParticipantes() == null) {
+			projetoBean.setParticipantes(participantesSelecionados);
+		} else {
+			projetoBean.getParticipantes().addAll(participantesSelecionados);
+		}
+
+		projetoBean.setSelecaoParticipantes(null);
+
+		List<Recurso> possiveisParticipantes = recursoDaoImpl.consultarHabilitados();
+
+		if (projetoBean.getParticipantes() != null) {
+			for (Recurso recurso : projetoBean.getParticipantes()) {
+				possiveisParticipantes.remove(recurso);
+			}
+		}
+
+		projetoBean.setPossiveisParticipantes(possiveisParticipantes);
+	}
+	
+	public void mudarAba(ValueChangeEvent event) {
+		// HtmlTabPanel panel = (HtmlTabPanel) event.getSource();
+		// UIInput input = (UIInput)panel.findComponent("nome");
+		// if(input.getSubmittedValue() != null){
+		// projetoBean.setNome(input.getSubmittedValue().toString());
+		// }
+
+		if (event.getNewValue().toString().equals("tabObservadores")) {
+			List<Recurso> possiveisObservadores = recursoDaoImpl.consultarObservadores();
+
+			if (projetoBean.getObservadores() != null) {
+				for (Recurso recurso : projetoBean.getObservadores()) {
+					possiveisObservadores.remove(recurso);
+				}
+			}
+
+			projetoBean.setPossiveisObservadores(possiveisObservadores);
+		} else if (event.getNewValue().toString().equals("tabGerentes")) {
+			List<Recurso> possiveisGerentes = recursoDaoImpl.consultarGerentes();
+
+			if (projetoBean.getGerentes() != null) {
+				for (Recurso recurso : projetoBean.getGerentes()) {
+					possiveisGerentes.remove(recurso);
+				}
+			}
+
+			projetoBean.setPossiveisGerentes(possiveisGerentes);
+		} else if (event.getNewValue().toString().equals("tabParticipantes")) {
+			List<Recurso> possiveisParticipantes = recursoDaoImpl.consultarHabilitados();
+
+			if (projetoBean.getParticipantes() != null) {
+				for (Recurso recurso : projetoBean.getParticipantes()) {
+					possiveisParticipantes.remove(recurso);
+				}
+			}
+
+			projetoBean.setPossiveisParticipantes(possiveisParticipantes);			
+		}
 	}
 
 	/**

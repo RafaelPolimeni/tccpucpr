@@ -42,140 +42,172 @@
 						 value="#{labels['novo']}" style="margin-left:61px;"/>
 				</h:panelGroup>
 				
-				<h:panelGroup layout="block" id="detailPanel" 
-					rendered="#{not projetoServiceImpl.projetoBean.listState}">
-					<fieldset>
-						<legend>Dados do projeto</legend>
-						
-						<h:panelGrid columns="3" >
+				<rich:tabPanel switchType="ajax" rendered="#{not projetoServiceImpl.projetoBean.listState}"
+					valueChangeListener="#{projetoServiceImpl.mudarAba}">
+			        <rich:tab label="Dados Gerais" id="tabGeral">
+						<h:panelGrid columns="2" >
 							<h:outputLabel value="#{labels['projeto.nome']}:" for="nome"/>
 							<h:inputText id="nome" value="#{projetoServiceImpl.projetoBean.nome}" 
 								rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}"
-								required="true" requiredMessage="#{messages['validation.empty']}"
-								maxlength="100" size="80">
-								<f:validator validatorId="validaObrigatorio"/>
-								<rich:ajaxValidator event="onsubmit"/>
-							</h:inputText>
+								maxlength="100" size="80"/>
 							<h:outputText value="#{projetoServiceImpl.projetoBean.nome}" 
 								rendered="#{projetoServiceImpl.projetoBean.detailState}"/>
-							<rich:message for="nome" style="color:red;"/>
 							
 							<h:outputLabel value="#{labels['projeto.descricao']}:" for="descricao"/>
 							<rich:editor id="descricao" width="450" height="250"
-								theme="advanced" required="true" 
-								requiredMessage="#{messages['validation.empty']}">
+								theme="advanced">
 								<f:param name="theme_advanced_buttons1" value="bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,fontselect,fontsizeselect"/>
 								<f:param name="theme_advanced_buttons2" value="cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,|,forecolor,backcolor"/>
 								<f:param name="theme_advanced_buttons3" value=""/>
 								<f:param name="theme_advanced_buttons4" value=""/>
 						        <f:param name="theme_advanced_toolbar_location" value="top"/>                               
-         							<f:param name="theme_advanced_toolbar_align" value="left"/>
+         						<f:param name="theme_advanced_toolbar_align" value="left"/>
 							</rich:editor>
-							<rich:message for="descricao" style="color:red;"/>
 							
 							<h:outputLabel value="#{labels['projeto.dataInicio']}:" for="dataInicio" />
 							<rich:calendar id="dataInicio" datePattern="dd/MM/yyyy" 
-								value="#{projetoServiceImpl.projetoBean.dataInicio}" 
-								rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}"
-								required="true" requiredMessage="#{messages['validation.empty']}"
-								size="50">
-								<rich:ajaxValidator event="onsubmit"/>
-							</rich:calendar>
+								value="#{projetoServiceImpl.projetoBean.dataInicio}" size="50"
+								rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}" />
 							<h:outputText value="#{projetoServiceImpl.projetoBean.dataInicio}"
 								rendered="#{projetoServiceImpl.projetoBean.detailState}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
-							<rich:message for="dataInicio" style="color:red;"/>
 							
 							<h:outputLabel value="#{labels['projeto.dataFimPrevista']}:" for="dataFimPrevista" />
 							<rich:calendar id="dataFimPrevista" datePattern="dd/MM/yyyy" 
 								value="#{projetoServiceImpl.projetoBean.dataFimPrevista}" size="50"
-								rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}">
-								<rich:ajaxValidator event="onsubmit"/>
-							</rich:calendar>
+								rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}"/>
 							<h:outputText value="#{projetoServiceImpl.projetoBean.dataFimPrevista}"
 								rendered="#{projetoServiceImpl.projetoBean.detailState}">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
-							<rich:message for="dataFimPrevista" style="color:red;"/>
-							
-							<h:outputLabel value="#{labels['projeto.observadores']}:" for="observadores" />
-							<rich:dataTable id="observadores" var="item" rows="4"
-								value="#{projetoServiceImpl.projetoBean.observadores}">
-								<rich:column>
-									<f:facet name="header">
-										Nome
-									</f:facet>
-									<h:outputText value="#{item.nome} #{item.sobrenome}"></h:outputText>	
-								</rich:column>
-								
-								<rich:column style="text-align: center;">
-									<f:facet name="header">
-																					
-									</f:facet>
-									<h:graphicImage value="/img/disabled.png" style="cursor: pointer;">
-										<a4j:support action="#{projetoServiceImpl.excluirObservador}"
-											event="onclick" immediate="true">
-											<f:setPropertyActionListener value="#{item}" target="#{projetoServiceImpl.projetoBean.recursoTemp}" />
-										</a4j:support>
-									</h:graphicImage>
-								</rich:column>
-								<f:facet name="footer">
-				            		<rich:datascroller id="dataScroller2" />
-				            	</f:facet>
-				            </rich:dataTable>
-							<rich:message for="observadores" style="color:red;"/>
-							
-							<h:outputText value=" " />
-							
-							<a4j:commandButton action="#{projetoServiceImpl.mostrarModalObservadores}" 
-									value="#{labels['adicionar']}" immediate="true"/>
 							<h:outputText value=" " />
 						</h:panelGrid>
 						
 						<br />
+			        </rich:tab>
+			        <rich:tab label="Observadores" id="tabObservadores">
+			        	<h:outputText value="Selecione os observadores" styleClass="pageMessage"/>
+			        	
+			        	<br />
+			        	<br />
+			        	
+				        <rich:extendedDataTable id="possiveisObservadores" var="item"
+							value="#{projetoServiceImpl.projetoBean.possiveisObservadores}"
+							selectionMode="multiple" height="200px" style="cursor: pointer;"
+							selection="#{projetoServiceImpl.projetoBean.selecaoObservadores}">
+							
+							<rich:column width="100%" label="Nome" sortable="true" sortBy="#{item.nome}" id="nomeObservadoresPossiveis">
+								<f:facet name="header">
+									Nome
+								</f:facet>
+								<h:outputText value="#{item.nome} #{item.sobrenome}"></h:outputText>	
+							</rich:column>
+			            </rich:extendedDataTable>
 						
-						<a4j:commandButton action="#{projetoServiceImpl.confirmCreate}" value="#{labels['confirmar']}" rendered="#{projetoServiceImpl.projetoBean.createState}" reRender="messageSenha"/>
-						<a4j:commandButton action="#{projetoServiceImpl.prepareUpdate}" value="#{labels['alterar']}" rendered="#{projetoServiceImpl.projetoBean.detailState}"/>
-						<a4j:commandButton action="#{projetoServiceImpl.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{projetoServiceImpl.projetoBean.updateState}"/>
-						<rich:spacer width="7" rendered="#{not projetoServiceImpl.projetoBean.listState}"/>
-						<a4j:commandButton action="#{projetoServiceImpl.backToList}" value="#{labels['cancelar']}" rendered="#{not projetoServiceImpl.projetoBean.listState}" immediate="true"/>
-					</fieldset>
-				</h:panelGroup>
+						<br />
+						
+						<a4j:commandButton action="#{projetoServiceImpl.selecionarObservadores}" 
+							value="#{labels['selecionar']}" reRender="observadores"/>
+						
+						<br />
+						<br />
+						<br />
+						
+						<h:panelGroup rendered="#{not empty projetoServiceImpl.projetoBean.observadores}">
+							<h:outputText value="Observadores Selecionados" styleClass="pageMessage"/>
+			        	
+				        	<br />
+				        	<br />
+						</h:panelGroup>
+			        	
+						<rich:extendedDataTable id="observadoresSelecionados" var="item"
+							value="#{projetoServiceImpl.projetoBean.observadores}"
+							rendered="#{not empty projetoServiceImpl.projetoBean.observadores}"
+							selectionMode="none" height="200px">
+							
+							<rich:column width="90%" sortable="true" sortBy="#{item.nome}" label="Nome">
+								<f:facet name="header">
+									Nome
+								</f:facet>
+								<h:outputText value="#{item.nome} #{item.sobrenome}"></h:outputText>	
+							</rich:column>
+							
+							<rich:column style="text-align: center;" label="Excluir" width="10%">
+								<f:facet name="header">
+									Excluir											
+								</f:facet>
+								<h:graphicImage value="/img/disabled.png" style="cursor: pointer;">
+									<a4j:support action="#{projetoServiceImpl.excluirObservador}"
+										event="onclick" immediate="true">
+										<f:setPropertyActionListener value="#{item}" target="#{projetoServiceImpl.projetoBean.recursoTemp}" />
+									</a4j:support>
+								</h:graphicImage>
+							</rich:column>
+			            </rich:extendedDataTable>
+			            
+			            <h:outputText value="Nenhum observador selecionado" rendered="#{empty projetoServiceImpl.projetoBean.observadores}"/>
+			        </rich:tab>
+			        
+			        <rich:tab label="Gerentes" id="tabGerentes">
+				        <rich:extendedDataTable id="possiveisGerentes" var="item"
+							value="#{projetoServiceImpl.projetoBean.possiveisGerentes}"
+							selectionMode="multiple" height="200px" style="cursor: pointer;"
+							selection="#{projetoServiceImpl.projetoBean.selecaoGerentes}">
+							
+							<rich:column width="100%" label="Nome" sortable="true" sortBy="#{item.nome}" id="nomeGerentesPossiveis">
+								<f:facet name="header">
+									Nome
+								</f:facet>
+								<h:outputText value="#{item.nome} #{item.sobrenome}"></h:outputText>	
+							</rich:column>
+			            </rich:extendedDataTable>
+						
+						<br />
+						
+						<a4j:commandButton action="#{projetoServiceImpl.selecionarGerentes}" 
+							value="#{labels['selecionar']}"/>
+						
+						<br />
+						<br />
+						
+						<rich:extendedDataTable id="gerentesSelecionados" var="item"
+							value="#{projetoServiceImpl.projetoBean.gerentes}"
+							rendered="#{not empty projetoServiceImpl.projetoBean.gerentes}"
+							selectionMode="none" height="200px">
+							
+							<rich:column width="90%" sortable="true" sortBy="#{item.nome}" label="Nome">
+								<f:facet name="header">
+									Nome
+								</f:facet>
+								<h:outputText value="#{item.nome} #{item.sobrenome}"></h:outputText>	
+							</rich:column>
+							
+							<rich:column style="text-align: center;" label="Excluir" width="10%">
+								<f:facet name="header">
+									Excluir											
+								</f:facet>
+								<h:graphicImage value="/img/disabled.png" style="cursor: pointer;">
+									<a4j:support action="#{projetoServiceImpl.excluirGerente}"
+										event="onclick" immediate="true">
+										<f:setPropertyActionListener value="#{item}" target="#{projetoServiceImpl.projetoBean.recursoTemp}" />
+									</a4j:support>
+								</h:graphicImage>
+							</rich:column>
+			            </rich:extendedDataTable>
+			            
+			            <h:outputText value="Nenhum gerente selecionado" rendered="#{empty projetoServiceImpl.projetoBean.gerentes}"/>
+			        </rich:tab>
+			    </rich:tabPanel>
+			    
+			    <br />
+			    
+			    <a4j:commandButton action="#{projetoServiceImpl.confirmCreate}" value="#{labels['confirmar']}" rendered="#{projetoServiceImpl.projetoBean.createState}" reRender="messageSenha"/>
+				<a4j:commandButton action="#{projetoServiceImpl.prepareUpdate}" value="#{labels['alterar']}" rendered="#{projetoServiceImpl.projetoBean.detailState}"/>
+				<a4j:commandButton action="#{projetoServiceImpl.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{projetoServiceImpl.projetoBean.updateState}"/>
+				<rich:spacer width="7" rendered="#{not projetoServiceImpl.projetoBean.listState}"/>
+				<a4j:commandButton action="#{projetoServiceImpl.backToList}" value="#{labels['cancelar']}" rendered="#{not projetoServiceImpl.projetoBean.listState}" immediate="true"/>
 			</a4j:form>
-			
-			<rich:modalPanel id="modalPanelObserver" rendered="#{projetoServiceImpl.projetoBean.showModalObservadores}" 
-				autosized="true" showWhenRendered="true" width="450">
-				<f:facet name="header">
-					<h:outputText value="#{labels['projeto.observadores']}" />
-				</f:facet>
-					
-				<a4j:form id="modalFormObservadores" ajaxSubmit="true" reRender="nome">
-					<rich:extendedDataTable id="possiveisObservadores" var="item" rows="6"
-						value="#{projetoServiceImpl.projetoBean.possiveisObservadores}"
-						selectionMode="multiple" height="200px" style="cursor: pointer;"
-						selection="#{projetoServiceImpl.projetoBean.selecaoObservadores}">
-						<rich:column>
-							<f:facet name="header">
-								Nome
-							</f:facet>
-							<h:outputText value="#{item.nome} #{item.sobrenome}"></h:outputText>	
-						</rich:column>
-						
-						<f:facet name="footer">
-		            		<rich:datascroller id="dataScrollerObservadores" />
-		            	</f:facet>
-		            </rich:extendedDataTable>
-					
-					<br />
-					
-					<a4j:commandButton action="#{projetoServiceImpl.selecionarObservadores}" 
-						value="#{labels['selecionar']}" reRender="observadores"/>
-					<rich:spacer width="7"/>
-					<a4j:commandButton action="#{projetoServiceImpl.esconderModalObservadores}" 
-						value="#{labels['cancelar']}" reRender="observadores"/>
-				</a4j:form>		
-			</rich:modalPanel>
 		</ui:define>
 	</ui:composition>
 </html>

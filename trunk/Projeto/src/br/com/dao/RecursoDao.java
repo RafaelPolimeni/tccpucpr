@@ -12,4 +12,6 @@ public interface RecursoDao extends CrudDAO<Recurso> {
 	List<Recurso> consultarObservadores();
 	
 	List<Recurso> consultarGerentes();
+	
+	List<Recurso> consultarHabilitados();
 }
