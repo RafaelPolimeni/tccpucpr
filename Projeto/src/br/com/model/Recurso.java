@@ -300,64 +300,11 @@ public class Recurso implements EntityInterface {
 		if (getClass() != obj.getClass())
 			return false;
 		Recurso other = (Recurso) obj;
-		if (autoridade == null) {
-			if (other.autoridade != null)
-				return false;
-		} else if (!autoridade.equals(other.autoridade))
-			return false;
-		if (dataNascimento == null) {
-			if (other.dataNascimento != null)
-				return false;
-		} else if (!dataNascimento.equals(other.dataNascimento))
-			return false;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (habilitado != other.habilitado)
-			return false;
 		if (idRecurso == null) {
 			if (other.idRecurso != null)
 				return false;
 		} else if (!idRecurso.equals(other.idRecurso))
 			return false;
-		if (locale == null) {
-			if (other.locale != null)
-				return false;
-		} else if (!locale.equals(other.locale))
-			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
-		if (papeis == null) {
-			if (other.papeis != null)
-				return false;
-		} else if (!papeis.equals(other.papeis))
-			return false;
-		if (senha == null) {
-			if (other.senha != null)
-				return false;
-		} else if (!senha.equals(other.senha))
-			return false;
-		if (sobrenome == null) {
-			if (other.sobrenome != null)
-				return false;
-		} else if (!sobrenome.equals(other.sobrenome))
-			return false;
-		if (telefone == null) {
-			if (other.telefone != null)
-				return false;
-		} else if (!telefone.equals(other.telefone))
-			return false;
-		if (usuario == null) {
-			if (other.usuario != null)
-				return false;
-		} else if (!usuario.equals(other.usuario))
-			return false;
 		return true;
 	}
-
 }

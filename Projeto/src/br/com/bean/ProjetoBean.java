@@ -3,6 +3,7 @@ package br.com.bean;
 import java.util.Date;
 import java.util.List;
 
+import org.richfaces.model.selection.Selection;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,8 @@ public class ProjetoBean extends BeanAbstrato {
 	private Recurso recursoTemp;
 	
 	private boolean showModalObservadores;
+	
+	private Selection selecaoObservadores;
 
 	public void clear() {
 		setIdProjeto(null);
@@ -329,5 +332,19 @@ public class ProjetoBean extends BeanAbstrato {
 	 */
 	public void setShowModalObservadores(boolean showModalObservadores) {
 		this.showModalObservadores = showModalObservadores;
+	}
+
+	/**
+	 * @return the selecaoObservadores
+	 */
+	public Selection getSelecaoObservadores() {
+		return selecaoObservadores;
+	}
+
+	/**
+	 * @param selecaoObservadores the selecaoObservadores to set
+	 */
+	public void setSelecaoObservadores(Selection selecaoObservadores) {
+		this.selecaoObservadores = selecaoObservadores;
 	}
 }

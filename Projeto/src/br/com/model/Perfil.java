@@ -81,4 +81,47 @@ public class Perfil implements EntityInterface{
 	public void setNomeVisivel(String nomeVisivel) {
 		this.nomeVisivel = nomeVisivel;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idAutoridade == null) ? 0 : idAutoridade.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((nomeVisivel == null) ? 0 : nomeVisivel.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Perfil other = (Perfil) obj;
+		if (idAutoridade == null) {
+			if (other.idAutoridade != null)
+				return false;
+		} else if (!idAutoridade.equals(other.idAutoridade))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		if (nomeVisivel == null) {
+			if (other.nomeVisivel != null)
+				return false;
+		} else if (!nomeVisivel.equals(other.nomeVisivel))
+			return false;
+		return true;
+	}
 }

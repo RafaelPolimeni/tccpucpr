@@ -1,8 +1,11 @@
 package br.com.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -45,8 +48,8 @@ public class ProjetoServiceImpl implements ProjetoService {
 	}
 
 	public void prepareCreate() {
-//		projetoBean.setPossiveisGerentes(recursoDaoImpl.consultarGerentes());
-//		projetoBean.setPossiveisParticipantes(recursoDaoImpl.findAll(Recurso.class));
+		// projetoBean.setPossiveisGerentes(recursoDaoImpl.consultarGerentes());
+		// projetoBean.setPossiveisParticipantes(recursoDaoImpl.findAll(Recurso.class));
 
 		projetoBean.clear();
 		projetoBean.setCreateState();
@@ -65,57 +68,91 @@ public class ProjetoServiceImpl implements ProjetoService {
 	}
 
 	public void confirmCreate() {
-//		try {
-//			Projeto projeto = new Projeto();
-//			projetoBean.setDataFim(new Date());
-//			projetoBean.setDataFimPrevista(new Date());
-//			BeanUtils.copyProperties(projeto, projetoBean);
-//			projeto.setStatus(1);
-//
-//			UserBean userBean = (UserBean) Util.getFromSession("userBean");
-//
-//			projeto.setCriador(recursoDaoImpl.find(Recurso.class, userBean.getIdUsuario()));
-//
-//			List<Recurso> recursos = projetoBean.getParticipantes();
-//			Date data = new Date();
-//
-//			List<HistoricoProjeto> historicos = new ArrayList<HistoricoProjeto>();
-//			List<RecursoProjeto> alocados = new ArrayList<RecursoProjeto>();
-//
-//			for (Recurso recurso : recursos) {
-//				HistoricoProjeto historico = new HistoricoProjeto();
-//				historico.setProjeto(projeto);
-//				historico.setRecurso(recurso);
-//				historico.setData(data);
-//				historico.setAdicionou(true);
-//
-//				historicos.add(historico);
-//
-//				RecursoProjetoPK recursoProjetoPK = new RecursoProjetoPK();
-//				recursoProjetoPK.setProjeto(projeto);
-//				recursoProjetoPK.setRecurso(recurso);
-//				RecursoProjeto recursoProjeto = new RecursoProjeto();
-//				recursoProjeto.setRecursoProjetoPK(recursoProjetoPK);
-//
-//				alocados.add(recursoProjeto);
-//			}
-//
-//			projeto.setParticipantes(alocados);
-//
-//			projetoDaoImpl.incluirProjeto(projeto, historicos);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		// try {
+		// Projeto projeto = new Projeto();
+		// projetoBean.setDataFim(new Date());
+		// projetoBean.setDataFimPrevista(new Date());
+		// BeanUtils.copyProperties(projeto, projetoBean);
+		// projeto.setStatus(1);
+		//
+		// UserBean userBean = (UserBean) Util.getFromSession("userBean");
+		//
+		// projeto.setCriador(recursoDaoImpl.find(Recurso.class,
+		// userBean.getIdUsuario()));
+		//
+		// List<Recurso> recursos = projetoBean.getParticipantes();
+		// Date data = new Date();
+		//
+		// List<HistoricoProjeto> historicos = new
+		// ArrayList<HistoricoProjeto>();
+		// List<RecursoProjeto> alocados = new ArrayList<RecursoProjeto>();
+		//
+		// for (Recurso recurso : recursos) {
+		// HistoricoProjeto historico = new HistoricoProjeto();
+		// historico.setProjeto(projeto);
+		// historico.setRecurso(recurso);
+		// historico.setData(data);
+		// historico.setAdicionou(true);
+		//
+		// historicos.add(historico);
+		//
+		// RecursoProjetoPK recursoProjetoPK = new RecursoProjetoPK();
+		// recursoProjetoPK.setProjeto(projeto);
+		// recursoProjetoPK.setRecurso(recurso);
+		// RecursoProjeto recursoProjeto = new RecursoProjeto();
+		// recursoProjeto.setRecursoProjetoPK(recursoProjetoPK);
+		//
+		// alocados.add(recursoProjeto);
+		// }
+		//
+		// projeto.setParticipantes(alocados);
+		//
+		// projetoDaoImpl.incluirProjeto(projeto, historicos);
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+
+	}
+
+	public void excluirObservador() {
+		projetoBean.getObservadores().remove(projetoBean.getRecursoTemp());
+	}
+
+	public void mostrarModalObservadores() {
+		List<Recurso> possiveisObservadores = recursoDaoImpl.consultarObservadores();
 		
-	}
-	
-	public void excluirObservador(){
-		projetoBean.getPossiveisObservadores().remove(projetoBean.getRecursoTemp());
-	}
-	
-	public void showModalAddObserver(){
-		projetoBean.setPossiveisObservadores(recursoDaoImpl.consultarObservadores());
+		if(projetoBean.getObservadores() != null){
+			for(Recurso recurso : projetoBean.getObservadores()){
+				possiveisObservadores.remove(recurso);
+			}
+		}
+		
+		projetoBean.setPossiveisObservadores(possiveisObservadores);
 		projetoBean.setShowModalObservadores(true);
+	}
+	
+	public void esconderModalObservadores(){
+		projetoBean.setShowModalObservadores(false);
+	}
+	
+	public void selecionarObservadores(){
+		Iterator iterator = projetoBean.getSelecaoObservadores().getKeys();
+		
+		List<Recurso> recursosSelecionados = new ArrayList();
+		
+		while(iterator.hasNext()){
+			Integer index = (Integer)iterator.next();
+			recursosSelecionados.add(projetoBean.getPossiveisObservadores().get(index));
+		}
+		
+		if(projetoBean.getObservadores() == null){
+			projetoBean.setObservadores(recursosSelecionados);
+		}else{
+			projetoBean.getObservadores().addAll(recursosSelecionados);
+		}
+		
+		projetoBean.setShowModalObservadores(false);
+		projetoBean.setSelecaoObservadores(null);
 	}
 
 	/**
