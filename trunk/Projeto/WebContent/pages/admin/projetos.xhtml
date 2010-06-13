@@ -7,7 +7,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:a4j="http://richfaces.org/a4j"
 	  xmlns:rich="http://richfaces.org/rich"
-	  xmlns:validators="validators">
+	  xmlns:validators="validators"
+	  xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 	<ui:composition template="/templates/main.xhtml">
 		<ui:param name="bean" value="#{projetoBean}" />
 		<ui:define name="body">
@@ -44,7 +45,7 @@
 				
 				<rich:tabPanel switchType="ajax" rendered="#{not projetoServiceImpl.projetoBean.listState}"
 					valueChangeListener="#{projetoServiceImpl.mudarAba}">
-			        <rich:tab label="Dados Gerais" id="tabGeral">
+			        <rich:tab label="#{labels['projeto.dadosGerais']}" id="tabGeral">
 						<h:panelGrid columns="2" >
 							<h:outputLabel value="#{labels['projeto.nome']}:" for="nome"/>
 							<h:inputText id="nome" value="#{projetoServiceImpl.projetoBean.nome}" 
@@ -86,8 +87,10 @@
 						
 						<br />
 			        </rich:tab>
-			        <rich:tab label="Observadores" id="tabObservadores">
-			        	<h:outputText value="Selecione os observadores" styleClass="pageMessage"/>
+			        <rich:tab label="#{labels['projeto.observadores']}" id="tabObservadores">
+			        	<h:outputFormat value="#{labels['projeto.selecione']}" styleClass="pageMessage">
+			        		<f:param value="#{fn:toLowerCase(labels['projeto.observadores'])}"/>
+			        	</h:outputFormat>
 			        	
 			        	<br />
 			        	<br />
@@ -107,7 +110,7 @@
 						
 						<br />
 						
-						<a4j:commandButton action="#{projetoServiceImpl.selecionarObservadores}" 
+						<a4j:commandButton actionListener="#{projetoServiceImpl.selecionarObservadores}" 
 							value="#{labels['selecionar']}" reRender="observadores"/>
 						
 						<br />
@@ -146,10 +149,19 @@
 							</rich:column>
 			            </rich:extendedDataTable>
 			            
-			            <h:outputText value="Nenhum observador selecionado" rendered="#{empty projetoServiceImpl.projetoBean.observadores}"/>
+			            <h:outputFormat value="#{labels['projeto.nenhumSelecionado']}" rendered="#{empty projetoServiceImpl.projetoBean.observadores}">
+			            	<f:param value="#{fn:toLowerCase(labels['projeto.observador'])}"/>
+			            </h:outputFormat>
 			        </rich:tab>
 			        
-			        <rich:tab label="Gerentes" id="tabGerentes">
+			        <rich:tab label="#{labels['projeto.gerentes']}" id="tabGerentes">
+			        	<h:outputFormat value="#{labels['projeto.selecione']}" styleClass="pageMessage">
+			        		<f:param value="#{fn:toLowerCase(labels['projeto.gerentes'])}"/>
+			        	</h:outputFormat>
+			        	
+			        	<br />
+			        	<br />
+			        	
 				        <rich:extendedDataTable id="possiveisGerentes" var="item"
 							value="#{projetoServiceImpl.projetoBean.possiveisGerentes}"
 							selectionMode="multiple" height="200px" style="cursor: pointer;"
@@ -165,7 +177,7 @@
 						
 						<br />
 						
-						<a4j:commandButton action="#{projetoServiceImpl.selecionarGerentes}" 
+						<a4j:commandButton actionListener="#{projetoServiceImpl.selecionarGerentes}" 
 							value="#{labels['selecionar']}"/>
 						
 						<br />
@@ -196,13 +208,90 @@
 							</rich:column>
 			            </rich:extendedDataTable>
 			            
-			            <h:outputText value="Nenhum gerente selecionado" rendered="#{empty projetoServiceImpl.projetoBean.gerentes}"/>
+			            <h:outputFormat value="#{labels['projeto.nenhumSelecionado']}" rendered="#{empty projetoServiceImpl.projetoBean.gerentes}">
+			            	<f:param value="#{fn:toLowerCase(labels['projeto.gerente'])}"/>
+			            </h:outputFormat>
+			        </rich:tab>
+			        
+			        <rich:tab label="#{labels['projeto.recursos']}" id="tabRecursos">
+			        	<h:outputFormat value="#{labels['projeto.selecione']}" styleClass="pageMessage">
+			        		<f:param value="#{fn:toLowerCase(labels['projeto.recursos'])}"/>
+			        	</h:outputFormat>
+			        	
+			        	<br />
+			        	<br />
+			        	
+				        <rich:extendedDataTable id="possiveisRecursos" var="item"
+							value="#{projetoServiceImpl.projetoBean.possiveisRecursos}"
+							selectionMode="multiple" height="200px" style="cursor: pointer;"
+							selection="#{projetoServiceImpl.projetoBean.selecaoRecursos}"
+							rowKeyVar="index">
+							
+							<rich:column width="60%" label="Nome" sortable="true" sortBy="#{item.nome}">
+								<f:facet name="header">
+									Nome
+								</f:facet>
+								<h:outputText value="#{item.nome} #{item.sobrenome}" />	
+							</rich:column>
+							<rich:column width="40%" label="Papel">
+								<f:facet name="header">
+									Papel
+								</f:facet>
+								<rich:comboBox defaultLabel="Selecione um papel" value="#{item.papelProjeto}">
+									<f:selectItems value="#{projetoServiceImpl.papeis}" />
+								</rich:comboBox>
+							</rich:column>
+			            </rich:extendedDataTable>
+						
+						<br />
+						
+						<a4j:commandButton actionListener="#{projetoServiceImpl.selecionarRecursos}" 
+							value="#{labels['selecionar']}"/>
+						
+						<br />
+						<br />
+						
+						<rich:extendedDataTable id="recursosSelecionados" var="item"
+							value="#{projetoServiceImpl.projetoBean.recursos}"
+							rendered="#{not empty projetoServiceImpl.projetoBean.recursos}"
+							selectionMode="none" height="200px">
+							
+							<rich:column width="59%" sortable="true" sortBy="#{item.nome}" label="Nome">
+								<f:facet name="header">
+									Nome
+								</f:facet>
+								<h:outputText value="#{item.recursoProjetoPK.recurso.nome} #{item.recursoProjetoPK.recurso.sobrenome}"></h:outputText>	
+							</rich:column>
+							
+							<rich:column width="31%" sortable="true" sortBy="#{item.nome}" label="Nome">
+								<f:facet name="header">
+									Papel
+								</f:facet>
+								<h:outputText value="#{item.papel.nome}"></h:outputText>	
+							</rich:column>
+							
+							<rich:column style="text-align: center;" label="Excluir" width="10%">
+								<f:facet name="header">
+									Excluir											
+								</f:facet>
+								<h:graphicImage value="/img/disabled.png" style="cursor: pointer;">
+									<a4j:support action="#{projetoServiceImpl.excluirRecurso}"
+										event="onclick" immediate="true">
+										<f:setPropertyActionListener value="#{item}" target="#{projetoServiceImpl.projetoBean.recursoProjetoTemp}" />
+									</a4j:support>
+								</h:graphicImage>
+							</rich:column>
+			            </rich:extendedDataTable>
+			            
+			            <h:outputFormat value="#{labels['projeto.nenhumSelecionado']}" rendered="#{empty projetoServiceImpl.projetoBean.recursos}">
+			            	<f:param value="#{fn:toLowerCase(labels['projeto.recurso'])}"/>
+			            </h:outputFormat>
 			        </rich:tab>
 			    </rich:tabPanel>
 			    
 			    <br />
 			    
-			    <a4j:commandButton action="#{projetoServiceImpl.confirmCreate}" value="#{labels['confirmar']}" rendered="#{projetoServiceImpl.projetoBean.createState}" reRender="messageSenha"/>
+			    <a4j:commandButton actionListener="#{projetoServiceImpl.confirmCreate}" value="#{labels['confirmar']}" rendered="#{projetoServiceImpl.projetoBean.createState}" reRender="messageSenha"/>
 				<a4j:commandButton action="#{projetoServiceImpl.prepareUpdate}" value="#{labels['alterar']}" rendered="#{projetoServiceImpl.projetoBean.detailState}"/>
 				<a4j:commandButton action="#{projetoServiceImpl.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{projetoServiceImpl.projetoBean.updateState}"/>
 				<rich:spacer width="7" rendered="#{not projetoServiceImpl.projetoBean.listState}"/>

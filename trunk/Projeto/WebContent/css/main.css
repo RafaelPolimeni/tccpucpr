@@ -1,35 +1,60 @@
 @CHARSET "ISO-8859-1";
 
-.table-align-center{
+.table-align-center {
 	text-align: left;
 }
 
-body{
+body {
 	margin-left: 0px;
 	margin-right: 0px;
 	margin-top: 0px;
 	overflow: auto;
 }
 
-.pageMessage{
-	
+.pageMessage {
 	color: #696969;
 	font: normal Arial;
 	font-size: 11px;
-	
 }
 
-.lastBreadCrumb{
+.lastBreadCrumb {
 	font-weight: bolder;
 	font-size: 9pt;
 }
 
-.rich-inplace-select-font{ 
-	font-size : 10px; 
-	font-family : arial; 
-	color : #000000;
+.rich-inplace-select-font {
+	font-size: 10px;
+	font-family: arial;
+	color: #000000;
 }
 
 .rich-table-footer {
 	background-color: white;
+}
+
+.info,.success,.warning,.error,.validation {
+	margin: 0px 0px;
+	padding: 2px 10px 2px 4px;
+	background-repeat: no-repeat;
+	background-position: 0px center;
+}
+
+.info {
+	color: #00529B;
+	background-color: #BDE5F8;
+}
+
+.success {
+	color: #4F8A10;
+	background-color: #DFF2BF;
+}
+
+.warning {
+	color: #9F6000;
+	background-color: #FEEFB3;
+}
+
+.error {
+	color: #D8000C;
+	background-color: #FFBABA;
 }

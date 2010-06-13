@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Recurso")
@@ -70,6 +71,9 @@ public class Recurso implements EntityInterface {
 
 	@Column(length = 6, nullable = false)
 	private String locale;
+	
+	@Transient
+	private String papelProjeto;
 
 	public Serializable getPrimaryKey() {
 		return getIdRecurso();
@@ -261,6 +265,21 @@ public class Recurso implements EntityInterface {
 	 */
 	public void setLocale(String locale) {
 		this.locale = locale;
+	}
+	
+
+	/**
+	 * @return the papelProjeto
+	 */
+	public String getPapelProjeto() {
+		return papelProjeto;
+	}
+
+	/**
+	 * @param papelProjeto the papelProjeto to set
+	 */
+	public void setPapelProjeto(String papelProjeto) {
+		this.papelProjeto = papelProjeto;
 	}
 
 	/*
