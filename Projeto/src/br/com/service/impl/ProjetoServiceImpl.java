@@ -1,22 +1,33 @@
 package br.com.service.impl;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import br.com.bean.ProjetoBean;
+import br.com.dao.PapelDao;
 import br.com.dao.ProjetoDao;
 import br.com.dao.RecursoDao;
+import br.com.model.Papel;
 import br.com.model.Projeto;
 import br.com.model.Recurso;
+import br.com.model.RecursoProjeto;
+import br.com.model.RecursoProjetoPK;
 import br.com.service.ProjetoService;
+import br.com.util.Util;
 
 @Service
 @Scope(value = "request")
@@ -29,12 +40,17 @@ public class ProjetoServiceImpl implements ProjetoService {
 	private RecursoDao recursoDaoImpl;
 
 	@Autowired
+	private PapelDao papelDaoImpl;
+
+	@Autowired
 	private ProjetoBean projetoBean;
+
+	// public List<SelectItem> papeis;
 
 	public String findAll() {
 		projetoBean.setProjetos(projetoDaoImpl.findAll(Projeto.class));
 
-		ResourceBundle labels = projetoBean.getLabels();
+		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 		List<String> breadCrumb = new ArrayList<String>();
 		breadCrumb.add(labels.getString("breadCrumb.homePage"));
 		breadCrumb.add(labels.getString("breadCrumb.maintenance"));
@@ -42,32 +58,26 @@ public class ProjetoServiceImpl implements ProjetoService {
 
 		projetoBean.setBreadCrumb(breadCrumb);
 		projetoBean.setListState();
-		projetoBean.setPageMessage(projetoBean.getLabels().getString("info.paginaLista"));
+		projetoBean.setPageMessage(labels.getString("info.paginaLista"));
 
 		return "gerenciarProjetos";
 	}
 
 	public void prepareCreate() {
-		// projetoBean.setPossiveisGerentes(recursoDaoImpl.consultarGerentes());
-		// projetoBean.setPossiveisParticipantes(recursoDaoImpl.findAll(Recurso.class));
+		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 
 		projetoBean.clear();
 		projetoBean.setCreateState();
 		projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
-		projetoBean.getBreadCrumb().add(projetoBean.getLabels().getString("breadCrumb.projeto.create"));
-		projetoBean.setPageMessage(projetoBean.getLabels().getString("info.paginaInclusao"));
-
-		// List<SelectItem> itens = new ArrayList<SelectItem>();
-		//
-		// for (Perfil autoridade : (List<Perfil>) autoridades) {
-		// itens.add(new SelectItem(autoridade.getIdAutoridade(),
-		// autoridade.getNomeVisivel()));
-		// }
-		//
-		// recursoBean.setAutoridades(itens);
+		projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.create"));
+		projetoBean.setPageMessage(labels.getString("info.paginaInclusao"));
 	}
 
-	public void confirmCreate() {
+	public void confirmCreate(ActionEvent event) {
+		if (validate()) {
+
+		}
+
 		// try {
 		// Projeto projeto = new Projeto();
 		// projetoBean.setDataFim(new Date());
@@ -114,6 +124,48 @@ public class ProjetoServiceImpl implements ProjetoService {
 
 	}
 
+	private boolean validate() {
+		boolean formularioOK = true;
+		ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+		
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		if (Util.isEmpty(projetoBean.getNome())) {
+			String mensagem = mensagens.getString("mensagem.validacao.obrigatorio");
+			String param1 = labels.getString("projeto.nome");
+
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+			formularioOK = false;
+		}
+
+		if (Util.isEmpty(projetoBean.getDescricao())) {
+			String mensagem = mensagens.getString("mensagem.validacao.obrigatorio");
+			String param1 = labels.getString("projeto.descricao");
+
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+			formularioOK = false;
+		}
+
+		if (Util.isEmpty(projetoBean.getGerentes())) {
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String param1 = labels.getString("projeto.gerente");
+
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+			formularioOK = false;
+		}
+
+		if (Util.isEmpty(projetoBean.getRecursos())) {
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String param1 = labels.getString("projeto.recurso");
+
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+			formularioOK = false;
+		}
+
+		return formularioOK;
+	}
+
 	public void excluirObservador() {
 		projetoBean.getObservadores().remove(projetoBean.getRecursoTemp());
 
@@ -127,7 +179,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 
 		projetoBean.setPossiveisObservadores(possiveisObservadores);
 	}
-	
+
 	public void excluirGerente() {
 		projetoBean.getGerentes().remove(projetoBean.getRecursoTemp());
 
@@ -141,22 +193,22 @@ public class ProjetoServiceImpl implements ProjetoService {
 
 		projetoBean.setPossiveisGerentes(possiveisGerentes);
 	}
-	
-	public void excluirParticipantes() {
-		projetoBean.getParticipantes().remove(projetoBean.getRecursoTemp());
 
-		List<Recurso> possiveisParticipantes = recursoDaoImpl.consultarHabilitados();
+	public void excluirRecurso() {
+		projetoBean.getRecursos().remove(projetoBean.getRecursoProjetoTemp());
 
-		if (projetoBean.getParticipantes() != null) {
-			for (Recurso recurso : projetoBean.getParticipantes()) {
-				possiveisParticipantes.remove(recurso);
+		List<Recurso> possiveisRecursos = recursoDaoImpl.consultarHabilitados();
+
+		if (projetoBean.getRecursos() != null) {
+			for (RecursoProjeto recurso : projetoBean.getRecursos()) {
+				possiveisRecursos.remove(recurso.getRecursoProjetoPK().getRecurso());
 			}
 		}
 
-		projetoBean.setPossiveisParticipantes(possiveisParticipantes);
+		projetoBean.setPossiveisRecursos(possiveisRecursos);
 	}
 
-	public void selecionarObservadores() {
+	public void selecionarObservadores(ActionEvent event) {
 		Iterator iterator = projetoBean.getSelecaoObservadores().getKeys();
 
 		List<Recurso> recursosSelecionados = new ArrayList();
@@ -166,26 +218,35 @@ public class ProjetoServiceImpl implements ProjetoService {
 			recursosSelecionados.add(projetoBean.getPossiveisObservadores().get(index));
 		}
 
-		if (projetoBean.getObservadores() == null) {
-			projetoBean.setObservadores(recursosSelecionados);
-		} else {
-			projetoBean.getObservadores().addAll(recursosSelecionados);
-		}
-
-		projetoBean.setSelecaoObservadores(null);
-
-		List<Recurso> possiveisObservadores = recursoDaoImpl.consultarObservadores();
-
-		if (projetoBean.getObservadores() != null) {
-			for (Recurso recurso : projetoBean.getObservadores()) {
-				possiveisObservadores.remove(recurso);
+		if (recursosSelecionados.size() != 0) {
+			if (projetoBean.getObservadores() == null) {
+				projetoBean.setObservadores(recursosSelecionados);
+			} else {
+				projetoBean.getObservadores().addAll(recursosSelecionados);
 			}
-		}
 
-		projetoBean.setPossiveisObservadores(possiveisObservadores);
+			projetoBean.setSelecaoObservadores(null);
+
+			List<Recurso> possiveisObservadores = recursoDaoImpl.consultarObservadores();
+
+			if (projetoBean.getObservadores() != null) {
+				for (Recurso recurso : projetoBean.getObservadores()) {
+					possiveisObservadores.remove(recurso);
+				}
+			}
+
+			projetoBean.setPossiveisObservadores(possiveisObservadores);
+		} else {
+			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String param1 = mensagens.getString("projeto.observador");
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+		}
 	}
 
-	public void selecionarGerentes() {
+	public void selecionarGerentes(ActionEvent event) {
 		Iterator iterator = projetoBean.getSelecaoGerentes().getKeys();
 
 		List<Recurso> gerentesSelecionados = new ArrayList();
@@ -195,54 +256,99 @@ public class ProjetoServiceImpl implements ProjetoService {
 			gerentesSelecionados.add(projetoBean.getPossiveisGerentes().get(index));
 		}
 
-		if (projetoBean.getGerentes() == null) {
-			projetoBean.setGerentes(gerentesSelecionados);
-		} else {
-			projetoBean.getGerentes().addAll(gerentesSelecionados);
-		}
-
-		projetoBean.setSelecaoGerentes(null);
-
-		List<Recurso> possiveisGerentes = recursoDaoImpl.consultarGerentes();
-
-		if (projetoBean.getGerentes() != null) {
-			for (Recurso recurso : projetoBean.getGerentes()) {
-				possiveisGerentes.remove(recurso);
+		if (gerentesSelecionados.size() != 0) {
+			if (projetoBean.getGerentes() == null) {
+				projetoBean.setGerentes(gerentesSelecionados);
+			} else {
+				projetoBean.getGerentes().addAll(gerentesSelecionados);
 			}
-		}
 
-		projetoBean.setPossiveisGerentes(possiveisGerentes);
+			projetoBean.setSelecaoGerentes(null);
+
+			List<Recurso> possiveisGerentes = recursoDaoImpl.consultarGerentes();
+
+			if (projetoBean.getGerentes() != null) {
+				for (Recurso recurso : projetoBean.getGerentes()) {
+					possiveisGerentes.remove(recurso);
+				}
+			}
+
+			projetoBean.setPossiveisGerentes(possiveisGerentes);
+		} else {
+			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String param1 = mensagens.getString("projeto.gerente");
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+		}
 	}
-	
-	public void selecionarParticipantes() {
-		Iterator iterator = projetoBean.getSelecaoParticipantes().getKeys();
+
+	public void selecionarRecursos(ActionEvent event) {
+		Iterator iterator = projetoBean.getSelecaoRecursos().getKeys();
 
 		List<Recurso> participantesSelecionados = new ArrayList();
 
+		boolean selecionouPapel = true;
+
 		while (iterator.hasNext()) {
 			Integer index = (Integer) iterator.next();
-			participantesSelecionados.add(projetoBean.getPossiveisParticipantes().get(index));
-		}
-
-		if (projetoBean.getParticipantes() == null) {
-			projetoBean.setParticipantes(participantesSelecionados);
-		} else {
-			projetoBean.getParticipantes().addAll(participantesSelecionados);
-		}
-
-		projetoBean.setSelecaoParticipantes(null);
-
-		List<Recurso> possiveisParticipantes = recursoDaoImpl.consultarHabilitados();
-
-		if (projetoBean.getParticipantes() != null) {
-			for (Recurso recurso : projetoBean.getParticipantes()) {
-				possiveisParticipantes.remove(recurso);
+			if (Util.isEmpty(projetoBean.getPossiveisRecursos().get(index).getPapelProjeto())) {
+				selecionouPapel = false;
 			}
+
+			participantesSelecionados.add(projetoBean.getPossiveisRecursos().get(index));
 		}
 
-		projetoBean.setPossiveisParticipantes(possiveisParticipantes);
+		if (participantesSelecionados.size() != 0) {
+			if (selecionouPapel) {
+				if (projetoBean.getRecursos() == null) {
+					projetoBean.setRecursos(new ArrayList<RecursoProjeto>());
+				}
+
+				List<RecursoProjeto> recursosSelecionados = new ArrayList<RecursoProjeto>();
+
+				List<Papel> papeis = papelDaoImpl.findAll(Papel.class);
+
+				for (Recurso recurso : participantesSelecionados) {
+					RecursoProjeto recursoProjeto = new RecursoProjeto();
+					RecursoProjetoPK recursoProjetoPK = new RecursoProjetoPK();
+
+					recursoProjetoPK.setRecurso(recurso);
+					recursoProjeto.setPapel(selecionarPapel(recurso.getPapelProjeto(), papeis));
+					recursoProjeto.setRecursoProjetoPK(recursoProjetoPK);
+					recursosSelecionados.add(recursoProjeto);
+				}
+
+				projetoBean.getRecursos().addAll(recursosSelecionados);
+
+				projetoBean.setSelecaoRecursos(null);
+
+				List<Recurso> possiveisRecursos = recursoDaoImpl.consultarHabilitados();
+
+				if (projetoBean.getRecursos() != null) {
+					for (RecursoProjeto recursoProjeto : projetoBean.getRecursos()) {
+						possiveisRecursos.remove(recursoProjeto.getRecursoProjetoPK().getRecurso());
+					}
+				}
+
+				projetoBean.setPossiveisRecursos(possiveisRecursos);
+			} else {
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", FacesContext.getCurrentInstance().getApplication().getResourceBundle(
+								FacesContext.getCurrentInstance(), "messages").getString("mensagem.validacao.projeto.selecionePapel")));
+			}
+		} else {
+			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String param1 = mensagens.getString("projeto.recurso");
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+		}
 	}
-	
+
 	public void mudarAba(ValueChangeEvent event) {
 		// HtmlTabPanel panel = (HtmlTabPanel) event.getSource();
 		// UIInput input = (UIInput)panel.findComponent("nome");
@@ -270,17 +376,40 @@ public class ProjetoServiceImpl implements ProjetoService {
 			}
 
 			projetoBean.setPossiveisGerentes(possiveisGerentes);
-		} else if (event.getNewValue().toString().equals("tabParticipantes")) {
+		} else if (event.getNewValue().toString().equals("tabRecursos")) {
 			List<Recurso> possiveisParticipantes = recursoDaoImpl.consultarHabilitados();
 
-			if (projetoBean.getParticipantes() != null) {
-				for (Recurso recurso : projetoBean.getParticipantes()) {
-					possiveisParticipantes.remove(recurso);
+			if (projetoBean.getRecursos() != null) {
+				for (RecursoProjeto recursoProjeto : projetoBean.getRecursos()) {
+					possiveisParticipantes.remove(recursoProjeto.getRecursoProjetoPK().getRecurso());
 				}
 			}
 
-			projetoBean.setPossiveisParticipantes(possiveisParticipantes);			
+			projetoBean.setPossiveisRecursos(possiveisParticipantes);
 		}
+	}
+
+	public List<SelectItem> getPapeis() {
+		List<SelectItem> itens = new ArrayList<SelectItem>();
+
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		Recurso recurso = (Recurso) request.getAttribute("item");
+
+		for (Papel papel : recurso.getPapeis()) {
+			itens.add(new SelectItem(papel.getNome(), papel.getNome()));
+		}
+
+		return itens;
+	}
+
+	private Papel selecionarPapel(String nomePapel, List<Papel> papeis) {
+		for (Papel papel : papeis) {
+			if (papel.getNome().equalsIgnoreCase(nomePapel)) {
+				return papel;
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -326,5 +455,20 @@ public class ProjetoServiceImpl implements ProjetoService {
 	 */
 	public void setRecursoDaoImpl(RecursoDao recursoDaoImpl) {
 		this.recursoDaoImpl = recursoDaoImpl;
+	}
+
+	/**
+	 * @return the papelDaoImpl
+	 */
+	public PapelDao getPapelDaoImpl() {
+		return papelDaoImpl;
+	}
+
+	/**
+	 * @param papelDaoImpl
+	 *            the papelDaoImpl to set
+	 */
+	public void setPapelDaoImpl(PapelDao papelDaoImpl) {
+		this.papelDaoImpl = papelDaoImpl;
 	}
 }

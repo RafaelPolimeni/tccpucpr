@@ -1,20 +1,13 @@
 package br.com.bean;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 
-import org.richfaces.component.html.HtmlRichMessages;
 import org.springframework.stereotype.Service;
 
 @Service
 public abstract class BeanAbstrato {
-	private HtmlRichMessages errorMessage;
-	private HtmlRichMessages infoMessage;
-	private ResourceBundle labels;
-	private ResourceBundle messages;
-	
 	// States for CRUD
 	private boolean listState;
 	private boolean createState;
@@ -32,31 +25,6 @@ public abstract class BeanAbstrato {
 		
 	}
 	
-	/**
-	 * @return the errorMessage
-	 */
-	public HtmlRichMessages getErrorMessage() {
-		return errorMessage;
-	}
-	/**
-	 * @param errorMessage the errorMessage to set
-	 */
-	public void setErrorMessage(HtmlRichMessages errorMessage) {
-		this.errorMessage = errorMessage;
-	}
-	/**
-	 * @return the infoMessage
-	 */
-	public HtmlRichMessages getInfoMessage() {
-		return infoMessage;
-	}
-	/**
-	 * @param infoMessage the infoMessage to set
-	 */
-	public void setInfoMessage(HtmlRichMessages infoMessage) {
-		this.infoMessage = infoMessage;
-	}
-
 	/**
 	 * @return the listState
 	 */
@@ -137,36 +105,6 @@ public abstract class BeanAbstrato {
 	 */
 	public void setBreadCrumb(List<String> breadCrumb) {
 		this.breadCrumb = breadCrumb;
-	}
-
-	/**
-	 * @return the messages
-	 */
-	public ResourceBundle getLabels() {
-		setLabels(FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels"));
-		return labels;
-	}
-
-	/**
-	 * @param messages the messages to set
-	 */
-	public void setLabels(ResourceBundle labels) {
-		this.labels = labels;
-	}
-	
-	/**
-	 * @return the messages
-	 */
-	public ResourceBundle getMessages() {
-		setMessages(FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages"));
-		return messages;
-	}
-
-	/**
-	 * @param messages the messages to set
-	 */
-	public void setMessages(ResourceBundle messages) {
-		this.messages = messages;
 	}
 
 	/**

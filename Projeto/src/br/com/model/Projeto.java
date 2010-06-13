@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,7 +46,7 @@ public class Projeto implements EntityInterface {
 	@Temporal(TemporalType.DATE)
 	private Date dataCriacao;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date dataInicio;
 
@@ -60,29 +61,29 @@ public class Projeto implements EntityInterface {
 	@Column(length = 1, nullable = false)
 	private Integer status;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(columnDefinition = "idCriador")
 	private Recurso criador;
 										          
-	@OneToMany(fetch=FetchType.LAZY, mappedBy = "recursoProjetoPK.projeto")
-	private List<RecursoProjeto> participantes;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "recursoProjetoPK.projeto", cascade = CascadeType.ALL)
+	private List<RecursoProjeto> recursos;
 	
-	@ManyToMany(targetEntity = Recurso.class)
+	@ManyToMany(targetEntity = Recurso.class, cascade = CascadeType.MERGE)
 	@JoinTable(name = "observadoresProjeto", 
 			joinColumns = @JoinColumn(nullable = false, referencedColumnName = "idProjeto"), 
 			inverseJoinColumns = @JoinColumn(nullable = false, referencedColumnName = "idRecurso"))
 	private List<Recurso> observadores;
 
-	@ManyToMany(targetEntity = Recurso.class)
+	@ManyToMany(targetEntity = Recurso.class, cascade = CascadeType.MERGE)
 	@JoinTable(name = "gerentesProjeto", 
 			joinColumns = @JoinColumn(nullable = false, referencedColumnName = "idProjeto"), 
 			inverseJoinColumns = @JoinColumn(nullable = false, referencedColumnName = "idRecurso"))
 	private List<Recurso> gerentes;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.MERGE)
 	private List<Comentario> comentarios;
 
-	@OneToMany
+	@OneToMany(cascade = CascadeType.MERGE)
 	private List<Imagem> imagens;
 
 	@Override
@@ -98,8 +99,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param idProjeto
-	 *            the idProjeto to set
+	 * @param idProjeto the idProjeto to set
 	 */
 	public void setIdProjeto(Integer idProjeto) {
 		this.idProjeto = idProjeto;
@@ -113,8 +113,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param nome
-	 *            the nome to set
+	 * @param nome the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -128,8 +127,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param descricao
-	 *            the descricao to set
+	 * @param descricao the descricao to set
 	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
@@ -143,8 +141,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param dataCriacao
-	 *            the dataCriacao to set
+	 * @param dataCriacao the dataCriacao to set
 	 */
 	public void setDataCriacao(Date dataCriacao) {
 		this.dataCriacao = dataCriacao;
@@ -158,8 +155,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param dataInicio
-	 *            the dataInicio to set
+	 * @param dataInicio the dataInicio to set
 	 */
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
@@ -173,8 +169,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param dataFim
-	 *            the dataFim to set
+	 * @param dataFim the dataFim to set
 	 */
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
@@ -188,8 +183,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param dataFimPrevista
-	 *            the dataFimPrevista to set
+	 * @param dataFimPrevista the dataFimPrevista to set
 	 */
 	public void setDataFimPrevista(Date dataFimPrevista) {
 		this.dataFimPrevista = dataFimPrevista;
@@ -203,8 +197,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param status
-	 *            the status to set
+	 * @param status the status to set
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
@@ -218,11 +211,24 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param criador
-	 *            the criador to set
+	 * @param criador the criador to set
 	 */
 	public void setCriador(Recurso criador) {
 		this.criador = criador;
+	}
+
+	/**
+	 * @return the recursos
+	 */
+	public List<RecursoProjeto> getRecursos() {
+		return recursos;
+	}
+
+	/**
+	 * @param recursos the recursos to set
+	 */
+	public void setRecursos(List<RecursoProjeto> recursos) {
+		this.recursos = recursos;
 	}
 
 	/**
@@ -233,8 +239,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param observadores
-	 *            the observadores to set
+	 * @param observadores the observadores to set
 	 */
 	public void setObservadores(List<Recurso> observadores) {
 		this.observadores = observadores;
@@ -248,8 +253,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param gerentes
-	 *            the gerentes to set
+	 * @param gerentes the gerentes to set
 	 */
 	public void setGerentes(List<Recurso> gerentes) {
 		this.gerentes = gerentes;
@@ -263,8 +267,7 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param comentarios
-	 *            the comentarios to set
+	 * @param comentarios the comentarios to set
 	 */
 	public void setComentarios(List<Comentario> comentarios) {
 		this.comentarios = comentarios;
@@ -278,24 +281,9 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param imagens
-	 *            the imagens to set
+	 * @param imagens the imagens to set
 	 */
 	public void setImagens(List<Imagem> imagens) {
 		this.imagens = imagens;
-	}
-
-	/**
-	 * @return the participantes
-	 */
-	public List<RecursoProjeto> getParticipantes() {
-		return participantes;
-	}
-
-	/**
-	 * @param participantes the participantes to set
-	 */
-	public void setParticipantes(List<RecursoProjeto> participantes) {
-		this.participantes = participantes;
 	}
 }

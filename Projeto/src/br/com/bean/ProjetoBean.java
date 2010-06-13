@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.model.Projeto;
 import br.com.model.Recurso;
+import br.com.model.RecursoProjeto;
 
 @Service
 @Scope(value = "request")
@@ -28,17 +29,16 @@ public class ProjetoBean extends BeanAbstrato {
 	private List<Recurso> possiveisObservadores;
 	private List<Recurso> gerentes;
 	private List<Recurso> possiveisGerentes;
-	private List<Recurso> participantes;
-	private List<Recurso> possiveisParticipantes;
+	private List<RecursoProjeto> recursos;
+	private List<Recurso> possiveisRecursos;
 
 	private Projeto projeto;
 	private Recurso recursoTemp;
-	
-	private boolean showModalObservadores;
-	
+	private RecursoProjeto recursoProjetoTemp;
+
 	private Selection selecaoObservadores;
 	private Selection selecaoGerentes;
-	private Selection selecaoParticipantes;
+	private Selection selecaoRecursos;
 
 	public void clear() {
 		setIdProjeto(null);
@@ -50,6 +50,21 @@ public class ProjetoBean extends BeanAbstrato {
 		setDataFimPrevista(null);
 		setStatus(0);
 		setCriador(null);
+	}
+
+	/**
+	 * @return the projetos
+	 */
+	public List<Projeto> getProjetos() {
+		return projetos;
+	}
+
+	/**
+	 * @param projetos
+	 *            the projetos to set
+	 */
+	public void setProjetos(List<Projeto> projetos) {
+		this.projetos = projetos;
 	}
 
 	/**
@@ -203,51 +218,6 @@ public class ProjetoBean extends BeanAbstrato {
 	}
 
 	/**
-	 * @return the gerentes
-	 */
-	public List<Recurso> getGerentes() {
-		return gerentes;
-	}
-
-	/**
-	 * @param gerentes
-	 *            the gerentes to set
-	 */
-	public void setGerentes(List<Recurso> gerentes) {
-		this.gerentes = gerentes;
-	}
-
-	/**
-	 * @return the projeto
-	 */
-	public Projeto getProjeto() {
-		return projeto;
-	}
-
-	/**
-	 * @param projeto
-	 *            the projeto to set
-	 */
-	public void setProjeto(Projeto projeto) {
-		this.projeto = projeto;
-	}
-
-	/**
-	 * @return the projetos
-	 */
-	public List<Projeto> getProjetos() {
-		return projetos;
-	}
-
-	/**
-	 * @param projetos
-	 *            the projetos to set
-	 */
-	public void setProjetos(List<Projeto> projetos) {
-		this.projetos = projetos;
-	}
-
-	/**
 	 * @return the possiveisObservadores
 	 */
 	public List<Recurso> getPossiveisObservadores() {
@@ -260,6 +230,21 @@ public class ProjetoBean extends BeanAbstrato {
 	 */
 	public void setPossiveisObservadores(List<Recurso> possiveisObservadores) {
 		this.possiveisObservadores = possiveisObservadores;
+	}
+
+	/**
+	 * @return the gerentes
+	 */
+	public List<Recurso> getGerentes() {
+		return gerentes;
+	}
+
+	/**
+	 * @param gerentes
+	 *            the gerentes to set
+	 */
+	public void setGerentes(List<Recurso> gerentes) {
+		this.gerentes = gerentes;
 	}
 
 	/**
@@ -278,33 +263,48 @@ public class ProjetoBean extends BeanAbstrato {
 	}
 
 	/**
-	 * @return the participantes
+	 * @return the recursos
 	 */
-	public List<Recurso> getParticipantes() {
-		return participantes;
+	public List<RecursoProjeto> getRecursos() {
+		return recursos;
 	}
 
 	/**
-	 * @param participantes
-	 *            the participantes to set
+	 * @param recursos
+	 *            the recursos to set
 	 */
-	public void setParticipantes(List<Recurso> participantes) {
-		this.participantes = participantes;
+	public void setRecursos(List<RecursoProjeto> recursos) {
+		this.recursos = recursos;
 	}
 
 	/**
-	 * @return the possiveisParticipantes
+	 * @return the possiveisRecursos
 	 */
-	public List<Recurso> getPossiveisParticipantes() {
-		return possiveisParticipantes;
+	public List<Recurso> getPossiveisRecursos() {
+		return possiveisRecursos;
 	}
 
 	/**
-	 * @param possiveisParticipantes
-	 *            the possiveisParticipantes to set
+	 * @param possiveisRecursos
+	 *            the possiveisRecursos to set
 	 */
-	public void setPossiveisParticipantes(List<Recurso> possiveisParticipantes) {
-		this.possiveisParticipantes = possiveisParticipantes;
+	public void setPossiveisRecursos(List<Recurso> possiveisRecursos) {
+		this.possiveisRecursos = possiveisRecursos;
+	}
+
+	/**
+	 * @return the projeto
+	 */
+	public Projeto getProjeto() {
+		return projeto;
+	}
+
+	/**
+	 * @param projeto
+	 *            the projeto to set
+	 */
+	public void setProjeto(Projeto projeto) {
+		this.projeto = projeto;
 	}
 
 	/**
@@ -323,17 +323,18 @@ public class ProjetoBean extends BeanAbstrato {
 	}
 
 	/**
-	 * @return the showModalObservadores
+	 * @return the recursoProjetoTemp
 	 */
-	public boolean isShowModalObservadores() {
-		return showModalObservadores;
+	public RecursoProjeto getRecursoProjetoTemp() {
+		return recursoProjetoTemp;
 	}
 
 	/**
-	 * @param showModalObservadores the showModalObservadores to set
+	 * @param recursoProjetoTemp
+	 *            the recursoProjetoTemp to set
 	 */
-	public void setShowModalObservadores(boolean showModalObservadores) {
-		this.showModalObservadores = showModalObservadores;
+	public void setRecursoProjetoTemp(RecursoProjeto recursoProjetoTemp) {
+		this.recursoProjetoTemp = recursoProjetoTemp;
 	}
 
 	/**
@@ -344,7 +345,8 @@ public class ProjetoBean extends BeanAbstrato {
 	}
 
 	/**
-	 * @param selecaoObservadores the selecaoObservadores to set
+	 * @param selecaoObservadores
+	 *            the selecaoObservadores to set
 	 */
 	public void setSelecaoObservadores(Selection selecaoObservadores) {
 		this.selecaoObservadores = selecaoObservadores;
@@ -358,23 +360,25 @@ public class ProjetoBean extends BeanAbstrato {
 	}
 
 	/**
-	 * @param selecaoGerentes the selecaoGerentes to set
+	 * @param selecaoGerentes
+	 *            the selecaoGerentes to set
 	 */
 	public void setSelecaoGerentes(Selection selecaoGerentes) {
 		this.selecaoGerentes = selecaoGerentes;
 	}
 
 	/**
-	 * @return the selecaoParticipantes
+	 * @return the selecaoRecursos
 	 */
-	public Selection getSelecaoParticipantes() {
-		return selecaoParticipantes;
+	public Selection getSelecaoRecursos() {
+		return selecaoRecursos;
 	}
 
 	/**
-	 * @param selecaoParticipantes the selecaoParticipantes to set
+	 * @param selecaoRecursos
+	 *            the selecaoRecursos to set
 	 */
-	public void setSelecaoParticipantes(Selection selecaoParticipantes) {
-		this.selecaoParticipantes = selecaoParticipantes;
+	public void setSelecaoRecursos(Selection selecaoRecursos) {
+		this.selecaoRecursos = selecaoRecursos;
 	}
 }
