@@ -23,18 +23,30 @@ public class Util {
 		}
 		return null;
 	}
-	
-	public static Object getFromSession(String id){
-		HttpSession sessao = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-		
+
+	/**
+	 * Responsável por recuperar um objeto da sessão
+	 * 
+	 * @param String id - Id do objeto na sessão
+	 * @return Object - objeto na sessão or null caso não haja na sessão
+	 */
+	public static Object getFromSession(String id) {
+		HttpSession sessao = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+
 		return sessao.getAttribute(id);
 	}
-	
-	public static boolean isEmpty(String str){
+
+	/**
+	 * Responsável por verificar se uma String é nula ou vazia
+	 * 
+	 * @param String str - String
+	 * @return boolean - true se for vazia ou nula e false se não for
+	 */
+	public static boolean isEmpty(String str) {
 		return str == null || str.trim().length() == 0 ? true : false;
 	}
-	
-	public static boolean isEmpty(List lista){
+
+	public static boolean isEmpty(List lista) {
 		return lista == null || lista.size() == 0 ? true : false;
 	}
 }

@@ -117,4 +117,16 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
+	
+	<servlet>  
+	    <servlet-name>Resource Servlet</servlet-name>  
+	    <servlet-class>  
+	        org.primefaces.resource.ResourceServlet  
+	    </servlet-class>  
+	</servlet>  
+	  
+	<servlet-mapping>  
+	    <servlet-name>Resource Servlet</servlet-name>  
+	    <url-pattern>/primefaces_resource/*</url-pattern>  
+	</servlet-mapping> 
 </web-app>

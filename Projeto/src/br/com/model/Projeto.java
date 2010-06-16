@@ -64,10 +64,10 @@ public class Projeto implements EntityInterface {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JoinColumn(columnDefinition = "idCriador")
 	private Recurso criador;
-										          
-	@OneToMany(fetch=FetchType.LAZY, mappedBy = "recursoProjetoPK.projeto", cascade = CascadeType.ALL)
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "recursoProjetoPK.projeto", cascade = CascadeType.ALL)
 	private List<RecursoProjeto> recursos;
-	
+
 	@ManyToMany(targetEntity = Recurso.class, cascade = CascadeType.MERGE)
 	@JoinTable(name = "observadoresProjeto", 
 			joinColumns = @JoinColumn(nullable = false, referencedColumnName = "idProjeto"), 
@@ -86,6 +86,9 @@ public class Projeto implements EntityInterface {
 	@OneToMany(cascade = CascadeType.MERGE)
 	private List<Imagem> imagens;
 
+	@OneToMany(mappedBy = "projeto", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<HistoricoProjeto> historicos;
+
 	@Override
 	public Serializable getPrimaryKey() {
 		return getIdProjeto();
@@ -99,7 +102,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param idProjeto the idProjeto to set
+	 * @param idProjeto
+	 *            the idProjeto to set
 	 */
 	public void setIdProjeto(Integer idProjeto) {
 		this.idProjeto = idProjeto;
@@ -113,7 +117,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param nome the nome to set
+	 * @param nome
+	 *            the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -127,7 +132,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param descricao the descricao to set
+	 * @param descricao
+	 *            the descricao to set
 	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
@@ -141,7 +147,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param dataCriacao the dataCriacao to set
+	 * @param dataCriacao
+	 *            the dataCriacao to set
 	 */
 	public void setDataCriacao(Date dataCriacao) {
 		this.dataCriacao = dataCriacao;
@@ -155,7 +162,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param dataInicio the dataInicio to set
+	 * @param dataInicio
+	 *            the dataInicio to set
 	 */
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
@@ -169,7 +177,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param dataFim the dataFim to set
+	 * @param dataFim
+	 *            the dataFim to set
 	 */
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
@@ -183,7 +192,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param dataFimPrevista the dataFimPrevista to set
+	 * @param dataFimPrevista
+	 *            the dataFimPrevista to set
 	 */
 	public void setDataFimPrevista(Date dataFimPrevista) {
 		this.dataFimPrevista = dataFimPrevista;
@@ -197,7 +207,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param status the status to set
+	 * @param status
+	 *            the status to set
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
@@ -211,7 +222,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param criador the criador to set
+	 * @param criador
+	 *            the criador to set
 	 */
 	public void setCriador(Recurso criador) {
 		this.criador = criador;
@@ -225,7 +237,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param recursos the recursos to set
+	 * @param recursos
+	 *            the recursos to set
 	 */
 	public void setRecursos(List<RecursoProjeto> recursos) {
 		this.recursos = recursos;
@@ -239,7 +252,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param observadores the observadores to set
+	 * @param observadores
+	 *            the observadores to set
 	 */
 	public void setObservadores(List<Recurso> observadores) {
 		this.observadores = observadores;
@@ -253,7 +267,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param gerentes the gerentes to set
+	 * @param gerentes
+	 *            the gerentes to set
 	 */
 	public void setGerentes(List<Recurso> gerentes) {
 		this.gerentes = gerentes;
@@ -267,7 +282,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param comentarios the comentarios to set
+	 * @param comentarios
+	 *            the comentarios to set
 	 */
 	public void setComentarios(List<Comentario> comentarios) {
 		this.comentarios = comentarios;
@@ -281,9 +297,25 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param imagens the imagens to set
+	 * @param imagens
+	 *            the imagens to set
 	 */
 	public void setImagens(List<Imagem> imagens) {
 		this.imagens = imagens;
+	}
+
+	/**
+	 * @return the historicos
+	 */
+	public List<HistoricoProjeto> getHistoricos() {
+		return historicos;
+	}
+
+	/**
+	 * @param historicos
+	 *            the historicos to set
+	 */
+	public void setHistoricos(List<HistoricoProjeto> historicos) {
+		this.historicos = historicos;
 	}
 }

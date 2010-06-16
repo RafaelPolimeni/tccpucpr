@@ -15,17 +15,17 @@
   <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="logout::#logout.jsf" NAME="output"
     PATH="/logout.jsf" TARGET="rules:#logout.jsf" TITLE="logout" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="erro::#pages#user#erro.jsf" NAME="output1"
+    PATH="/pages/user/erro.jsf" TARGET="rules:#pages#user#erro.jsf"
+    TITLE="erro" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT
-    ID="gerenciarRecursos::#pages#admin#recursos.jsf" NAME="output1"
+    ID="erroBaseDados::#pages#user#erroBaseDados.jsf" NAME="output2"
+    PATH="/pages/user/erroBaseDados.jsf"
+    TARGET="rules:#pages#user#erroBaseDados.jsf" TITLE="erroBaseDados" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="gerenciarRecursos::#pages#admin#recursos.jsf" NAME="output3"
     PATH="/pages/admin/recursos.jsf"
     TARGET="rules:#pages#admin#recursos.jsf" TITLE="gerenciarRecursos" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT ID="gerenciarPapeis::#pages#admin#papeis.jsf"
-    NAME="output2" PATH="/pages/admin/papeis.jsf"
-    TARGET="rules:#pages#admin#papeis.jsf" TITLE="gerenciarPapeis" model-entity="JSFProcessItemOutput"/>
-   <PROCESS-ITEM-OUTPUT
-    ID="gerenciarProjetos::#pages#admin#projetos.jsf" NAME="output3"
-    PATH="/pages/admin/projetos.jsf"
-    TARGET="rules:#pages#admin#projetos.jsf" TITLE="gerenciarProjetos" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#login.jsf" PATH="/login.jsf"
@@ -40,4 +40,8 @@
   PATH="/pages/admin/projetos.jsf" SHAPE="288,833,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#pages#admin#recursos.jsf"
   PATH="/pages/admin/recursos.jsf" SHAPE="288,497,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#user#erroBaseDados.jsf"
+  PATH="/pages/user/erroBaseDados.jsf" SHAPE="288,721,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#user#erro.jsf"
+  PATH="/pages/user/erro.jsf" SHAPE="288,497,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>
