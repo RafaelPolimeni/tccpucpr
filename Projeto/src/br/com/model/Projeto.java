@@ -21,16 +21,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "Projeto")
 @NamedQueries( { @NamedQuery(name = "Projeto.findAll", query = "SELECT p FROM Projeto p order by p.nome") })
 public class Projeto implements EntityInterface {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5405661644221470932L;
+	
+	@Transient
+	public static final int PROJETO_CRIADO = 1;
+	@Transient
+	public static final int PROJETO_INICIADO = 2;
+	@Transient
+	public static final int PROJETO_FINALIZADO = 3;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -50,6 +55,10 @@ public class Projeto implements EntityInterface {
 	@Temporal(TemporalType.DATE)
 	private Date dataInicio;
 
+	@Column(nullable = true)
+	@Temporal(TemporalType.DATE)
+	private Date dataInicioPrevista;
+	
 	@Column(nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date dataFim;
@@ -167,6 +176,21 @@ public class Projeto implements EntityInterface {
 	 */
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
+	}
+
+	
+	/**
+	 * @return the dataInicioPrevista
+	 */
+	public Date getDataInicioPrevista() {
+		return dataInicioPrevista;
+	}
+
+	/**
+	 * @param dataInicioPrevista the dataInicioPrevista to set
+	 */
+	public void setDataInicioPrevista(Date dataInicioPrevista) {
+		this.dataInicioPrevista = dataInicioPrevista;
 	}
 
 	/**

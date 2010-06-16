@@ -21,6 +21,7 @@ public class ProjetoBean extends BeanAbstrato {
 	private String descricao;
 	private Date dataCriacao;
 	private Date dataInicio;
+	private Date dataInicioPrevista;
 	private Date dataFim;
 	private Date dataFimPrevista;
 	private Integer status;
@@ -46,6 +47,7 @@ public class ProjetoBean extends BeanAbstrato {
 		setDescricao(null);
 		setDataCriacao(null);
 		setDataInicio(null);
+		setDataInicioPrevista(null);
 		setDataFim(null);
 		setDataFimPrevista(null);
 		setStatus(0);
@@ -140,6 +142,21 @@ public class ProjetoBean extends BeanAbstrato {
 	 */
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
+	}
+
+	
+	/**
+	 * @return the dataInicioPrevista
+	 */
+	public Date getDataInicioPrevista() {
+		return dataInicioPrevista;
+	}
+
+	/**
+	 * @param dataInicioPrevista the dataInicioPrevista to set
+	 */
+	public void setDataInicioPrevista(Date dataInicioPrevista) {
+		this.dataInicioPrevista = dataInicioPrevista;
 	}
 
 	/**

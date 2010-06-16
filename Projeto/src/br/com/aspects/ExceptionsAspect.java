@@ -1,7 +1,5 @@
 package br.com.aspects;
 
-import javax.persistence.NoResultException;
-
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -14,20 +12,16 @@ import br.com.exceptions.BaseDadosException;
 @Aspect
 public class ExceptionsAspect {
 	@AfterThrowing(pointcut = "br.com.poincuts.Pointcuts.allDao()", throwing = "ex", argNames = "ex")
-	public void noResultException(JoinPoint joinPoint, NoResultException ex) throws Throwable {
-		
-	}
-
-	@AfterThrowing(pointcut = "br.com.poincuts.Pointcuts.allDao()", throwing = "ex", argNames = "ex")
 	public void exceptionDAO(JoinPoint joinPoint, Exception ex) throws Throwable {
 		Logger logger = Logger.getLogger(joinPoint.getTarget().getClass());
 		logger.error("Mensagem: " + ex.getMessage());
 		logger.error("Causa: " + ex.getCause());
 
-		BaseDadosException baseDadosException = new BaseDadosException();
+		BaseDadosException baseDadosException = new BaseDadosException(ex.getMessage(), ex.getCause());
+
 		throw baseDadosException;
 	}
-	
+
 	@AfterThrowing(pointcut = "br.com.poincuts.Pointcuts.allServices()", throwing = "ex", argNames = "ex")
 	public void exceptionService(JoinPoint joinPoint, Exception ex) throws Throwable {
 		Logger logger = Logger.getLogger(joinPoint.getTarget().getClass());

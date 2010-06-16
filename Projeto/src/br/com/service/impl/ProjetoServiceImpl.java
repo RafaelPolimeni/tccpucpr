@@ -14,17 +14,16 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.bean.ProjetoBean;
 import br.com.bean.UserBean;
 import br.com.dao.PapelDao;
 import br.com.dao.ProjetoDao;
 import br.com.dao.RecursoDao;
-import br.com.exceptions.BaseDadosException;
 import br.com.model.HistoricoProjeto;
 import br.com.model.Papel;
 import br.com.model.Projeto;
@@ -52,30 +51,27 @@ public class ProjetoServiceImpl implements ProjetoService {
 
 	// public List<SelectItem> papeis;
 
-	public String findAll() throws Exception{
-		try{
+	public String findAll() throws Exception {
+		try {
 			projetoBean.setProjetos(projetoDaoImpl.findAll(Projeto.class));
-	
+
 			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 			List<String> breadCrumb = new ArrayList<String>();
 			breadCrumb.add(labels.getString("breadCrumb.homePage"));
 			breadCrumb.add(labels.getString("breadCrumb.maintenance"));
 			breadCrumb.add(labels.getString("breadCrumb.projeto.list"));
-	
+
 			projetoBean.setBreadCrumb(breadCrumb);
 			projetoBean.setListState();
 			projetoBean.setPageMessage(labels.getString("info.paginaLista"));
-			
+
 			return "gerenciarProjetos";
 		} catch (Exception e) {
 			return "gerenciarProjetos";
 		}
 	}
 
-	public void prepareCreate() throws Exception{
-		String nul = null;
-		nul.toString();
-		
+	public void prepareCreate(ActionEvent event) throws Exception {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 
 		projetoBean.clear();
@@ -85,60 +81,59 @@ public class ProjetoServiceImpl implements ProjetoService {
 		projetoBean.setPageMessage(labels.getString("info.paginaInclusao"));
 	}
 
-	public void confirmCreate(ActionEvent event) throws Exception{
+	public void confirmCreate(ActionEvent event) throws Exception {
 		if (validate()) {
-			try {
-				Projeto projeto = new Projeto();
-				Date dataTemp = new Date();
+			Projeto projeto = new Projeto();
 
-				projetoBean.setDataCriacao(dataTemp);
-				projetoBean.setDataFim(dataTemp);
-				projetoBean.setDataFimPrevista(dataTemp);
+			projeto.setNome(projetoBean.getNome());
+			projeto.setDescricao(projetoBean.getDescricao());
+			projeto.setDataInicioPrevista(projetoBean.getDataInicioPrevista());
+			projeto.setDataFimPrevista(projetoBean.getDataFimPrevista());
+			projeto.setCriador(projetoBean.getCriador());
+			projeto.setGerentes(projetoBean.getGerentes());
+			projeto.setRecursos(projetoBean.getRecursos());
+			projeto.setObservadores(projetoBean.getObservadores());
 
-				BeanUtils.copyProperties(projeto, projetoBean);
-				projeto.setStatus(1);
-				projeto.setIdProjeto(null);
+			projeto.setStatus(Projeto.PROJETO_CRIADO);
+			projeto.setIdProjeto(null);
 
-				UserBean userBean = (UserBean) Util.getFromSession("userBean");
+			UserBean userBean = (UserBean) Util.getFromSession("userBean");
 
-				projeto.setCriador(recursoDaoImpl.find(Recurso.class, userBean.getIdRecurso()));
+			projeto.setCriador(recursoDaoImpl.find(Recurso.class, userBean.getIdRecurso()));
 
-				List<RecursoProjeto> recursos = projetoBean.getRecursos();
-				Date data = new Date();
+			List<RecursoProjeto> recursos = projetoBean.getRecursos();
+			Date data = new Date();
 
-				List<HistoricoProjeto> historicos = new ArrayList<HistoricoProjeto>();
-				List<RecursoProjeto> alocados = new ArrayList<RecursoProjeto>();
+			List<HistoricoProjeto> historicos = new ArrayList<HistoricoProjeto>();
 
-				for (RecursoProjeto recursoProjeto : recursos) {
-					HistoricoProjeto historico = new HistoricoProjeto();
-					historico.setProjeto(projeto);
-					historico.setRecurso(recursoProjeto.getRecursoProjetoPK().getRecurso());
-					historico.setData(data);
-					historico.setAdicionou(true);
-					historicos.add(historico);
+			for (RecursoProjeto recursoProjeto : recursos) {
+				HistoricoProjeto historico = new HistoricoProjeto();
+				historico.setProjeto(projeto);
+				historico.setRecurso(recursoProjeto.getRecursoProjetoPK().getRecurso());
+				historico.setData(data);
+				historico.setAdicionou(true);
+				historicos.add(historico);
 
-					recursoProjeto.getRecursoProjetoPK().setProjeto(projeto);
-				}
-
-				projeto.setHistoricos(historicos);
-				projetoDaoImpl.save(projeto);
-
-				ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-
-				projetoBean.clear();
-				projetoBean.setListState();
-				projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
-				projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.list"));
-				projetoBean.setPageMessage(labels.getString("info.paginaLista"));
-
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", labels.getString("info.sucesso.inclusao")));
-			} catch (Exception e) {
-				
+				recursoProjeto.getRecursoProjetoPK().setProjeto(projeto);
 			}
+
+			projeto.setHistoricos(historicos);
+			projetoDaoImpl.save(projeto);
+
+			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+			ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+
+			projetoBean.clear();
+			projetoBean.setListState();
+			projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
+			projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.list"));
+			projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.inclusao")));
 		}
 	}
 
-	private boolean validate() throws Exception{
+	private boolean validate() throws Exception {
 		boolean formularioOK = true;
 		ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
@@ -180,7 +175,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		return formularioOK;
 	}
 
-	public void excluirObservador() throws Exception{
+	public void excluirObservador() throws Exception {
 		projetoBean.getObservadores().remove(projetoBean.getRecursoTemp());
 
 		List<Recurso> possiveisObservadores = recursoDaoImpl.consultarObservadores();
@@ -194,7 +189,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		projetoBean.setPossiveisObservadores(possiveisObservadores);
 	}
 
-	public void excluirGerente() throws Exception{
+	public void excluirGerente() throws Exception {
 		projetoBean.getGerentes().remove(projetoBean.getRecursoTemp());
 
 		List<Recurso> possiveisGerentes = recursoDaoImpl.consultarGerentes();
@@ -208,7 +203,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		projetoBean.setPossiveisGerentes(possiveisGerentes);
 	}
 
-	public void excluirRecurso() throws Exception{
+	public void excluirRecurso() throws Exception {
 		projetoBean.getRecursos().remove(projetoBean.getRecursoProjetoTemp());
 
 		List<Recurso> possiveisRecursos = recursoDaoImpl.consultarHabilitados();
@@ -222,7 +217,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		projetoBean.setPossiveisRecursos(possiveisRecursos);
 	}
 
-	public void selecionarObservadores(ActionEvent event) throws Exception{
+	public void selecionarObservadores(ActionEvent event) throws Exception {
 		Iterator iterator = projetoBean.getSelecaoObservadores().getKeys();
 
 		List<Recurso> recursosSelecionados = new ArrayList();
@@ -261,7 +256,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		}
 	}
 
-	public void selecionarGerentes(ActionEvent event) throws Exception{
+	public void selecionarGerentes(ActionEvent event) throws Exception {
 		Iterator iterator = projetoBean.getSelecaoGerentes().getKeys();
 
 		List<Recurso> gerentesSelecionados = new ArrayList();
@@ -300,7 +295,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		}
 	}
 
-	public void selecionarRecursos(ActionEvent event) throws Exception{
+	public void selecionarRecursos(ActionEvent event) throws Exception {
 		Iterator iterator = projetoBean.getSelecaoRecursos().getKeys();
 
 		List<Recurso> participantesSelecionados = new ArrayList();
@@ -366,7 +361,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		}
 	}
 
-	public void mudarAba(ValueChangeEvent event) throws Exception{
+	public void mudarAba(ValueChangeEvent event) throws Exception {
 		// HtmlTabPanel panel = (HtmlTabPanel) event.getSource();
 		// UIInput input = (UIInput)panel.findComponent("nome");
 		// if(input.getSubmittedValue() != null){
@@ -406,11 +401,50 @@ public class ProjetoServiceImpl implements ProjetoService {
 		}
 	}
 
-	public String showDetails()throws Exception{
-		
-		return null;
+	@Transactional
+	public void showDetails() throws Exception {
+		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+
+		Projeto projeto = projetoDaoImpl.find(Projeto.class, projetoBean.getIdProjeto());
+
+		projetoBean.setNome(projeto.getNome());
+		projetoBean.setDescricao(projeto.getDescricao());
+		projetoBean.setDataInicio(projeto.getDataInicio());
+		projetoBean.setDataInicioPrevista(projeto.getDataInicioPrevista());
+		projetoBean.setDataFim(projeto.getDataFimPrevista());
+		projetoBean.setDataFimPrevista(projeto.getDataFimPrevista());
+		projetoBean.setStatus(projeto.getStatus());
+		projetoBean.setCriador(projeto.getCriador());
+
+		List<Recurso> gerentes = new ArrayList<Recurso>();
+		gerentes.addAll(projeto.getGerentes());
+		projetoBean.setGerentes(gerentes);
+
+		List<RecursoProjeto> recursos = new ArrayList<RecursoProjeto>();
+		recursos.addAll(projeto.getRecursos());
+		projetoBean.setRecursos(recursos);
+
+		List<Recurso> observadores = new ArrayList<Recurso>();
+		observadores.addAll(projeto.getObservadores());
+		projetoBean.setObservadores(observadores);
+
+		projetoBean.setDetailState();
+
+		projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
+		projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.detail"));
+
+		projetoBean.setPageMessage(labels.getString("info.paginaDetalhe"));
 	}
-	
+
+	public void backToList(ActionEvent event) {
+		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+
+		projetoBean.clear();
+		projetoBean.setListState();
+		projetoBean.setProjetos(projetoDaoImpl.findAll(Projeto.class));
+		projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+	}
+
 	public List<SelectItem> getPapeis() {
 		List<SelectItem> itens = new ArrayList<SelectItem>();
 

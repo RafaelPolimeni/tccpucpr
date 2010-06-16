@@ -38,7 +38,7 @@ public class RecursoServiceImpl implements RecursoService {
 
 	public String findAll() {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-		
+
 		List<String> breadCrumb = new ArrayList<String>();
 		breadCrumb.add(labels.getString("breadCrumb.homePage"));
 		breadCrumb.add(labels.getString("breadCrumb.maintenance"));
@@ -54,7 +54,7 @@ public class RecursoServiceImpl implements RecursoService {
 
 	public void prepareCreate() {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-		
+
 		recursoBean.clear();
 		recursoBean.setCreateState();
 		recursoBean.getBreadCrumb().remove(recursoBean.getBreadCrumb().size() - 1);
@@ -74,43 +74,40 @@ public class RecursoServiceImpl implements RecursoService {
 		recursoBean.setPossiveisPapeis(papelDaoImpl.findAll(Papel.class));
 	}
 
-	public void confirmCreate() {
+	public void confirmCreate() throws Exception {
 		Recurso recurso = new Recurso();
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 		ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
-		try {
-			if (recursoBean.getSenha().equals(recursoBean.getConfirmarSenha())) {
-				BeanUtils.copyProperties(recurso, recursoBean);
-				recurso.setIdRecurso(null);
-				recurso.setLocale("pt_BR");
-				Perfil autoridade = new Perfil();
-				autoridade.setIdAutoridade(recursoBean.getIdAutoridade());
-				recurso.setAutoridade(autoridade);
-				recursoDaoImpl.save(recurso);
+		if (recursoBean.getSenha().equals(recursoBean.getConfirmarSenha())) {
+			BeanUtils.copyProperties(recurso, recursoBean);
+			recurso.setIdRecurso(null);
+			recurso.setLocale("pt_BR");
+			Perfil autoridade = new Perfil();
+			autoridade.setIdAutoridade(recursoBean.getIdAutoridade());
+			recurso.setAutoridade(autoridade);
+			recursoDaoImpl.save(recurso);
 
-				recursoBean.setRecursos(recursoDaoImpl.findAll(Recurso.class));
+			recursoBean.setRecursos(recursoDaoImpl.findAll(Recurso.class));
 
-				recursoBean.clear();
-				recursoBean.setListState();
-				recursoBean.getBreadCrumb().remove(recursoBean.getBreadCrumb().size() - 1);
-				recursoBean.getBreadCrumb().add(labels.getString("breadCrumb.recurso.list"));
+			recursoBean.clear();
+			recursoBean.setListState();
+			recursoBean.getBreadCrumb().remove(recursoBean.getBreadCrumb().size() - 1);
+			recursoBean.getBreadCrumb().add(labels.getString("breadCrumb.recurso.list"));
 
-				recursoBean.setPageMessage(labels.getString("info.paginaLista"));
-			} else {
-				recursoBean.setSenha("");
-				recursoBean.setConfirmarSenha("");
-				FacesContext context = FacesContext.getCurrentInstance();
-				UIComponent senha = Util.findComponent(context.getViewRoot(), "senha");
-				context.addMessage(senha.getClientId(context), new FacesMessage(messages.getString("validacao.senha")));
-			}
-		} catch (Exception e) {
-
+			recursoBean.setPageMessage(labels.getString("info.paginaLista"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.inclusao")));
+		} else {
+			recursoBean.setSenha("");
+			recursoBean.setConfirmarSenha("");
+			FacesContext context = FacesContext.getCurrentInstance();
+			UIComponent senha = Util.findComponent(context.getViewRoot(), "senha");
+			context.addMessage(senha.getClientId(context), new FacesMessage(messages.getString("validacao.senha")));
 		}
 	}
 
 	public void showDetail() {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-		
+
 		try {
 			BeanUtils.copyProperties(recursoBean, recursoBean.getRecurso());
 			recursoBean.setDetailState();
@@ -126,7 +123,7 @@ public class RecursoServiceImpl implements RecursoService {
 
 	public void prepareUpdate() {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-		
+
 		recursoBean.setUpdateState();
 		recursoBean.setIdAutoridade(recursoBean.getAutoridade().getIdAutoridade());
 		recursoBean.setConfirmarSenha(recursoBean.getSenha());
@@ -161,25 +158,22 @@ public class RecursoServiceImpl implements RecursoService {
 		recursoBean.setPageMessage(labels.getString("info.paginaAlteracao"));
 	}
 
-	public void confirmUpdate() {
+	public void confirmUpdate() throws Exception {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 		ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 		if (recursoBean.getSenha().equals(recursoBean.getConfirmarSenha())) {
-			try {
-				BeanUtils.copyProperties(recursoBean.getRecurso(), recursoBean);
-				recursoBean.getRecurso().getAutoridade().setIdAutoridade(recursoBean.getIdAutoridade());
-				recursoDaoImpl.update(recursoBean.getRecurso());
+			BeanUtils.copyProperties(recursoBean.getRecurso(), recursoBean);
+			recursoBean.getRecurso().getAutoridade().setIdAutoridade(recursoBean.getIdAutoridade());
+			recursoDaoImpl.update(recursoBean.getRecurso());
 
-				recursoBean.setListState();
-				recursoBean.setRecursos(recursoDaoImpl.findAll(Recurso.class));
+			recursoBean.setListState();
+			recursoBean.setRecursos(recursoDaoImpl.findAll(Recurso.class));
 
-				recursoBean.getBreadCrumb().remove(recursoBean.getBreadCrumb().size() - 1);
-				recursoBean.getBreadCrumb().add(labels.getString("breadCrumb.recurso.list"));
+			recursoBean.getBreadCrumb().remove(recursoBean.getBreadCrumb().size() - 1);
+			recursoBean.getBreadCrumb().add(labels.getString("breadCrumb.recurso.list"));
 
-				recursoBean.setPageMessage(labels.getString("info.paginaLista"));
-			} catch (Exception e) {
-
-			}
+			recursoBean.setPageMessage(labels.getString("info.paginaLista"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.alteracao")));
 		} else {
 			recursoBean.setSenha("");
 			recursoBean.setConfirmarSenha("");
@@ -194,7 +188,7 @@ public class RecursoServiceImpl implements RecursoService {
 	 */
 	public void backToList() {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-		
+
 		recursoBean.clear();
 		recursoBean.setListState();
 		recursoBean.setRecursos(recursoDaoImpl.findAll(Recurso.class));
