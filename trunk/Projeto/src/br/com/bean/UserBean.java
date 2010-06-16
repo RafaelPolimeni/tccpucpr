@@ -45,7 +45,11 @@ public class UserBean extends BeanAbstrato {
 
 		if (e == null && session.getAttribute("userNotFound") == null) {
 			BeanUtils.copyProperties(this, userServiceImpl.findByUsername(((HttpServletRequest) context.getRequest()).getParameter("j_username")));
+		} else {
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(
+					AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY, null);
 		}
+
 		FacesContext.getCurrentInstance().responseComplete();
 		// It's OK to return null here because Faces is just going to exit.
 

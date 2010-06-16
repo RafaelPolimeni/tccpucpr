@@ -1,5 +1,7 @@
 package br.com.dao.impl;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -15,6 +17,12 @@ public class UserDaoImpl extends CrudDAOImpl<Recurso> implements UserDao {
 	EntityManager entityManager;
 
 	public Recurso findUserByName(String userName) {
-		return (Recurso) entityManager.createNamedQuery("Recurso.findByUsername").setParameter("userName", userName).getSingleResult();
+		List users = entityManager.createNamedQuery("Recurso.findByUsername").setParameter("userName", userName).getResultList();
+
+		if (users.size() == 0) {
+			return null;
+		}
+
+		return ((Recurso) users.get(0));
 	}
 }

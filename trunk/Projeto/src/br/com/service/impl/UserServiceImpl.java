@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.faces.context.FacesContext;
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +30,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException, DataAccessException {
 		Recurso recurso = null;
+		recurso = userDaoImpl.findUserByName(userName);
 		
-		try{
-			recurso = userDaoImpl.findUserByName(userName);
-		}catch (NoResultException e) {
-			HttpSession session = (HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+		if (recurso == null) {
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 			session.setAttribute("userNotFound", "userNotFound");
 			return null;
 		}
@@ -44,14 +42,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	private User makeUser(Recurso recurso) {
- 		return new User(recurso.getUsuario(), recurso.getSenha(), true, true, true, true, makeGrantedAuthorities(recurso));
+		return new User(recurso.getUsuario(), recurso.getSenha(), true, true, true, true, makeGrantedAuthorities(recurso));
 	}
 
 	private Collection<GrantedAuthority> makeGrantedAuthorities(Recurso recurso) {
 		Collection<GrantedAuthority> autoridades = new ArrayList<GrantedAuthority>();
 
 		autoridades.add(new GrantedAuthorityImpl(recurso.getAutoridade().getNome()));
-		
+
 		return autoridades;
 	}
 

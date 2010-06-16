@@ -17,24 +17,17 @@ public class LoginErrorPhaseListener implements PhaseListener {
 	public void beforePhase(final PhaseEvent arg0) {
 		Exception e = (Exception) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(
 				AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY);
-		
+
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 
 		if (session.getAttribute("userNotFound") != null) {
-			FacesContext.getCurrentInstance().addMessage("Erro", new FacesMessage("User not found!"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "User not found!"));
 			session.setAttribute("userNotFound", null);
+		} else if (e instanceof BadCredentialsException) {
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(
+					AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY, null);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Us"));
 		}
-		
-		if (e instanceof BadCredentialsException) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY,
-					null);
-			FacesContext.getCurrentInstance().addMessage("errors", new FacesMessage("Erro", "Bad Credencials"));
-		}
-		if(e != null){
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY,
-					null);
-			FacesContext.getCurrentInstance().addMessage("errors", new FacesMessage("Erro", e.getMessage()));
-		}	
 	}
 
 	@Override

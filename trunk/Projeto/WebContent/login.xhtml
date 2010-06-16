@@ -13,7 +13,6 @@
 			<ui:define name="body">
 				<f:view>
 					<h:form id="loginForm" prependId="false" rendered="#{empty userBean.autoridade}">
-						<rich:messages id="errors" showSummary="true" showDetail="true"/>
 						<h:panelGrid columns="2">
 			            	<h:outputLabel value="#{labels['recurso.usuario']}:" for="j_username" />
 			                <h:inputText id="j_username" size="40" maxlength="80" value="victor"></h:inputText>
