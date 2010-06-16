@@ -7,5 +7,4 @@ import br.com.model.Projeto;
 
 public interface ProjetoDao extends CrudDAO<Projeto> {
 
-	public void incluirProjeto(Projeto projeto, List<HistoricoProjeto> listaHistorico);
 }

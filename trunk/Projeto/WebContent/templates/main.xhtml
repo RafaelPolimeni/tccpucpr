@@ -7,7 +7,8 @@
       xmlns:a4j="http://richfaces.org/a4j"
 	  xmlns:rich="http://richfaces.org/rich"
 	  xmlns:fn="http://java.sun.com/jsp/jstl/functions"
-	  xmlns:c="http://java.sun.com/jstl/core"> 
+	  xmlns:c="http://java.sun.com/jstl/core"
+	  xmlns:p="http://primefaces.prime.com.tr/ui"> 
 
 	<html xmlns="http://www.w3.org/1999/xhtml" >
 		<head>
@@ -73,15 +74,13 @@
 									</a4j:form>
 									<h:panelGroup layout="block" rendered="#{not empty userBean.autoridade}">
 										<br />
-										<h:outputText value="#{bean.pageMessage}" styleClass="pageMessage"/>
+										<h:outputText value="#{bean.pageMessage}" styleClass="pageMessage" />
 										<br />
 										<br />
 										<br />
 									</h:panelGroup>
 									
-									<rich:messages id="errorMessage" showDetail="true" 
-										showSummary="false" ajaxRendered="true" 
-										errorClass="error" infoClass="info" warnClass="success" fatalClass="warning"/>
+									<p:messages showDetail="true" id="msg" />
 										
 							        <br />
 							        

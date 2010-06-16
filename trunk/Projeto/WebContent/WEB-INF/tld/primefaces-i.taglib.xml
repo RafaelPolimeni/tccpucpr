@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE facelet-taglib PUBLIC
+  "-//Sun Microsystems, Inc.//DTD Facelet Taglib 1.0//EN"
+  "http://java.sun.com/dtd/facelet-taglib_1_0.dtd">
+
+<facelet-taglib>
+	<namespace>http://primefaces.prime.com.tr/touch</namespace>
+
+	<tag>
+		<tag-name>application</tag-name>
+		<component>
+			<component-type>org.primefaces.touch.Application</component-type>
+			<renderer-type>org.primefaces.touch.component.ApplicationRenderer</renderer-type>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>navBarControl</tag-name>
+		<component>
+			<component-type>org.primefaces.touch.NavBarControl</component-type>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>rowGroup</tag-name>
+		<component>
+			<component-type>org.primefaces.touch.RowGroup</component-type>
+			<renderer-type>org.primefaces.touch.component.RowGroupRenderer</renderer-type>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>rowItem</tag-name>
+		<component>
+			<component-type>org.primefaces.touch.RowItem</component-type>
+			<renderer-type>org.primefaces.touch.component.RowItemRenderer</renderer-type>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>switch</tag-name>
+		<component>
+			<component-type>org.primefaces.touch.InputSwitch</component-type>
+			<renderer-type>org.primefaces.touch.component.InputSwitchRenderer</renderer-type>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>tableView</tag-name>
+		<component>
+			<component-type>org.primefaces.touch.TableView</component-type>
+			<renderer-type>org.primefaces.touch.component.TableViewRenderer</renderer-type>
+		</component>
+	</tag>
+	<tag>
+		<tag-name>view</tag-name>
+		<component>
+			<component-type>org.primefaces.touch.View</component-type>
+			<renderer-type>org.primefaces.touch.component.ViewRenderer</renderer-type>
+		</component>
+	</tag>
+</facelet-taglib>

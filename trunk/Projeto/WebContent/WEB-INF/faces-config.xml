@@ -8,6 +8,10 @@
 	</lifecycle>
 		
 	<application>
+		<action-listener>
+			br.com.exceptions.ExceptionHandler
+		</action-listener>
+		
     	<!-- tell JSF to use Facelets -->
     	<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
     	
@@ -78,6 +82,18 @@
 			<redirect/>
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>erro</from-outcome>
+			<to-view-id>/pages/user/erro.jsf</to-view-id>
+			<redirect/>
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>erroBaseDados</from-outcome>
+			<to-view-id>/pages/user/erroBaseDados.jsf</to-view-id>
+			<redirect/>
+		</navigation-case>
+		
 		<!-- Manage users -->
 		<navigation-case>
 			<from-outcome>gerenciarRecursos</from-outcome>
@@ -95,6 +111,5 @@
 			<from-outcome>gerenciarProjetos</from-outcome>
 			<to-view-id>/pages/admin/projetos.jsf</to-view-id>
 		</navigation-case>
-		
 	</navigation-rule>
 </faces-config>

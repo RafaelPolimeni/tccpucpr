@@ -18,9 +18,9 @@ import br.com.model.Perfil;
 import br.com.service.UserService;
 
 @Service
-@Scope(value="session")
-public class UserBean extends BeanAbstrato{
-	private Integer idUsuario;
+@Scope(value = "session")
+public class UserBean extends BeanAbstrato {
+	private Integer idRecurso;
 	private String nome;
 	private String sobrenome;
 	private String usuario;
@@ -33,7 +33,7 @@ public class UserBean extends BeanAbstrato{
 
 	public String login() throws Exception {
 		ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
- 
+
 		RequestDispatcher dispatcher = ((ServletRequest) context.getRequest()).getRequestDispatcher("/j_spring_security_check");
 
 		dispatcher.forward((HttpServletRequest) context.getRequest(), (HttpServletResponse) context.getResponse());
@@ -45,14 +45,13 @@ public class UserBean extends BeanAbstrato{
 
 		if (e == null && session.getAttribute("userNotFound") == null) {
 			BeanUtils.copyProperties(this, userServiceImpl.findByUsername(((HttpServletRequest) context.getRequest()).getParameter("j_username")));
-		} 
+		}
 		FacesContext.getCurrentInstance().responseComplete();
 		// It's OK to return null here because Faces is just going to exit.
 
 		return null;
 	}
 
-	
 	/**
 	 * @return the userServiceImpl
 	 */
@@ -68,22 +67,20 @@ public class UserBean extends BeanAbstrato{
 		this.userServiceImpl = userServiceImpl;
 	}
 
-
 	/**
-	 * @return the idUsuario
+	 * @return the idRecurso
 	 */
-	public Integer getIdUsuario() {
-		return idUsuario;
+	public Integer getIdRecurso() {
+		return idRecurso;
 	}
 
-
 	/**
-	 * @param idUsuario the idUsuario to set
+	 * @param idRecurso
+	 *            the idRecurso to set
 	 */
-	public void setIdUsuario(Integer idUsuario) {
-		this.idUsuario = idUsuario;
+	public void setIdRecurso(Integer idRecurso) {
+		this.idRecurso = idRecurso;
 	}
-
 
 	/**
 	 * @return the nome
@@ -92,14 +89,13 @@ public class UserBean extends BeanAbstrato{
 		return nome;
 	}
 
-
 	/**
-	 * @param nome the nome to set
+	 * @param nome
+	 *            the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 
 	/**
 	 * @return the sobrenome
@@ -108,14 +104,13 @@ public class UserBean extends BeanAbstrato{
 		return sobrenome;
 	}
 
-
 	/**
-	 * @param sobrenome the sobrenome to set
+	 * @param sobrenome
+	 *            the sobrenome to set
 	 */
 	public void setSobrenome(String sobrenome) {
 		this.sobrenome = sobrenome;
 	}
-
 
 	/**
 	 * @return the usuario
@@ -124,14 +119,13 @@ public class UserBean extends BeanAbstrato{
 		return usuario;
 	}
 
-
 	/**
-	 * @param usuario the usuario to set
+	 * @param usuario
+	 *            the usuario to set
 	 */
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
-
 
 	/**
 	 * @return the senha
@@ -140,14 +134,13 @@ public class UserBean extends BeanAbstrato{
 		return senha;
 	}
 
-
 	/**
-	 * @param senha the senha to set
+	 * @param senha
+	 *            the senha to set
 	 */
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
 
 	/**
 	 * @return the habilitado
@@ -156,14 +149,13 @@ public class UserBean extends BeanAbstrato{
 		return habilitado;
 	}
 
-
 	/**
-	 * @param habilitado the habilitado to set
+	 * @param habilitado
+	 *            the habilitado to set
 	 */
 	public void setHabilitado(boolean habilitado) {
 		this.habilitado = habilitado;
 	}
-
 
 	/**
 	 * @return the autoridade
@@ -172,9 +164,9 @@ public class UserBean extends BeanAbstrato{
 		return autoridade;
 	}
 
-
 	/**
-	 * @param autoridade the autoridade to set
+	 * @param autoridade
+	 *            the autoridade to set
 	 */
 	public void setAutoridade(Perfil autoridade) {
 		this.autoridade = autoridade;
