@@ -77,6 +77,14 @@
 		<display-name>RichFaces Filter</display-name>
 		<filter-name>richfaces</filter-name>
 		<filter-class>org.ajax4jsf.Filter</filter-class>
+		<init-param>    
+             <param-name>createTempFiles</param-name>    
+             <param-value>true</param-value>    
+         </init-param>  
+         <init-param>  
+            <param-name>forceparser</param-name>  
+            <param-value>false</param-value>  
+        </init-param>  		
 	</filter>
 	
 	<filter-mapping>

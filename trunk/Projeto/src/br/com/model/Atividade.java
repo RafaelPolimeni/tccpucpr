@@ -67,7 +67,7 @@ public class Atividade implements EntityInterface {
 
 	@OneToMany
 	private List<Atividade> filhas;
-	
+
 	@ManyToMany
 	private List<Recurso> recursos;
 
@@ -81,7 +81,7 @@ public class Atividade implements EntityInterface {
 	private List<Comentario> comentarios;
 
 	@OneToMany
-	private List<Imagem> imagens;
+	private List<Arquivo> arquivos;
 
 	@Override
 	public Serializable getPrimaryKey() {
@@ -284,18 +284,18 @@ public class Atividade implements EntityInterface {
 	}
 
 	/**
-	 * @return the imagens
+	 * @return the arquivos
 	 */
-	public List<Imagem> getImagens() {
-		return imagens;
+	public List<Arquivo> getArquivos() {
+		return arquivos;
 	}
 
 	/**
-	 * @param imagens
-	 *            the imagens to set
+	 * @param arquivos
+	 *            the arquivos to set
 	 */
-	public void setImagens(List<Imagem> imagens) {
-		this.imagens = imagens;
+	public void setArquivos(List<Arquivo> arquivos) {
+		this.arquivos = arquivos;
 	}
 
 	/**
@@ -336,7 +336,8 @@ public class Atividade implements EntityInterface {
 	}
 
 	/**
-	 * @param recursos the recursos to set
+	 * @param recursos
+	 *            the recursos to set
 	 */
 	public void setRecursos(List<Recurso> recursos) {
 		this.recursos = recursos;

@@ -29,7 +29,7 @@ import javax.persistence.Transient;
 public class Projeto implements EntityInterface {
 
 	private static final long serialVersionUID = 5405661644221470932L;
-	
+
 	@Transient
 	public static final int PROJETO_CRIADO = 1;
 	@Transient
@@ -58,7 +58,7 @@ public class Projeto implements EntityInterface {
 	@Column(nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date dataInicioPrevista;
-	
+
 	@Column(nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date dataFim;
@@ -78,22 +78,18 @@ public class Projeto implements EntityInterface {
 	private List<RecursoProjeto> recursos;
 
 	@ManyToMany(targetEntity = Recurso.class, cascade = CascadeType.MERGE)
-	@JoinTable(name = "observadoresProjeto", 
-			joinColumns = @JoinColumn(nullable = false, referencedColumnName = "idProjeto"), 
-			inverseJoinColumns = @JoinColumn(nullable = false, referencedColumnName = "idRecurso"))
+	@JoinTable(name = "observadores_projeto", joinColumns = @JoinColumn(nullable = false, referencedColumnName = "idProjeto"), inverseJoinColumns = @JoinColumn(nullable = false, referencedColumnName = "idRecurso"))
 	private List<Recurso> observadores;
 
 	@ManyToMany(targetEntity = Recurso.class, cascade = CascadeType.MERGE)
-	@JoinTable(name = "gerentesProjeto", 
-			joinColumns = @JoinColumn(nullable = false, referencedColumnName = "idProjeto"), 
-			inverseJoinColumns = @JoinColumn(nullable = false, referencedColumnName = "idRecurso"))
+	@JoinTable(name = "gerentes_projeto", joinColumns = @JoinColumn(nullable = false, referencedColumnName = "idProjeto"), inverseJoinColumns = @JoinColumn(nullable = false, referencedColumnName = "idRecurso"))
 	private List<Recurso> gerentes;
 
 	@OneToMany(cascade = CascadeType.MERGE)
 	private List<Comentario> comentarios;
 
-	@OneToMany(cascade = CascadeType.MERGE)
-	private List<Imagem> imagens;
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Arquivo> arquivos;
 
 	@OneToMany(mappedBy = "projeto", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<HistoricoProjeto> historicos;
@@ -178,7 +174,6 @@ public class Projeto implements EntityInterface {
 		this.dataInicio = dataInicio;
 	}
 
-	
 	/**
 	 * @return the dataInicioPrevista
 	 */
@@ -187,7 +182,8 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @param dataInicioPrevista the dataInicioPrevista to set
+	 * @param dataInicioPrevista
+	 *            the dataInicioPrevista to set
 	 */
 	public void setDataInicioPrevista(Date dataInicioPrevista) {
 		this.dataInicioPrevista = dataInicioPrevista;
@@ -314,18 +310,18 @@ public class Projeto implements EntityInterface {
 	}
 
 	/**
-	 * @return the imagens
+	 * @return the arquivos
 	 */
-	public List<Imagem> getImagens() {
-		return imagens;
+	public List<Arquivo> getArquivos() {
+		return arquivos;
 	}
 
 	/**
-	 * @param imagens
-	 *            the imagens to set
+	 * @param arquivos
+	 *            the arquivos to set
 	 */
-	public void setImagens(List<Imagem> imagens) {
-		this.imagens = imagens;
+	public void setArquivos(List<Arquivo> arquivos) {
+		this.arquivos = arquivos;
 	}
 
 	/**

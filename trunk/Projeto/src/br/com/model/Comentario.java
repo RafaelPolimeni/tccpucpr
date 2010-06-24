@@ -39,7 +39,7 @@ public class Comentario implements EntityInterface {
 	private String comentario;
 
 	@OneToMany
-	private List<Imagem> imagens;
+	private List<Arquivo> arquivos;
 
 	@Override
 	public Serializable getPrimaryKey() {
@@ -107,17 +107,17 @@ public class Comentario implements EntityInterface {
 	}
 
 	/**
-	 * @return the imagens
+	 * @return the arquivos
 	 */
-	public List<Imagem> getImagens() {
-		return imagens;
+	public List<Arquivo> getArquivos() {
+		return arquivos;
 	}
 
 	/**
-	 * @param imagens
-	 *            the imagens to set
+	 * @param arquivos
+	 *            the arquivos to set
 	 */
-	public void setImagens(List<Imagem> imagens) {
-		this.imagens = imagens;
+	public void setArquivos(List<Arquivo> arquivos) {
+		this.arquivos = arquivos;
 	}
 }
