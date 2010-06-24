@@ -1,5 +1,6 @@
 package br.com.service.impl;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,11 +10,13 @@ import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.richfaces.event.UploadEvent;
+import org.richfaces.model.UploadItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import br.com.bean.UserBean;
 import br.com.dao.PapelDao;
 import br.com.dao.ProjetoDao;
 import br.com.dao.RecursoDao;
+import br.com.model.Arquivo;
 import br.com.model.HistoricoProjeto;
 import br.com.model.Papel;
 import br.com.model.Projeto;
@@ -49,6 +53,8 @@ public class ProjetoServiceImpl implements ProjetoService {
 	@Autowired
 	private ProjetoBean projetoBean;
 
+	private UploadItem uploadItem;
+
 	// public List<SelectItem> papeis;
 
 	public String findAll() throws Exception {
@@ -71,7 +77,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		}
 	}
 
-	public void prepareCreate(ActionEvent event) throws Exception {
+	public void prepareCreate() throws Exception {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 
 		projetoBean.clear();
@@ -81,8 +87,11 @@ public class ProjetoServiceImpl implements ProjetoService {
 		projetoBean.setPageMessage(labels.getString("info.paginaInclusao"));
 	}
 
-	public void confirmCreate(ActionEvent event) throws Exception {
+	public void confirmCreate() throws Exception {
 		if (validate()) {
+			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+			ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+
 			Projeto projeto = new Projeto();
 
 			projeto.setNome(projetoBean.getNome());
@@ -93,9 +102,11 @@ public class ProjetoServiceImpl implements ProjetoService {
 			projeto.setGerentes(projetoBean.getGerentes());
 			projeto.setRecursos(projetoBean.getRecursos());
 			projeto.setObservadores(projetoBean.getObservadores());
+			projeto.setArquivos(projetoBean.getArquivos());
 
 			projeto.setStatus(Projeto.PROJETO_CRIADO);
 			projeto.setIdProjeto(null);
+			projeto.setDataCriacao(new Date());
 
 			UserBean userBean = (UserBean) Util.getFromSession("userBean");
 
@@ -118,18 +129,58 @@ public class ProjetoServiceImpl implements ProjetoService {
 			}
 
 			projeto.setHistoricos(historicos);
-			projetoDaoImpl.save(projeto);
 
-			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-			ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+			ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+			String dir = servletContext.getRealPath("/") + "upload" + File.separator + "projetos" + File.separator;
 
-			projetoBean.clear();
-			projetoBean.setListState();
-			projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
-			projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.list"));
-			projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+			List<File> arquivosSalvos = new ArrayList<File>();
 
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.inclusao")));
+			boolean arquivosOK = true;
+
+			for (Arquivo arquivo : projetoBean.getArquivos()) {
+				if (arquivo.getArquivo() != null) {
+					File file = new File(dir + arquivo.getArquivo().getFileName());
+
+					try {
+						File arquivoSalvo = Util.saveFile(dir, file, arquivo.getArquivo());
+
+						arquivosSalvos.add(arquivoSalvo);
+						arquivo.setCaminho(file.getAbsolutePath().substring(
+								file.getAbsolutePath().lastIndexOf(File.separator + "upload" + File.separator + "projetos")));
+
+						arquivo.setNomeArquivo(arquivoSalvo.getName().substring(0, arquivoSalvo.getName().lastIndexOf(".")));
+					} catch (Exception e) {
+						for (File f : arquivosSalvos) {
+							f.delete();
+						}
+
+						FacesContext.getCurrentInstance().addMessage(null,
+								new FacesMessage(FacesMessage.SEVERITY_ERROR, "", messages.getString("info.erro.salvarArquivo")));
+						projetoBean.clear();
+						projetoBean.setListState();
+						projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
+						projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.list"));
+						projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+
+						arquivosOK = false;
+
+						break;
+					}
+				}
+			}
+
+			if (arquivosOK) {
+				projetoDaoImpl.save(projeto);
+
+				projetoBean.clear();
+				projetoBean.setListState();
+				projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
+				projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.list"));
+				projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.inclusao")));
+			}
 		}
 	}
 
@@ -217,7 +268,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		projetoBean.setPossiveisRecursos(possiveisRecursos);
 	}
 
-	public void selecionarObservadores(ActionEvent event) throws Exception {
+	public void selecionarObservadores() throws Exception {
 		Iterator iterator = projetoBean.getSelecaoObservadores().getKeys();
 
 		List<Recurso> recursosSelecionados = new ArrayList();
@@ -256,7 +307,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		}
 	}
 
-	public void selecionarGerentes(ActionEvent event) throws Exception {
+	public void selecionarGerentes() throws Exception {
 		Iterator iterator = projetoBean.getSelecaoGerentes().getKeys();
 
 		List<Recurso> gerentesSelecionados = new ArrayList();
@@ -295,7 +346,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		}
 	}
 
-	public void selecionarRecursos(ActionEvent event) throws Exception {
+	public void selecionarRecursos() throws Exception {
 		Iterator iterator = projetoBean.getSelecaoRecursos().getKeys();
 
 		List<Recurso> participantesSelecionados = new ArrayList();
@@ -436,13 +487,89 @@ public class ProjetoServiceImpl implements ProjetoService {
 		projetoBean.setPageMessage(labels.getString("info.paginaDetalhe"));
 	}
 
-	public void backToList(ActionEvent event) {
+	public void listener(UploadEvent event) throws Exception {
+		setUploadItem(event.getUploadItem());
+	}
+
+	public void backToList() {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 
 		projetoBean.clear();
 		projetoBean.setListState();
 		projetoBean.setProjetos(projetoDaoImpl.findAll(Projeto.class));
 		projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+	}
+
+	public void mostrarPopUpUpload() {
+		projetoBean.setMostrarPopUpUpload(true);
+	}
+
+	public void cancelarUpload() {
+		setUploadItem(null);
+		projetoBean.setMostrarPopUpUpload(false);
+	}
+
+	public void confirmarUpload() throws Exception {
+		if (validateUpload()) {
+			Arquivo arquivo = new Arquivo();
+			arquivo.setNome(projetoBean.getNomeArquivo());
+			arquivo.setDescricao(projetoBean.getDescricaoArquivo());
+			arquivo.setTipo(Util.getTipoArquivo(getUploadItem().getFileName()));
+			arquivo.setArquivo(getUploadItem());
+
+			if (projetoBean.getArquivos() == null)
+				projetoBean.setArquivos(new ArrayList<Arquivo>());
+
+			projetoBean.getArquivos().add(arquivo);
+
+			projetoBean.setNomeArquivo("");
+			projetoBean.setDescricaoArquivo("");
+
+			projetoBean.setMostrarPopUpUpload(false);
+			setUploadItem(null);
+		}
+	}
+
+	public void excluirArquivo(){
+		if(projetoBean.getArquivosMarcadosExclusao() == null)
+			projetoBean.setArquivosMarcadosExclusao(new ArrayList<Arquivo>());
+		
+		projetoBean.getArquivosMarcadosExclusao().add(projetoBean.getArquivoTemp());
+		
+		projetoBean.getArquivos().remove(projetoBean.getArquivoTemp());
+	}
+	
+	private boolean validateUpload() {
+		boolean formularioOK = true;
+		ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		if (getUploadItem() == null) {
+			String mensagem = mensagens.getString("mensagem.validacao.selecioneUmArquivo");
+
+			context.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, mensagem));
+			formularioOK = false;
+		}
+
+		if (Util.isEmpty(projetoBean.getNomeArquivo())) {
+			String mensagem = mensagens.getString("mensagem.validacao.obrigatorio");
+			String param1 = labels.getString("projeto.nomeArquivo");
+
+			context.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+			formularioOK = false;
+		}
+
+		if (Util.isEmpty(projetoBean.getDescricaoArquivo())) {
+			String mensagem = mensagens.getString("mensagem.validacao.obrigatorio");
+			String param1 = labels.getString("projeto.descricaoArquivo");
+
+			context.addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+			formularioOK = false;
+		}
+
+		return formularioOK;
 	}
 
 	public List<SelectItem> getPapeis() {
@@ -526,5 +653,20 @@ public class ProjetoServiceImpl implements ProjetoService {
 	 */
 	public void setPapelDaoImpl(PapelDao papelDaoImpl) {
 		this.papelDaoImpl = papelDaoImpl;
+	}
+
+	/**
+	 * @return the uploadItem
+	 */
+	public UploadItem getUploadItem() {
+		return uploadItem;
+	}
+
+	/**
+	 * @param uploadItem
+	 *            the uploadItem to set
+	 */
+	public void setUploadItem(UploadItem uploadItem) {
+		this.uploadItem = uploadItem;
 	}
 }

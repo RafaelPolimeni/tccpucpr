@@ -7,6 +7,7 @@ import org.richfaces.model.selection.Selection;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import br.com.model.Arquivo;
 import br.com.model.Projeto;
 import br.com.model.Recurso;
 import br.com.model.RecursoProjeto;
@@ -32,6 +33,7 @@ public class ProjetoBean extends BeanAbstrato {
 	private List<Recurso> possiveisGerentes;
 	private List<RecursoProjeto> recursos;
 	private List<Recurso> possiveisRecursos;
+	private List<Arquivo> arquivos;
 
 	private Projeto projeto;
 	private Recurso recursoTemp;
@@ -40,6 +42,15 @@ public class ProjetoBean extends BeanAbstrato {
 	private Selection selecaoObservadores;
 	private Selection selecaoGerentes;
 	private Selection selecaoRecursos;
+	private Selection selecaoProjeto;
+
+	private boolean mostrarPopUpUpload;
+
+	private String nomeArquivo;
+	private String descricaoArquivo;
+	private Arquivo arquivoTemp;
+
+	private List<Arquivo> arquivosMarcadosExclusao;
 
 	public void clear() {
 		setIdProjeto(null);
@@ -144,7 +155,6 @@ public class ProjetoBean extends BeanAbstrato {
 		this.dataInicio = dataInicio;
 	}
 
-	
 	/**
 	 * @return the dataInicioPrevista
 	 */
@@ -153,7 +163,8 @@ public class ProjetoBean extends BeanAbstrato {
 	}
 
 	/**
-	 * @param dataInicioPrevista the dataInicioPrevista to set
+	 * @param dataInicioPrevista
+	 *            the dataInicioPrevista to set
 	 */
 	public void setDataInicioPrevista(Date dataInicioPrevista) {
 		this.dataInicioPrevista = dataInicioPrevista;
@@ -397,5 +408,110 @@ public class ProjetoBean extends BeanAbstrato {
 	 */
 	public void setSelecaoRecursos(Selection selecaoRecursos) {
 		this.selecaoRecursos = selecaoRecursos;
+	}
+
+	/**
+	 * @return the arquivos
+	 */
+	public List<Arquivo> getArquivos() {
+		return arquivos;
+	}
+
+	/**
+	 * @param arquivos
+	 *            the arquivos to set
+	 */
+	public void setArquivos(List<Arquivo> arquivos) {
+		this.arquivos = arquivos;
+	}
+
+	/**
+	 * @return the mostrarPopUpUpload
+	 */
+	public boolean isMostrarPopUpUpload() {
+		return mostrarPopUpUpload;
+	}
+
+	/**
+	 * @param mostrarPopUpUpload
+	 *            the mostrarPopUpUpload to set
+	 */
+	public void setMostrarPopUpUpload(boolean mostrarPopUpUpload) {
+		this.mostrarPopUpUpload = mostrarPopUpUpload;
+	}
+
+	/**
+	 * @return the nomeArquivo
+	 */
+	public String getNomeArquivo() {
+		return nomeArquivo;
+	}
+
+	/**
+	 * @param nomeArquivo
+	 *            the nomeArquivo to set
+	 */
+	public void setNomeArquivo(String nomeArquivo) {
+		this.nomeArquivo = nomeArquivo;
+	}
+
+	/**
+	 * @return the descricaoArquivo
+	 */
+	public String getDescricaoArquivo() {
+		return descricaoArquivo;
+	}
+
+	/**
+	 * @param descricaoArquivo
+	 *            the descricaoArquivo to set
+	 */
+	public void setDescricaoArquivo(String descricaoArquivo) {
+		this.descricaoArquivo = descricaoArquivo;
+	}
+
+	/**
+	 * @return the arquivoTemp
+	 */
+	public Arquivo getArquivoTemp() {
+		return arquivoTemp;
+	}
+
+	/**
+	 * @param arquivoTemp
+	 *            the arquivoTemp to set
+	 */
+	public void setArquivoTemp(Arquivo arquivoTemp) {
+		this.arquivoTemp = arquivoTemp;
+	}
+
+	/**
+	 * @return the arquivosMarcadosExclusao
+	 */
+	public List<Arquivo> getArquivosMarcadosExclusao() {
+		return arquivosMarcadosExclusao;
+	}
+
+	/**
+	 * @param arquivosMarcadosExclusao
+	 *            the arquivosMarcadosExclusao to set
+	 */
+	public void setArquivosMarcadosExclusao(List<Arquivo> arquivosMarcadosExclusao) {
+		this.arquivosMarcadosExclusao = arquivosMarcadosExclusao;
+	}
+
+	/**
+	 * @return the selecaoProjeto
+	 */
+	public Selection getSelecaoProjeto() {
+		return selecaoProjeto;
+	}
+
+	/**
+	 * @param selecaoProjeto
+	 *            the selecaoProjeto to set
+	 */
+	public void setSelecaoProjeto(Selection selecaoProjeto) {
+		this.selecaoProjeto = selecaoProjeto;
 	}
 }
