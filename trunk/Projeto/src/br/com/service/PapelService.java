@@ -4,27 +4,27 @@ import br.com.model.Papel;
 
 public interface PapelService {
 
-	String findAll();
+	String findAll() throws Exception;
 
-	void prepareCreate();
+	void prepareCreate() throws Exception;
 
-	void confirmCreate();
+	void confirmCreate() throws Exception;
 
-	void showDetails();
+	void showDetails() throws Exception;
 
-	void prepareUpdate();
+	void prepareUpdate() throws Exception;
 
-	void confirmUpdate();
+	void confirmUpdate() throws Exception;
 
-	void prepareDelete();
+	void prepareDelete() throws Exception;
 
-	void cancelDelete();
+	void cancelDelete() throws Exception;
 
-	void delete();
+	void delete() throws Exception;
 
-	void backToList();
+	void backToList() throws Exception;
 
-	void update(Papel role);
+	void update(Papel role) throws Exception;
 
-	void delete(Papel role);
+	void delete(Papel role) throws Exception;
 }

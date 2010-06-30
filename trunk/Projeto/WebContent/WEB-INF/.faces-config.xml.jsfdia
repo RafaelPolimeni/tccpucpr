@@ -26,6 +26,18 @@
     ID="gerenciarRecursos::#pages#admin#recursos.jsf" NAME="output3"
     PATH="/pages/admin/recursos.jsf"
     TARGET="rules:#pages#admin#recursos.jsf" TITLE="gerenciarRecursos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="gerenciarPapeis::#pages#admin#papeis.jsf"
+    NAME="output4" PATH="/pages/admin/papeis.jsf"
+    TARGET="rules:#pages#admin#papeis.jsf" TITLE="gerenciarPapeis" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="gerenciarProjetos::#pages#admin#projetos.jsf" NAME="output5"
+    PATH="/pages/admin/projetos.jsf"
+    TARGET="rules:#pages#admin#projetos.jsf" TITLE="gerenciarProjetos" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="gerenciarTipoApontamento::#pages#admin#tiposApontamento.jsf"
+    NAME="output6" PATH="/pages/admin/tiposApontamento.jsf"
+    TARGET="rules:#pages#admin#tiposApontamento.jsf"
+    TITLE="gerenciarTipoApontamento" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#login.jsf" PATH="/login.jsf"
@@ -44,4 +56,6 @@
   PATH="/pages/user/erroBaseDados.jsf" SHAPE="288,721,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#pages#user#erro.jsf"
   PATH="/pages/user/erro.jsf" SHAPE="288,497,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#pages#admin#tiposApontamento.jsf"
+  PATH="/pages/admin/tiposApontamento.jsf" SHAPE="304,593,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

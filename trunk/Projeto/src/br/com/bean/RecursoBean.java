@@ -5,11 +5,12 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
+import org.richfaces.model.selection.SimpleSelection;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import br.com.model.Perfil;
 import br.com.model.Papel;
+import br.com.model.Perfil;
 import br.com.model.Recurso;
 
 @Service
@@ -36,6 +37,8 @@ public class RecursoBean extends BeanAbstrato {
 	private Integer idAutoridade;
 
 	private Recurso recurso;
+
+	private SimpleSelection selecaoRecurso;
 
 	public void clear() {
 		setIdRecurso(null);
@@ -322,5 +325,20 @@ public class RecursoBean extends BeanAbstrato {
 	 */
 	public void setPossiveisPapeis(List<Papel> possiveisPapeis) {
 		this.possiveisPapeis = possiveisPapeis;
+	}
+
+	/**
+	 * @return the selecaoRecurso
+	 */
+	public SimpleSelection getSelecaoRecurso() {
+		return selecaoRecurso;
+	}
+
+	/**
+	 * @param selecaoRecurso
+	 *            the selecaoRecurso to set
+	 */
+	public void setSelecaoRecurso(SimpleSelection selecaoRecurso) {
+		this.selecaoRecurso = selecaoRecurso;
 	}
 }

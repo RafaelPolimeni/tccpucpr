@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import br.com.model.Arquivo;
+import br.com.model.HistoricoProjeto;
 import br.com.model.Projeto;
 import br.com.model.Recurso;
 import br.com.model.RecursoProjeto;
@@ -34,6 +35,7 @@ public class ProjetoBean extends BeanAbstrato {
 	private List<RecursoProjeto> recursos;
 	private List<Recurso> possiveisRecursos;
 	private List<Arquivo> arquivos;
+	private List<HistoricoProjeto> historicos;
 
 	private Projeto projeto;
 	private Recurso recursoTemp;
@@ -513,5 +515,20 @@ public class ProjetoBean extends BeanAbstrato {
 	 */
 	public void setSelecaoProjeto(Selection selecaoProjeto) {
 		this.selecaoProjeto = selecaoProjeto;
+	}
+
+	/**
+	 * @return the historicos
+	 */
+	public List<HistoricoProjeto> getHistoricos() {
+		return historicos;
+	}
+
+	/**
+	 * @param historicos
+	 *            the historicos to set
+	 */
+	public void setHistoricos(List<HistoricoProjeto> historicos) {
+		this.historicos = historicos;
 	}
 }

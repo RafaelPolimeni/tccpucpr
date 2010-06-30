@@ -17,28 +17,33 @@
 			<a4j:keepAlive beanName="projetoBean"/>		
 			<a4j:form ajaxSubmit="true" id="papelForm" >
 				<h:panelGroup layout="block" id="listPanel" rendered="#{projetoServiceImpl.projetoBean.listState}">
-					<rich:extendedDataTable value="#{projetoBean.projetos}" var="projeto" 
-							width="400" align="center" id="projetos" height="200px"
-							selection="#{projetoServiceImpl.projetoBean.selecaoProjeto}"
-							selectionMode="single">
-        					
-       					<a4j:support action="#{projetoServiceImpl.showDetails}" event="onRowClick">
-       						<f:setPropertyActionListener value="#{projeto.idProjeto}" target="#{projetoServiceImpl.projetoBean.idProjeto}" />
-       					</a4j:support>
-        
-					 	<rich:column sortBy="#{projeto.nome}" style="text-align:left;" width="90%">
-					 		<f:facet name="header">
-								<h:outputText value="#{labels['papel.nome']}" />
-							</f:facet>
-							<h:outputText value="#{projeto.nome}"/>
-						</rich:column>
-						
-					</rich:extendedDataTable>
+					<div align="center">
+						<rich:extendedDataTable value="#{projetoServiceImpl.projetosDataModel}" var="projeto"
+								width="700px" align="center" height="347px" id="projetos" 
+								selection="#{projetoServiceImpl.projetoBean.selecaoProjeto}"
+								selectionMode="single"
+								onkeypress="if (event.keyCode == 13) {document.getElementById('recursos:nomefsp').blur(); document.getElementById('recursos:habilitadofsp').blur(); return false;} else {return true;}">
+	        					
+						 	<rich:column sortBy="#{projeto.nome}" style="text-align:left;" width="90%">
+						 		<f:facet name="header">
+									<h:outputText value="#{labels['papel.nome']}" />
+								</f:facet>
+								<h:outputText value="#{projeto.nome}"/>
+							</rich:column>
+						</rich:extendedDataTable>
+					</div>
 					
 					<br />
 					
 					<a4j:commandButton action="#{projetoServiceImpl.prepareCreate}"
-						 value="#{labels['novo']}" style="margin-left:61px;"/>
+						 value="   #{labels['novo']}   " style="margin-left:68px;"/>
+					<rich:spacer width="7"/>
+				    <a4j:commandButton action="#{projetoServiceImpl.showDetails}"
+						 value="   #{labels['detalhar']}   " />
+						 
+					<rich:spacer width="7"/>
+				    <a4j:commandButton action="#{projetoServiceImpl.prepareUpdate}"
+						 value="   #{labels['alterar']}   " />
 				</h:panelGroup>
 				
 				<rich:tabPanel switchType="ajax" rendered="#{not projetoServiceImpl.projetoBean.listState}"
@@ -327,7 +332,7 @@
 									Nome
 								</f:facet>
 								<a href="/Projeto#{item.caminho}"><h:outputText value="#{item.nome}" rendered="${projetoServiceImpl.projetoBean.detailState}"/></a>
-								<h:outputText value="#{item.nome}" rendered="${projetoServiceImpl.projetoBean.createState}"/>
+								<h:outputText value="#{item.nome}" rendered="${projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}"/>
 							</rich:column>
 							
 							<rich:column style="text-align: center;" label="Excluir" width="10%"
@@ -354,11 +359,10 @@
 			    
 			    <br />
 			    
-			    <a4j:commandButton action="#{projetoServiceImpl.confirmCreate}" value="#{labels['confirmar']}" rendered="#{projetoServiceImpl.projetoBean.createState}" reRender="messageSenha"/>
-				<a4j:commandButton action="#{projetoServiceImpl.prepareUpdate}" value="#{labels['alterar']}" rendered="#{projetoServiceImpl.projetoBean.detailState}"/>
-				<a4j:commandButton action="#{projetoServiceImpl.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{projetoServiceImpl.projetoBean.updateState}"/>
+			    <a4j:commandButton action="#{projetoServiceImpl.confirmCreate}" value="   #{labels['confirmar']}   " rendered="#{projetoServiceImpl.projetoBean.createState}" reRender="messageSenha"/>
+				<a4j:commandButton action="#{projetoServiceImpl.confirmUpdate}" value="   #{labels['confirmar']}   " rendered="#{projetoServiceImpl.projetoBean.updateState}"/>
 				<rich:spacer width="7" rendered="#{not projetoServiceImpl.projetoBean.listState}"/>
-				<a4j:commandButton action="#{projetoServiceImpl.backToList}" value="#{labels['cancelar']}" rendered="#{not projetoServiceImpl.projetoBean.listState}" immediate="true"/>
+				<a4j:commandButton action="#{projetoServiceImpl.backToList}" value="   #{labels['cancelar']}   " rendered="#{not projetoServiceImpl.projetoBean.listState}" immediate="true"/>
 			</a4j:form>
 			
 			<rich:modalPanel autosized="true" showWhenRendered="true" 
