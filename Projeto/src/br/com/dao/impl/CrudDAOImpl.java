@@ -20,8 +20,8 @@ public class CrudDAOImpl<T extends EntityInterface> implements CrudDAO<T> {
 
 	public CrudDAOImpl() {
 	}
-	
-	@Transactional
+
+	@Transactional()
 	public void delete(T objeto) {
 		entityManager.remove(entityManager.find(objeto.getClass(), objeto.getPrimaryKey()));
 	}
@@ -57,7 +57,7 @@ public class CrudDAOImpl<T extends EntityInterface> implements CrudDAO<T> {
 		return list;
 	}
 
-	@Transactional 
+	@Transactional
 	public void save(T objeto) {
 		entityManager.persist(objeto);
 	}

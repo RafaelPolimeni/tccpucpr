@@ -16,6 +16,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.richfaces.event.UploadEvent;
+import org.richfaces.model.DataProvider;
+import org.richfaces.model.ExtendedTableDataModel;
 import org.richfaces.model.UploadItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -55,7 +57,39 @@ public class ProjetoServiceImpl implements ProjetoService {
 
 	private UploadItem uploadItem;
 
-	// public List<SelectItem> papeis;
+	ExtendedTableDataModel<Projeto> dataModel;
+
+	public ExtendedTableDataModel<Projeto> getProjetosDataModel() {
+		if (dataModel == null) {
+			dataModel = new ExtendedTableDataModel<Projeto>(new DataProvider<Projeto>() {
+				private static final long serialVersionUID = -5906008834318730281L;
+
+				public Projeto getItemByKey(Object key) {
+					for (Projeto c : projetoBean.getProjetos()) {
+						if (key.equals(getKey(c))) {
+							return c;
+						}
+					}
+					return null;
+				}
+
+				public List<Projeto> getItemsByRange(int firstRow, int endRow) {
+					return projetoBean.getProjetos().subList(firstRow, endRow);
+				}
+
+				public Object getKey(Projeto item) {
+					return item.getIdProjeto();
+				}
+
+				public int getRowCount() {
+					return projetoBean.getProjetos().size();
+				}
+
+			});
+		}
+
+		return dataModel;
+	}
 
 	public String findAll() throws Exception {
 		try {
@@ -85,6 +119,8 @@ public class ProjetoServiceImpl implements ProjetoService {
 		projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
 		projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.create"));
 		projetoBean.setPageMessage(labels.getString("info.paginaInclusao"));
+
+		projetoBean.setArquivosMarcadosExclusao(null);
 	}
 
 	public void confirmCreate() throws Exception {
@@ -138,14 +174,167 @@ public class ProjetoServiceImpl implements ProjetoService {
 			boolean arquivosOK = true;
 
 			for (Arquivo arquivo : projetoBean.getArquivos()) {
-				if (arquivo.getArquivo() != null) {
+				File file = new File(dir + arquivo.getArquivo().getFileName());
+
+				try {
+					File arquivoSalvo = Util.saveFile(dir, file, arquivo.getArquivo());
+
+					arquivosSalvos.add(arquivoSalvo);
+					arquivo.setCaminho(arquivoSalvo.getAbsolutePath().substring(
+							file.getAbsolutePath().lastIndexOf(File.separator + "upload" + File.separator + "projetos")));
+
+					arquivo.setNomeArquivo(arquivoSalvo.getName().substring(0, arquivoSalvo.getName().lastIndexOf(".")));
+				} catch (Exception e) {
+					for (File f : arquivosSalvos) {
+						f.delete();
+					}
+
+					FacesContext.getCurrentInstance().addMessage(null,
+							new FacesMessage(FacesMessage.SEVERITY_ERROR, "", messages.getString("info.erro.salvarArquivo")));
+					projetoBean.clear();
+					projetoBean.setListState();
+					projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
+					projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.list"));
+					projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+
+					arquivosOK = false;
+
+					break;
+				}
+			}
+
+			if (arquivosOK) {
+				projetoDaoImpl.save(projeto);
+
+				projetoBean.clear();
+				projetoBean.setListState();
+				projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
+				projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.list"));
+				projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+				projetoBean.setProjetos(projetoDaoImpl.findAll(Projeto.class));
+
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.inclusao")));
+				
+				dataModel = new ExtendedTableDataModel<Projeto>(new DataProvider<Projeto>() {
+					private static final long serialVersionUID = -5906008834318730281L;
+
+					public Projeto getItemByKey(Object key) {
+						for (Projeto c : projetoBean.getProjetos()) {
+							if (key.equals(getKey(c))) {
+								return c;
+							}
+						}
+						return null;
+					}
+
+					public List<Projeto> getItemsByRange(int firstRow, int endRow) {
+						return projetoBean.getProjetos().subList(firstRow, endRow);
+					}
+
+					public Object getKey(Projeto item) {
+						return item.getIdProjeto();
+					}
+
+					public int getRowCount() {
+						return projetoBean.getProjetos().size();
+					}
+
+				});
+			}
+		}
+	}
+	
+	@Transactional
+	public void confirmUpdate() throws Exception {
+		if (validate()) {
+			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+			ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+
+			Projeto projetoAntigo = projetoDaoImpl.find(Projeto.class, projetoBean.getIdProjeto());
+
+			Projeto projeto = new Projeto();
+
+			projeto.setIdProjeto(projetoBean.getIdProjeto());
+			projeto.setNome(projetoBean.getNome());
+			projeto.setDescricao(projetoBean.getDescricao());
+			projeto.setDataInicioPrevista(projetoBean.getDataInicioPrevista());
+			projeto.setDataFimPrevista(projetoBean.getDataFimPrevista());
+			projeto.setCriador(projetoBean.getCriador());
+			projeto.setGerentes(projetoBean.getGerentes());
+			projeto.setRecursos(projetoBean.getRecursos());
+			projeto.setObservadores(projetoBean.getObservadores());
+			projeto.setArquivos(projetoBean.getArquivos());
+			projeto.setDataCriacao(projetoBean.getDataCriacao());
+			projeto.setStatus(Projeto.PROJETO_CRIADO);
+
+			Date dataAtual = new Date();
+
+			List<RecursoProjeto> recursosNovos = projetoBean.getRecursos();
+			List<RecursoProjeto> recursosAntigos = projetoAntigo.getRecursos();
+
+			List<HistoricoProjeto> historicos = projetoAntigo.getHistoricos();
+
+			for (RecursoProjeto recursoProjeto : recursosNovos) {
+				boolean encontrou = false;
+
+				for (RecursoProjeto recursoProjetoAntigo : recursosAntigos) {
+					if (recursoProjeto.equals(recursoProjetoAntigo)) {
+						encontrou = true;
+						break;
+					}
+				}
+
+				if (!encontrou) {
+					HistoricoProjeto historico = new HistoricoProjeto();
+					historico.setProjeto(projeto);
+					historico.setRecurso(recursoProjeto.getRecursoProjetoPK().getRecurso());
+					historico.setData(dataAtual);
+					historico.setAdicionou(true);
+					historicos.add(historico);
+
+					recursoProjeto.getRecursoProjetoPK().setProjeto(projeto);
+				}
+			}
+
+			for (RecursoProjeto recursoProjetoAntigo : recursosAntigos) {
+				boolean encontrou = false;
+
+				for (RecursoProjeto recursoProjetoNovo : recursosNovos) {
+					if (recursoProjetoAntigo.equals(recursoProjetoNovo)) {
+						encontrou = true;
+						break;
+					}
+				}
+
+				if (!encontrou) {
+					HistoricoProjeto historico = new HistoricoProjeto();
+					historico.setProjeto(projeto);
+					historico.setRecurso(recursoProjetoAntigo.getRecursoProjetoPK().getRecurso());
+					historico.setData(dataAtual);
+					historico.setAdicionou(false);
+					historicos.add(historico);
+				}
+			}
+
+			projeto.setHistoricos(historicos);
+
+			ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+			String dir = servletContext.getRealPath("/") + "upload" + File.separator + "projetos" + File.separator;
+
+			List<File> arquivosSalvos = new ArrayList<File>();
+
+			boolean arquivosOK = true;
+
+			for (Arquivo arquivo : projetoBean.getArquivos()) {
+				if (Util.isEmpty(arquivo.getCaminho())) {
 					File file = new File(dir + arquivo.getArquivo().getFileName());
 
 					try {
 						File arquivoSalvo = Util.saveFile(dir, file, arquivo.getArquivo());
 
 						arquivosSalvos.add(arquivoSalvo);
-						arquivo.setCaminho(file.getAbsolutePath().substring(
+						arquivo.setCaminho(arquivoSalvo.getAbsolutePath().substring(
 								file.getAbsolutePath().lastIndexOf(File.separator + "upload" + File.separator + "projetos")));
 
 						arquivo.setNomeArquivo(arquivoSalvo.getName().substring(0, arquivoSalvo.getName().lastIndexOf(".")));
@@ -169,17 +358,47 @@ public class ProjetoServiceImpl implements ProjetoService {
 				}
 			}
 
+			for (Arquivo arquivoAntigo : projetoAntigo.getArquivos()) {
+				boolean encontrou = false;
+
+				for (Arquivo arquivoNovo : projetoBean.getArquivos()) {
+					if (!Util.isEmpty(arquivoNovo.getCaminho()) && arquivoAntigo.equals(arquivoNovo)) {
+						encontrou = true;
+						break;
+					}
+				}
+
+				if (!encontrou) {
+					try {
+						File file = new File(dir + arquivoAntigo.getCaminho());
+						file.delete();
+					} catch (Exception e) {
+						FacesContext.getCurrentInstance().addMessage(null,
+								new FacesMessage(FacesMessage.SEVERITY_ERROR, "", messages.getString("info.erro.salvarArquivo")));
+						projetoBean.clear();
+						projetoBean.setListState();
+						projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
+						projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.list"));
+						projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+
+						arquivosOK = false;
+						break;
+					}
+				}
+			}
+
 			if (arquivosOK) {
-				projetoDaoImpl.save(projeto);
+				projetoDaoImpl.update(projeto);
 
 				projetoBean.clear();
 				projetoBean.setListState();
 				projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
 				projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.list"));
 				projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+				projetoBean.setProjetos(projetoDaoImpl.findAll(Projeto.class));
 
 				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.inclusao")));
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.alteracao")));
 			}
 		}
 	}
@@ -208,7 +427,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		}
 
 		if (Util.isEmpty(projetoBean.getGerentes())) {
-			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoAoMenosUm");
 			String param1 = labels.getString("projeto.gerente");
 
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
@@ -216,7 +435,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 		}
 
 		if (Util.isEmpty(projetoBean.getRecursos())) {
-			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoAoMenosUm");
 			String param1 = labels.getString("projeto.recurso");
 
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
@@ -300,7 +519,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 
-			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoAoMenosUm");
 			String param1 = labels.getString("projeto.observador");
 
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
@@ -339,7 +558,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 
-			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoAoMenosUm");
 			String param1 = labels.getString("projeto.gerente");
 
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
@@ -405,7 +624,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 
-			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoAoMenosUm");
 			String param1 = labels.getString("projeto.recurso");
 
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
@@ -456,35 +675,110 @@ public class ProjetoServiceImpl implements ProjetoService {
 	public void showDetails() throws Exception {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 
-		Projeto projeto = projetoDaoImpl.find(Projeto.class, projetoBean.getIdProjeto());
+		Iterator<Object> iterator = projetoBean.getSelecaoProjeto().getKeys();
 
-		projetoBean.setNome(projeto.getNome());
-		projetoBean.setDescricao(projeto.getDescricao());
-		projetoBean.setDataInicio(projeto.getDataInicio());
-		projetoBean.setDataInicioPrevista(projeto.getDataInicioPrevista());
-		projetoBean.setDataFim(projeto.getDataFimPrevista());
-		projetoBean.setDataFimPrevista(projeto.getDataFimPrevista());
-		projetoBean.setStatus(projeto.getStatus());
-		projetoBean.setCriador(projeto.getCriador());
+		if (iterator.hasNext()) {
+			Object key = iterator.next();
+			getProjetosDataModel().setRowKey(key);
 
-		List<Recurso> gerentes = new ArrayList<Recurso>();
-		gerentes.addAll(projeto.getGerentes());
-		projetoBean.setGerentes(gerentes);
+			Projeto projeto = projetoDaoImpl.find(Projeto.class, ((Projeto) getProjetosDataModel().getRowData()).getIdProjeto());
 
-		List<RecursoProjeto> recursos = new ArrayList<RecursoProjeto>();
-		recursos.addAll(projeto.getRecursos());
-		projetoBean.setRecursos(recursos);
+			projetoBean.setNome(projeto.getNome());
+			projetoBean.setDescricao(projeto.getDescricao());
+			projetoBean.setDataInicio(projeto.getDataInicio());
+			projetoBean.setDataInicioPrevista(projeto.getDataInicioPrevista());
+			projetoBean.setDataFim(projeto.getDataFimPrevista());
+			projetoBean.setDataFimPrevista(projeto.getDataFimPrevista());
+			projetoBean.setStatus(projeto.getStatus());
+			projetoBean.setCriador(projeto.getCriador());
 
-		List<Recurso> observadores = new ArrayList<Recurso>();
-		observadores.addAll(projeto.getObservadores());
-		projetoBean.setObservadores(observadores);
+			List<Recurso> gerentes = new ArrayList<Recurso>();
+			gerentes.addAll(projeto.getGerentes());
+			projetoBean.setGerentes(gerentes);
 
-		projetoBean.setDetailState();
+			List<RecursoProjeto> recursos = new ArrayList<RecursoProjeto>();
+			recursos.addAll(projeto.getRecursos());
+			projetoBean.setRecursos(recursos);
 
-		projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
-		projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.detail"));
+			List<Recurso> observadores = new ArrayList<Recurso>();
+			observadores.addAll(projeto.getObservadores());
+			projetoBean.setObservadores(observadores);
 
-		projetoBean.setPageMessage(labels.getString("info.paginaDetalhe"));
+			List<Arquivo> arquivos = new ArrayList<Arquivo>();
+			arquivos.addAll(projeto.getArquivos());
+			projetoBean.setArquivos(arquivos);
+
+			projetoBean.setDetailState();
+
+			projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
+			projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.detail"));
+
+			projetoBean.setPageMessage(labels.getString("info.paginaDetalhe"));
+		} else {
+			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String param1 = labels.getString("projeto");
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+		}
+	}
+
+	@Transactional
+	public void prepareUpdate() {
+		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+
+		Iterator<Object> iterator = projetoBean.getSelecaoProjeto().getKeys();
+
+		if (iterator.hasNext()) {
+			Object key = iterator.next();
+			getProjetosDataModel().setRowKey(key);
+
+			Projeto projeto = projetoDaoImpl.find(Projeto.class, ((Projeto) getProjetosDataModel().getRowData()).getIdProjeto());
+
+			projetoBean.setIdProjeto(projeto.getIdProjeto());
+			projetoBean.setNome(projeto.getNome());
+			projetoBean.setDescricao(projeto.getDescricao());
+			projetoBean.setDataInicio(projeto.getDataInicio());
+			projetoBean.setDataInicioPrevista(projeto.getDataInicioPrevista());
+			projetoBean.setDataFim(projeto.getDataFimPrevista());
+			projetoBean.setDataFimPrevista(projeto.getDataFimPrevista());
+			projetoBean.setStatus(projeto.getStatus());
+			projetoBean.setCriador(projeto.getCriador());
+			projetoBean.setDataCriacao(projeto.getDataCriacao());
+
+			List<Recurso> gerentes = new ArrayList<Recurso>();
+			gerentes.addAll(projeto.getGerentes());
+			projetoBean.setGerentes(gerentes);
+
+			List<RecursoProjeto> recursos = new ArrayList<RecursoProjeto>();
+			recursos.addAll(projeto.getRecursos());
+			projetoBean.setRecursos(recursos);
+
+			List<Recurso> observadores = new ArrayList<Recurso>();
+			observadores.addAll(projeto.getObservadores());
+			projetoBean.setObservadores(observadores);
+
+			List<Arquivo> arquivos = new ArrayList<Arquivo>();
+			arquivos.addAll(projeto.getArquivos());
+			projetoBean.setArquivos(arquivos);
+
+			projetoBean.setUpdateState();
+
+			projetoBean.getBreadCrumb().remove(projetoBean.getBreadCrumb().size() - 1);
+			projetoBean.getBreadCrumb().add(labels.getString("breadCrumb.projeto.update"));
+
+			projetoBean.setPageMessage(labels.getString("info.paginaAlteracao"));
+
+			projetoBean.setArquivosMarcadosExclusao(null);
+		} else {
+			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String param1 = labels.getString("projeto");
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+		}
 	}
 
 	public void listener(UploadEvent event) throws Exception {
@@ -530,15 +824,15 @@ public class ProjetoServiceImpl implements ProjetoService {
 		}
 	}
 
-	public void excluirArquivo(){
-		if(projetoBean.getArquivosMarcadosExclusao() == null)
+	public void excluirArquivo() {
+		if (projetoBean.getArquivosMarcadosExclusao() == null)
 			projetoBean.setArquivosMarcadosExclusao(new ArrayList<Arquivo>());
-		
+
 		projetoBean.getArquivosMarcadosExclusao().add(projetoBean.getArquivoTemp());
-		
+
 		projetoBean.getArquivos().remove(projetoBean.getArquivoTemp());
 	}
-	
+
 	private boolean validateUpload() {
 		boolean formularioOK = true;
 		ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");

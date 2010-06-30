@@ -2,22 +2,25 @@ package br.com.bean;
 
 import java.util.List;
 
+import org.richfaces.model.selection.SimpleSelection;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import br.com.model.Papel;
 
 @Service
-@Scope(value="request")
-public class PapelBean extends BeanAbstrato{
-	
+@Scope(value = "request")
+public class PapelBean extends BeanAbstrato {
+
 	private Integer idPapel;
 	private String nome;
 	private String descricao;
 	private List<Papel> papeis;
 	private Papel papel;
-	
-	public void clear(){
+
+	private SimpleSelection selecaoPapeis;
+
+	public void clear() {
 		setIdPapel(null);
 		setNome(null);
 		setDescricao(null);
@@ -32,7 +35,8 @@ public class PapelBean extends BeanAbstrato{
 	}
 
 	/**
-	 * @param idPapel the idPapel to set
+	 * @param idPapel
+	 *            the idPapel to set
 	 */
 	public void setIdPapel(Integer idPapel) {
 		this.idPapel = idPapel;
@@ -46,7 +50,8 @@ public class PapelBean extends BeanAbstrato{
 	}
 
 	/**
-	 * @param nome the nome to set
+	 * @param nome
+	 *            the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -60,7 +65,8 @@ public class PapelBean extends BeanAbstrato{
 	}
 
 	/**
-	 * @param descricao the descricao to set
+	 * @param descricao
+	 *            the descricao to set
 	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
@@ -74,7 +80,8 @@ public class PapelBean extends BeanAbstrato{
 	}
 
 	/**
-	 * @param papeis the papeis to set
+	 * @param papeis
+	 *            the papeis to set
 	 */
 	public void setPapeis(List<Papel> papeis) {
 		this.papeis = papeis;
@@ -88,9 +95,25 @@ public class PapelBean extends BeanAbstrato{
 	}
 
 	/**
-	 * @param papel the papel to set
+	 * @param papel
+	 *            the papel to set
 	 */
 	public void setPapel(Papel papel) {
 		this.papel = papel;
+	}
+
+	/**
+	 * @return the selecaoPapeis
+	 */
+	public SimpleSelection getSelecaoPapeis() {
+		return selecaoPapeis;
+	}
+
+	/**
+	 * @param selecaoPapeis
+	 *            the selecaoPapeis to set
+	 */
+	public void setSelecaoPapeis(SimpleSelection selecaoPapeis) {
+		this.selecaoPapeis = selecaoPapeis;
 	}
 }

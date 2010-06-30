@@ -11,16 +11,16 @@
 	<ui:composition template="/templates/main.xhtml">
 		<ui:param name="bean" value="#{papelBean}" />
 		<ui:define name="body">			
-				<a4j:keepAlive beanName="papelServiceImpl" />
-				<a4j:keepAlive beanName="papelBean" />
-				<a4j:form ajaxSubmit="true" id="papelForm">
+				<a4j:keepAlive beanName="tipoApontamentoServiceImpl" />
+				<a4j:keepAlive beanName="tipoApontamentoBean" />
+				<a4j:form ajaxSubmit="true" id="tipoApontamentoForm">
 					
 					<h:panelGroup layout="block" id="listPanel" style="align: center;" 
-						rendered="#{papelServiceImpl.papelBean.listState}">
+						rendered="#{tipoApontamentoServiceImpl.tipoApontamentoBean.listState}">
 						<div align="center">
-							<rich:extendedDataTable value="#{papelServiceImpl.papeisDataModel}" var="papel" 
+							<rich:extendedDataTable value="#{tipoApontamentoServiceImpl.papeisDataModel}" var="papel" 
 									width="700px" align="center" id="papeis" height="347px" sortMode="single"
-									selectionMode="single" selection="#{papelServiceImpl.papelBean.selecaoPapeis}"
+									selectionMode="single" selection="#{tipoApontamentoServiceImpl.tipoApontamentoBean.selecaoPapeis}"
 									onkeypress="if (event.keyCode == 13) {document.getElementById('papelForm:papeis:nomefsp').blur(); return false;} else {return true;}">
 							 	<rich:column sortable="true" sortBy="#{papel.nome}" style="text-align:left;" width="100%"
 							 		label="#{labels['papel.nome']}" filterBy="#{papel.nome}" filterEvent="onblur" id="nome">
@@ -34,50 +34,50 @@
 						
 						<br />
 						
-						<a4j:commandButton action="#{papelServiceImpl.prepareCreate}"
+						<a4j:commandButton action="#{tipoApontamentoServiceImpl.prepareCreate}"
 							 value="   #{labels['novo']}   " style="margin-left:68px;"/>
 						<rich:spacer width="7"/>					 
-						<a4j:commandButton action="#{papelServiceImpl.showDetail}"
+						<a4j:commandButton action="#{tipoApontamentoServiceImpl.showDetail}"
 						 value="   #{labels['detalhar']}   "/>
 						<rich:spacer width="7"/>				
-						<a4j:commandButton action="#{papelServiceImpl.prepareUpdate}"
+						<a4j:commandButton action="#{tipoApontamentoServiceImpl.prepareUpdate}"
 							 value="   #{labels['alterar']}   "/>
 						<rich:spacer width="7"/>	 
-						<a4j:commandButton action="#{papelServiceImpl.prepareDelete}"
+						<a4j:commandButton action="#{tipoApontamentoServiceImpl.prepareDelete}"
 							 value="   #{labels['excluir']}   "/>
 					</h:panelGroup>
 					
-					<h:panelGroup layout="block" id="detailPanel" rendered="#{not papelServiceImpl.papelBean.listState}">
+					<h:panelGroup layout="block" id="detailPanel" rendered="#{not tipoApontamentoServiceImpl.tipoApontamentoBean.listState}">
 						<fieldset>
 							<legend>Dados do papel</legend>
 							<h:panelGrid columns="3" >
 								<h:outputLabel value="#{labels['papel.nome']}:" for="name"/>
-								<h:inputText id="name" value="#{papelServiceImpl.papelBean.nome}" maxlength="100" 
-									rendered="#{papelServiceImpl.papelBean.createState or papelServiceImpl.papelBean.updateState}"/>
+								<h:inputText id="name" value="#{tipoApontamentoServiceImpl.tipoApontamentoBean.nome}" maxlength="100" 
+									rendered="#{tipoApontamentoServiceImpl.tipoApontamentoBean.createState or tipoApontamentoServiceImpl.tipoApontamentoBean.updateState}"/>
 								<rich:message for="name" style="color:red;"/>
-								<h:outputText value="#{papelServiceImpl.papelBean.nome}" rendered="#{papelServiceImpl.papelBean.detailState}"/>
+								<h:outputText value="#{tipoApontamentoServiceImpl.tipoApontamentoBean.nome}" rendered="#{tipoApontamentoServiceImpl.tipoApontamentoBean.detailState}"/>
 								
 								<h:outputLabel value="#{labels['papel.descricao']}:" for="description" />
-								<h:inputTextarea id="description" rows="3" cols="70" value="#{papelServiceImpl.papelBean.descricao}"
-									rendered="#{papelServiceImpl.papelBean.createState or papelServiceImpl.papelBean.updateState}"
-									onkeyup="javascript:limitText(this, 1000);"/>
+								<h:inputTextarea id="description" rows="3" cols="70" value="#{tipoApontamentoServiceImpl.tipoApontamentoBean.descricao}"
+									rendered="#{tipoApontamentoServiceImpl.tipoApontamentoBean.createState or tipoApontamentoServiceImpl.tipoApontamentoBean.updateState}"
+									onkeyup="javascript:limitText(this, 600);"/>
 								<rich:message for="description" style="color:red;"/>
-								<h:outputText value="#{papelServiceImpl.papelBean.descricao}" rendered="#{papelServiceImpl.papelBean.detailState}" escape="false">
+								<h:outputText value="#{tipoApontamentoServiceImpl.tipoApontamentoBean.descricao}" rendered="#{tipoApontamentoServiceImpl.tipoApontamentoBean.detailState}" escape="false">
 									<f:converter converterId="textAreaConverter"/>
 								</h:outputText>
 							</h:panelGrid>
 							
 							<br />
 												
-							<a4j:commandButton action="#{papelServiceImpl.confirmCreate}" value="#{labels['confirmar']}" rendered="#{papelServiceImpl.papelBean.createState}"/>
-							<a4j:commandButton action="#{papelServiceImpl.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{papelServiceImpl.papelBean.updateState}"/>
-							<rich:spacer width="7" rendered="#{not papelServiceImpl.papelBean.listState}"/>
-							<a4j:commandButton action="#{papelServiceImpl.backToList}" value="#{labels['cancelar']}" rendered="#{not papelServiceImpl.papelBean.listState}" immediate="true"/>
+							<a4j:commandButton action="#{tipoApontamentoServiceImpl.confirmCreate}" value="#{labels['confirmar']}" rendered="#{tipoApontamentoServiceImpl.tipoApontamentoBean.createState}"/>
+							<a4j:commandButton action="#{tipoApontamentoServiceImpl.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{tipoApontamentoServiceImpl.tipoApontamentoBean.updateState}"/>
+							<rich:spacer width="7" rendered="#{not tipoApontamentoServiceImpl.tipoApontamentoBean.listState}"/>
+							<a4j:commandButton action="#{tipoApontamentoServiceImpl.backToList}" value="#{labels['cancelar']}" rendered="#{not tipoApontamentoServiceImpl.tipoApontamentoBean.listState}" immediate="true"/>
 						</fieldset>
 					</h:panelGroup>
 				</a4j:form>
 				
-				<rich:modalPanel autosized="false" showWhenRendered="true" rendered="#{papelServiceImpl.papelBean.showModal}" height="100">
+				<rich:modalPanel autosized="false" showWhenRendered="true" rendered="#{tipoApontamentoServiceImpl.tipoApontamentoBean.showModal}" height="100">
 					<f:facet name="header">
 						<h:outputText value="#{labels['atencao']}" />
 					</f:facet>
@@ -90,9 +90,9 @@
 					<br />
 					
 					<a4j:form id="modalForm" ajaxSubmit="true">			
-						<a4j:commandButton action="#{papelServiceImpl.delete}" value="#{labels['excluir']}"/>
+						<a4j:commandButton action="#{tipoApontamentoServiceImpl.delete}" value="#{labels['excluir']}"/>
 						<rich:spacer width="7"/>
-						<a4j:commandButton action="#{papelServiceImpl.cancelDelete}" value="#{labels['cancelar']}"/>
+						<a4j:commandButton action="#{tipoApontamentoServiceImpl.cancelDelete}" value="#{labels['cancelar']}"/>
 					</a4j:form>		
 				</rich:modalPanel>
 		</ui:define>

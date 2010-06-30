@@ -35,14 +35,16 @@
 			                        <h:outputText value="#{labels['menu.manutencao']}"/>
 			                    </h:panelGroup>
 			                </f:facet>
-			                <rich:menuGroup value="Cadastros">
-			                	<rich:menuItem submitMode="server" value="#{labels['menu.recursos']}" 
-			                        action="#{recursoServiceImpl.findAll}" />
+			                <rich:menuGroup value="Sistema">
 			                	<rich:menuItem submitMode="server" value="#{labels['menu.papeis']}"
 			                        action="#{papelServiceImpl.findAll}" />
-		                        <rich:menuItem submitMode="server" value="#{labels['menu.projetos']}"
-			                        action="#{projetoServiceImpl.findAll}" />
+			                	<rich:menuItem submitMode="server" value="#{labels['menu.recursos']}" 
+			                        action="#{recursoServiceImpl.findAll}" />
+			                    <rich:menuItem submitMode="server" value="#{labels['menu.tipoApontamento']}" 
+			                        action="#{tipoApontamentoServiceImpl.findAll}" />   
 		                	</rich:menuGroup>
+		                	<rich:menuItem submitMode="server" value="#{labels['menu.projetos']}"
+			                        action="#{projetoServiceImpl.findAll}" />
 			           	</rich:dropDownMenu>
 						
 						<h:outputText value="#{labels['menu.login']}" rendered="#{empty userBean.autoridade}"/>			            	

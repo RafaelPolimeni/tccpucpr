@@ -4,6 +4,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 
+import org.springframework.transaction.TransactionSystemException;
+
 import com.sun.faces.application.ActionListenerImpl;
 
 /**
@@ -23,7 +25,7 @@ public class ExceptionHandler extends ActionListenerImpl {
 		} catch (Exception e) {
 			if (e.getCause().getCause() instanceof BaseDadosException) {
 				context.getApplication().getNavigationHandler().handleNavigation(context, null, "erroBaseDados");
-			} else {
+			} else if(!(e.getCause().getCause() instanceof TransactionSystemException)){
 				context.getApplication().getNavigationHandler().handleNavigation(context, null, "erro");
 			}
 		}

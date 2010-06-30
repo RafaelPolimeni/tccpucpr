@@ -1,20 +1,28 @@
 package br.com.service.impl;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.hibernate.exception.ConstraintViolationException;
+import org.richfaces.model.DataProvider;
+import org.richfaces.model.ExtendedTableDataModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.bean.PapelBean;
 import br.com.dao.PapelDao;
 import br.com.model.Papel;
 import br.com.service.PapelService;
+import br.com.util.Util;
 
 @Service
 @Scope(value = "request")
@@ -25,13 +33,14 @@ public class PapelServiceImpl implements PapelService {
 	@Autowired
 	private PapelBean papelBean;
 
+	ExtendedTableDataModel<Papel> dataModel;
+
 	public PapelServiceImpl() {
 
 	}
 
 	public String findAll() {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-		;
 
 		List<String> breadCrumb = new ArrayList<String>();
 		breadCrumb.add(labels.getString("breadCrumb.homePage"));
@@ -55,98 +64,283 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.create"));
 
 		papelBean.setPageMessage(labels.getString("info.paginaInclusao"));
+		
+		papelBean.setSelecaoPapeis(null);
 	}
 
 	public void confirmCreate() {
-		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-		ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+		if(validate()){
+			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+			ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 
-		Papel papel = new Papel();
-		papel.setNome(papelBean.getNome());
-		papel.setDescricao(papelBean.getDescricao());
+			Papel papel = new Papel();
+			papel.setNome(papelBean.getNome());
+			papel.setDescricao(papelBean.getDescricao());
 
-		roleDaoImpl.save(papel);
+			roleDaoImpl.save(papel);
 
-		papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
+			papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
 
-		papelBean.clear();
-		papelBean.setListState();
-		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.list"));
+			papelBean.clear();
+			papelBean.setListState();
+			papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
+			papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.list"));
 
-		papelBean.setPageMessage(labels.getString("info.paginaLista"));
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.inclusao")));
+			papelBean.setPageMessage(labels.getString("info.paginaLista"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.inclusao")));
+			
+			dataModel = new ExtendedTableDataModel<Papel>(new DataProvider<Papel>() {
+				private static final long serialVersionUID = -5906008834318730281L;
+
+				public Papel getItemByKey(Object key) {
+					for (Papel c : papelBean.getPapeis()) {
+						if (key.equals(getKey(c))) {
+							return c;
+						}
+					}
+					return null;
+				}
+
+				public List<Papel> getItemsByRange(int firstRow, int endRow) {
+					return papelBean.getPapeis().subList(firstRow, endRow);
+				}
+
+				public Object getKey(Papel item) {
+					return item.getIdPapel();
+				}
+
+				public int getRowCount() {
+					return papelBean.getPapeis().size();
+				}
+
+			});
+		}
 	}
 
-	public void showDetails() {
+	public void showDetails() throws Exception{
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+		
+		Iterator<Object> iterator = papelBean.getSelecaoPapeis().getKeys();
+		
+		if (iterator.hasNext()) {
+			Object key = iterator.next();
+			getPapeisDataModel().setRowKey(key);
+			papelBean.setPapel((Papel) getPapeisDataModel().getRowData());
+			BeanUtils.copyProperties(papelBean, papelBean.getPapel());
+			
+			papelBean.setNome(papelBean.getPapel().getNome());
+			papelBean.setDescricao(papelBean.getPapel().getDescricao());
+			papelBean.setIdPapel(papelBean.getPapel().getIdPapel());
 
-		papelBean.setNome(papelBean.getPapel().getNome());
-		papelBean.setDescricao(papelBean.getPapel().getDescricao());
-		papelBean.setIdPapel(papelBean.getPapel().getIdPapel());
+			papelBean.setDetailState();
 
-		papelBean.setDetailState();
+			papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
+			papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.detail"));
 
-		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.detail"));
+			papelBean.setPageMessage(labels.getString("info.paginaDetalhe"));
+		}else{
+			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 
-		papelBean.setPageMessage(labels.getString("info.paginaDetalhe"));
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String param1 = labels.getString("papel");
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+		}
 	}
 
-	public void prepareUpdate() {
+	public void prepareUpdate() throws Exception {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 
-		papelBean.setUpdateState();
+		Iterator<Object> iterator = papelBean.getSelecaoPapeis().getKeys();
 
-		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.update"));
+		if (iterator.hasNext()) {
+			Object key = iterator.next();
+			getPapeisDataModel().setRowKey(key);
+			papelBean.setPapel((Papel) getPapeisDataModel().getRowData());
+			BeanUtils.copyProperties(papelBean, papelBean.getPapel());
 
-		papelBean.setPageMessage(labels.getString("info.paginaAlteracao"));
+			papelBean.getPapeis();
+
+			papelBean.setUpdateState();
+
+			papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
+			papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.update"));
+
+			papelBean.setPageMessage(labels.getString("info.paginaAlteracao"));
+		} else {
+			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String param1 = labels.getString("papel");
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+		}
+	}
+
+	public ExtendedTableDataModel<Papel> getPapeisDataModel() {
+		if (dataModel == null) {
+			dataModel = new ExtendedTableDataModel<Papel>(new DataProvider<Papel>() {
+				private static final long serialVersionUID = -5906008834318730281L;
+
+				public Papel getItemByKey(Object key) {
+					for (Papel c : papelBean.getPapeis()) {
+						if (key.equals(getKey(c))) {
+							return c;
+						}
+					}
+					return null;
+				}
+
+				public List<Papel> getItemsByRange(int firstRow, int endRow) {
+					return papelBean.getPapeis().subList(firstRow, endRow);
+				}
+
+				public Object getKey(Papel item) {
+					return item.getIdPapel();
+				}
+
+				public int getRowCount() {
+					return papelBean.getPapeis().size();
+				}
+
+			});
+		}
+		
+		return dataModel;
 	}
 
 	public void confirmUpdate() {
-		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-		ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
-
-		papelBean.getPapel().setNome(papelBean.getNome());
-		papelBean.getPapel().setDescricao(papelBean.getDescricao());
-
-		roleDaoImpl.update(papelBean.getPapel());
-
-		papelBean.setListState();
-		papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
-
-		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.list"));
-
-		papelBean.setPageMessage(labels.getString("info.paginaLista"));
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.alteracao")));
+		if(validate()){
+			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+			ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+	
+			papelBean.getPapel().setNome(papelBean.getNome());
+			papelBean.getPapel().setDescricao(papelBean.getDescricao());
+	
+			roleDaoImpl.update(papelBean.getPapel());
+	
+			papelBean.setListState();
+	
+			papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
+			papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.list"));
+	
+			papelBean.setPageMessage(labels.getString("info.paginaLista"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.alteracao")));
+			papelBean.setSelecaoPapeis(null);
+		}
 	}
 
 	public void prepareDelete() {
-		papelBean.setShowModal(true);
+		Iterator<Object> iterator = papelBean.getSelecaoPapeis().getKeys();
+
+		if (iterator.hasNext()) {
+			Object key = iterator.next();
+			getPapeisDataModel().setRowKey(key);
+			papelBean.setPapel((Papel) getPapeisDataModel().getRowData());
+
+			papelBean.setShowModal(true);
+		} else {
+			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+
+			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
+			String param1 = labels.getString("papel");
+
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+		}
 	}
 
 	public void cancelDelete() {
 		papelBean.setShowModal(false);
 	}
 
-	public void delete() {
+	@Transactional
+	public void delete() throws Exception{
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 		ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+		
+		try{
+			roleDaoImpl.delete(papelBean.getPapel());
+			papelBean.setListState();
+			papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
 
-		roleDaoImpl.delete(papelBean.getPapel());
-		papelBean.setListState();
-		papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
+			papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
+			papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.list"));
 
-		papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
-		papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.list"));
+			papelBean.setPageMessage(labels.getString("info.paginaLista"));
 
-		papelBean.setPageMessage(labels.getString("info.paginaLista"));
+			papelBean.setShowModal(false);
 
-		papelBean.setShowModal(false);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.exclusao")));
+			papelBean.setSelecaoPapeis(null);
+			
+			dataModel = new ExtendedTableDataModel<Papel>(new DataProvider<Papel>() {
+				private static final long serialVersionUID = -5906008834318730281L;
 
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.exclusao")));
+				public Papel getItemByKey(Object key) {
+					for (Papel c : papelBean.getPapeis()) {
+						if (key.equals(getKey(c))) {
+							return c;
+						}
+					}
+					return null;
+				}
+
+				public List<Papel> getItemsByRange(int firstRow, int endRow) {
+					return papelBean.getPapeis().subList(firstRow, endRow);
+				}
+
+				public Object getKey(Papel item) {
+					return item.getIdPapel();
+				}
+
+				public int getRowCount() {
+					return papelBean.getPapeis().size();
+				}
+
+			});	
+		}catch (Exception e) {
+			if(e.getCause() instanceof ConstraintViolationException){
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, messages.getString("mensagem.papeis.papelReferenciado")));
+				
+				papelBean.setListState();
+	
+				papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
+				papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.list"));
+	
+				papelBean.setPageMessage(labels.getString("info.paginaLista"));
+	
+				papelBean.setShowModal(false);
+			}else{
+				throw e;
+			}
+		}
+	}
+	
+	private boolean validate(){
+		boolean formularioOK = true;
+		ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
+		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+
+		FacesContext context = FacesContext.getCurrentInstance();
+
+		if (Util.isEmpty(papelBean.getNome())) {
+			String mensagem = mensagens.getString("mensagem.validacao.obrigatorio");
+			String param1 = labels.getString("papel.nome");
+
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+			formularioOK = false;
+		}
+		
+		if (Util.isEmpty(papelBean.getDescricao())) {
+			String mensagem = mensagens.getString("mensagem.validacao.obrigatorio");
+			String param1 = labels.getString("papel.descricao");
+
+			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
+			formularioOK = false;
+		}
+		
+		return formularioOK;
 	}
 
 	/**
@@ -157,8 +351,9 @@ public class PapelServiceImpl implements PapelService {
 
 		papelBean.clear();
 		papelBean.setListState();
-		papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
 		papelBean.setPageMessage(labels.getString("info.paginaLista"));
+		
+		papelBean.setSelecaoPapeis(null);
 	}
 
 	public void update(Papel role) {
