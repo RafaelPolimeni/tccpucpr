@@ -14,7 +14,8 @@
 			<a4j:keepAlive beanName="recursoBean" />
 			<a4j:keepAlive beanName="recursoServiceImpl" />
 			<a4j:form ajaxSubmit="true" id="recursoForm" prependId="false">
-				<h:panelGroup layout="block" id="listPanel" rendered="#{recursoServiceImpl.recursoBean.listState}">
+				<h:panelGroup layout="block" id="listPanel" rendered="#{recursoServiceImpl.recursoBean.listState}"
+					binding="#{recursoServiceImpl.panelGroup}">
 					<div align="center">
 						<rich:extendedDataTable value="#{recursoServiceImpl.recursosDataModel}" var="recurso"
 										width="700px" align="center" id="recursos" height="347px" sortMode="single"
@@ -28,21 +29,21 @@
 								<h:outputText value="#{recurso.nome} #{recurso.sobrenome}" width="200"/>
 							</rich:column>
 		           			
-		           			<rich:column width="15%">
+		           			<rich:column width="15%" id="telefone">
 						 		<f:facet name="header">
 									<h:outputText value="#{labels['recurso.telefone']}" />
 								</f:facet>
 								<h:outputText value="#{recurso.telefone}"/>
 							</rich:column>
 							
-							<rich:column width="25%">
+							<rich:column width="25%" id="email">
 						 		<f:facet name="header">
 									<h:outputText value="#{labels['recurso.email']}" />
 								</f:facet>
 								<h:outputText value="#{recurso.email}"/>
 							</rich:column>
 							
-							<rich:column width="20%">
+							<rich:column width="20%" id="dataNascimento">
 						 		<f:facet name="header">
 									<h:outputText value="#{labels['recurso.dataNascimento']}" />
 								</f:facet>
@@ -56,8 +57,8 @@
 						 		<f:facet name="header">
 									<h:outputText value="#{labels['recurso.habilitado']}" />
 								</f:facet>
-								<h:graphicImage value="/img/enable.png" width="16" height="16" rendered="#{recurso.habilitado}" />
-								<h:graphicImage value="/img/disabled.png" width="16" height="16" rendered="#{not recurso.habilitado}"/>
+								<h:graphicImage value="/img/enable.png" width="16" height="16" rendered="#{recurso.habilitado}" id="imgDesabilitado"/>
+								<h:graphicImage value="/img/disabled.png" width="16" height="16" rendered="#{not recurso.habilitado}" id="imgHabilitado"/>
 							</rich:column>
 						</rich:extendedDataTable>
 					</div>
@@ -65,98 +66,99 @@
 			 		<br/>
 			 		
 			 		<a4j:commandButton action="#{recursoServiceImpl.prepareCreate}"
-							 value="   #{labels['novo']}   " style="margin-left:68px;"/>
-					<rich:spacer width="7"/>
-					<a4j:commandButton action="#{recursoServiceImpl.showDetail}"
+							 value="   #{labels['novo']}   " style="margin-left:68px;" id="btnPrepareCreate"/>
+					<rich:spacer width="7" id="spacer1"/>
+					<a4j:commandButton action="#{recursoServiceImpl.showDetail}" id="btnDetalhe"
 						 value="   #{labels['detalhar']}   "/>
-					<rich:spacer width="7"/>
-					<a4j:commandButton action="#{recursoServiceImpl.prepareUpdate}"
+					<rich:spacer width="7" id="spacer2"/>
+					<a4j:commandButton action="#{recursoServiceImpl.prepareUpdate}" id="btnAlterar"
 						 value="   #{labels['alterar']}   "/>
 				</h:panelGroup>
 				
-				<h:panelGroup layout="block" id="detailPanel" rendered="#{not recursoServiceImpl.recursoBean.listState}">
+				<h:panelGroup layout="block" id="detailPanel" 
+					rendered="#{not recursoServiceImpl.recursoBean.listState}">
 					<fieldset>
 						<legend>Dados do recurso</legend>
 						
-						<h:panelGrid columns="2" >
-							<h:outputLabel value="#{labels['recurso.nome']}:" for="nome"/>
+						<h:panelGrid columns="2" id="panel2">
+							<h:outputLabel value="#{labels['recurso.nome']}:" for="nome" id="labelNome"/>
 							<h:inputText id="nome" value="#{recursoServiceImpl.recursoBean.nome}" 
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"/>
 							<h:outputText value="#{recursoServiceImpl.recursoBean.nome}" 
-								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+								rendered="#{recursoServiceImpl.recursoBean.detailState}" id="outputNome"/>
 								
-							<h:outputLabel value="#{labels['recurso.sobrenome']}:" for="sobrenome"/>
+							<h:outputLabel value="#{labels['recurso.sobrenome']}:" for="sobrenome" id="labelSobreNome"/>
 							<h:inputText id="sobrenome" value="#{recursoServiceImpl.recursoBean.sobrenome}" 
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
 								size="50" />
-							<h:outputText value="#{recursoServiceImpl.recursoBean.sobrenome}" 
-								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+							<h:outputText value="#{recursoServiceImpl.recursoBean.sobrenome}"
+								rendered="#{recursoServiceImpl.recursoBean.detailState}" id="outputSobrenome"/>
 							
-							<h:outputLabel value="#{labels['recurso.dataNascimento']}:" for="dataNascimento" />
+							<h:outputLabel value="#{labels['recurso.dataNascimento']}:" for="dataNascimento" id="labelDataNascimento"/>
 							<rich:calendar id="dataNascimento" datePattern="dd/MM/yyyy" 
 								value="#{recursoServiceImpl.recursoBean.dataNascimento}" 
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
 								size="50" />
 							<h:outputText value="#{recursoServiceImpl.recursoBean.dataNascimento}"
-								rendered="#{recursoServiceImpl.recursoBean.detailState}">
+								rendered="#{recursoServiceImpl.recursoBean.detailState}" id="outputDataNascimento">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 							
-							<h:outputLabel value="#{labels['recurso.email']}:" for="email"/>
+							<h:outputLabel value="#{labels['recurso.email']}:" for="email" id="labelEmail"/>
 							<h:inputText id="email" value="#{recursoServiceImpl.recursoBean.email}" 
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}" />
 							<h:outputText value="#{recursoServiceImpl.recursoBean.email}" 
-								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+								rendered="#{recursoServiceImpl.recursoBean.detailState}" id="outputEmail"/>
 							
-							<h:outputLabel value="#{labels['recurso.telefone']}:" for="telefone"/>
+							<h:outputLabel value="#{labels['recurso.telefone']}:" for="telefone" id="labelTelefone"/>
 							<h:inputText id="telefone" value="#{recursoServiceImpl.recursoBean.telefone}" 
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}" />
 							<h:outputText value="#{recursoServiceImpl.recursoBean.telefone}" 
-								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+								rendered="#{recursoServiceImpl.recursoBean.detailState}" id="outputTelefone"/>
 							
-							<h:outputLabel value="#{labels['recurso.perfil']}:" for="profile"/>
+							<h:outputLabel value="#{labels['recurso.perfil']}:" for="profile" id="labelPerfil"/>
 							<rich:inplaceSelect defaultLabel="#{labels['selecioneUmItem']}" id="autoridade"
 								value="#{recursoServiceImpl.recursoBean.idAutoridade}"
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}" >
 								<f:selectItems value="#{recursoServiceImpl.recursoBean.autoridades}" />
 						    </rich:inplaceSelect>
 							<h:outputText value="#{recursoServiceImpl.recursoBean.autoridade.nomeVisivel}"
-								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+								rendered="#{recursoServiceImpl.recursoBean.detailState}" id="outputPerfil"/>
 							
-							<h:outputLabel value="#{labels['recurso.usuario']}:" for="usuario"/>
+							<h:outputLabel value="#{labels['recurso.usuario']}:" for="usuario" id="labelUsuario"/>
 							<h:inputText id="usuario" value="#{recursoServiceImpl.recursoBean.usuario}"
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
 								size="40" />
 							<h:outputText value="#{recursoServiceImpl.recursoBean.usuario}" 
-								rendered="#{recursoServiceImpl.recursoBean.detailState}"/>
+								rendered="#{recursoServiceImpl.recursoBean.detailState}" id="outputUsuario"/>
 							
-							<h:outputLabel value="#{labels['recurso.senha']}:" for="senha"
+							<h:outputLabel value="#{labels['recurso.senha']}:" for="senha" id="labelSenha"
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"/>
-							<h:inputSecret id="senha" value="#{recursoServiceImpl.recursoBean.senha}" 
+							<h:inputSecret id="senha" value="#{recursoServiceImpl.recursoBean.senha}"
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"  redisplay="true"/>
 							
-							<h:outputLabel value="#{labels['recurso.confirmarSenha']}:" for="confirmarSenha"
+							<h:outputLabel value="#{labels['recurso.confirmarSenha']}:" for="confirmarSenha" id="labelConfirmSenha"
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"/>
 							<h:inputSecret id="confirmarSenha" value="#{recursoServiceImpl.recursoBean.confirmarSenha}" 
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"
 								redisplay="true" />
 							
-							<h:outputLabel value="#{labels['recurso.habilitado']}:" for="habilitado" />
+							<h:outputLabel value="#{labels['recurso.habilitado']}:" for="habilitado" id="labelHabilitado"/>
 							<h:selectBooleanCheckbox id="habilitado" 
 								value="#{recursoServiceImpl.recursoBean.habilitado}" 
 								rendered="#{recursoServiceImpl.recursoBean.createState or recursoServiceImpl.recursoBean.updateState}"/>
-							<h:panelGroup layout="block" 
+							<h:panelGroup layout="block" id="panel3"
 								rendered="#{recursoServiceImpl.recursoBean.detailState and recursoServiceImpl.recursoBean.habilitado}">
-								<h:outputText value="#{labels['sim']}" />
+								<h:outputText value="#{labels['sim']}" id="outputSim"/>
 							</h:panelGroup>
-							<h:panelGroup layout="block" 
+							<h:panelGroup layout="block" id="panel4"
 								rendered="#{recursoServiceImpl.recursoBean.detailState and (not recursoServiceImpl.recursoBean.habilitado)}">
-								<h:outputText value="#{labels['nao']}" />
+								<h:outputText value="#{labels['nao']}" id="outputNao"/>
 							</h:panelGroup>							
 						</h:panelGrid>
 						
-						<h:panelGrid columns="2">
-							<h:outputLabel value="#{labels['recurso.papeis']}:" for="papeis" />
+						<h:panelGrid columns="2" id="panel5">
+							<h:outputLabel value="#{labels['recurso.papeis']}:" for="papeis" id="labelPapeis"/>
 							<rich:listShuttle id="papeis"
 										   var="item"
 										   targetValue="#{recursoServiceImpl.recursoBean.papeis}" 
@@ -175,16 +177,20 @@
 							</rich:listShuttle>
 							<rich:dataList value="#{recursoServiceImpl.recursoBean.papeis}" var="item" 
 							 	rendered="#{recursoServiceImpl.recursoBean.detailState}"
-							 	style="list-style: disc outside url('/Projeto/img/bullet_arrow.gif');"> 
-				                    <h:outputText value="#{item.nome}"/>
+							 	style="list-style: disc outside url('/Projeto/img/bullet_arrow.gif');" 
+							 	id="dataListPapeis"> 
+				                    <h:outputText value="#{item.nome}" id="outputPapeis"/>
 				            </rich:dataList> 
 						</h:panelGrid>
 						<br />
 									
-						<a4j:commandButton action="#{recursoServiceImpl.confirmCreate}" value="   #{labels['confirmar']}   " rendered="#{recursoServiceImpl.recursoBean.createState}" reRender="messageSenha"/>
-						<a4j:commandButton action="#{recursoServiceImpl.confirmUpdate}" value="   #{labels['confirmar']}   " rendered="#{recursoServiceImpl.recursoBean.updateState}"/>
+						<a4j:commandButton action="#{recursoServiceImpl.confirmCreate}" value="   #{labels['confirmar']}   " 
+							rendered="#{recursoServiceImpl.recursoBean.createState}" reRender="messageSenha" id="btnConfirCreate"/>
+						<a4j:commandButton action="#{recursoServiceImpl.confirmUpdate}" value="   #{labels['confirmar']}   " 
+							rendered="#{recursoServiceImpl.recursoBean.updateState}" id="btnConfirmUpdate"/>
 						<rich:spacer width="7" rendered="#{not recursoServiceImpl.recursoBean.listState}"/>
-						<a4j:commandButton action="#{recursoServiceImpl.backToList}" value="   #{labels['cancelar']}   " rendered="#{not recursoServiceImpl.recursoBean.listState}" immediate="true"/>
+						<a4j:commandButton action="#{recursoServiceImpl.backToList}" value="   #{labels['cancelar']}   " 
+							rendered="#{not recursoServiceImpl.recursoBean.listState}" immediate="true" id="btnBackToList"/>
 					</fieldset>
 				</h:panelGroup>
 			</a4j:form>

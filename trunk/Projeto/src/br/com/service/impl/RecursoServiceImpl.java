@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
+import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
@@ -38,6 +38,10 @@ public class RecursoServiceImpl implements RecursoService {
 
 	@Autowired
 	private PapelDao papelDaoImpl;
+
+	private HtmlPanelGroup panelGroup;
+
+	private boolean directLink = false;
 
 	ExtendedTableDataModel<Recurso> dataModel;
 
@@ -115,8 +119,8 @@ public class RecursoServiceImpl implements RecursoService {
 		Recurso recurso = new Recurso();
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 		ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
-		
-		if(validate()){
+
+		if (validate()) {
 			BeanUtils.copyProperties(recurso, recursoBean);
 			recurso.setIdRecurso(null);
 			recurso.setLocale("pt_BR");
@@ -348,7 +352,7 @@ public class RecursoServiceImpl implements RecursoService {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 		ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 
-		if(validate()){
+		if (validate()) {
 			BeanUtils.copyProperties(recursoBean.getRecurso(), recursoBean);
 			recursoBean.getRecurso().getAutoridade().setIdAutoridade(recursoBean.getIdAutoridade());
 			recursoDaoImpl.update(recursoBean.getRecurso());
@@ -375,7 +379,7 @@ public class RecursoServiceImpl implements RecursoService {
 		recursoBean.setListState();
 		recursoBean.setRecursos(recursoDaoImpl.findAll(Recurso.class));
 		recursoBean.setPageMessage(labels.getString("info.paginaLista"));
-		
+
 		recursoBean.setSelecaoRecurso(null);
 	}
 
@@ -426,5 +430,39 @@ public class RecursoServiceImpl implements RecursoService {
 	 */
 	public void setPapelDaoImpl(PapelDao papelDaoImpl) {
 		this.papelDaoImpl = papelDaoImpl;
+	}
+
+	/**
+	 * @return the directLink
+	 */
+	public boolean isDirectLink() {
+		return directLink;
+	}
+
+	/**
+	 * @param directLink
+	 *            the directLink to set
+	 */
+	public void setDirectLink(boolean directLink) {
+		this.directLink = directLink;
+	}
+
+	/**
+	 * @return the panelGroup
+	 */
+	public HtmlPanelGroup getPanelGroup() {
+		if(!isDirectLink()){
+			this.findAll();
+			setDirectLink(true);
+		}
+		return panelGroup;
+	}
+
+	/**
+	 * @param panelGroup
+	 *            the panelGroup to set
+	 */
+	public void setPanelGroup(HtmlPanelGroup panelGroup) {
+		this.panelGroup = panelGroup;
 	}
 }

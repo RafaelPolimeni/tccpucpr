@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -57,6 +58,10 @@ public class ProjetoServiceImpl implements ProjetoService {
 
 	private UploadItem uploadItem;
 
+	private HtmlPanelGroup panelGroup;
+
+	private boolean directLink = false;
+
 	ExtendedTableDataModel<Projeto> dataModel;
 
 	public ExtendedTableDataModel<Projeto> getProjetosDataModel() {
@@ -91,24 +96,22 @@ public class ProjetoServiceImpl implements ProjetoService {
 		return dataModel;
 	}
 
-	public String findAll() throws Exception {
-		try {
-			projetoBean.setProjetos(projetoDaoImpl.findAll(Projeto.class));
+	public String findAll() {
+		projetoBean.setProjetos(projetoDaoImpl.findAll(Projeto.class));
 
-			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-			List<String> breadCrumb = new ArrayList<String>();
-			breadCrumb.add(labels.getString("breadCrumb.homePage"));
-			breadCrumb.add(labels.getString("breadCrumb.maintenance"));
-			breadCrumb.add(labels.getString("breadCrumb.projeto.list"));
+		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
+		List<String> breadCrumb = new ArrayList<String>();
+		breadCrumb.add(labels.getString("breadCrumb.homePage"));
+		breadCrumb.add(labels.getString("breadCrumb.maintenance"));
+		breadCrumb.add(labels.getString("breadCrumb.projeto.list"));
 
-			projetoBean.setBreadCrumb(breadCrumb);
-			projetoBean.setListState();
-			projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+		projetoBean.setBreadCrumb(breadCrumb);
+		projetoBean.setListState();
+		projetoBean.setPageMessage(labels.getString("info.paginaLista"));
 
-			return "gerenciarProjetos";
-		} catch (Exception e) {
-			return "gerenciarProjetos";
-		}
+		setDirectLink(true);
+		
+		return "gerenciarProjetos";
 	}
 
 	public void prepareCreate() throws Exception {
@@ -215,7 +218,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 
 				FacesContext.getCurrentInstance().addMessage(null,
 						new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.inclusao")));
-				
+
 				dataModel = new ExtendedTableDataModel<Projeto>(new DataProvider<Projeto>() {
 					private static final long serialVersionUID = -5906008834318730281L;
 
@@ -244,7 +247,7 @@ public class ProjetoServiceImpl implements ProjetoService {
 			}
 		}
 	}
-	
+
 	@Transactional
 	public void confirmUpdate() throws Exception {
 		if (validate()) {
@@ -399,6 +402,8 @@ public class ProjetoServiceImpl implements ProjetoService {
 
 				FacesContext.getCurrentInstance().addMessage(null,
 						new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.alteracao")));
+				
+				projetoBean.setSelecaoProjeto(null);
 			}
 		}
 	}
@@ -792,6 +797,8 @@ public class ProjetoServiceImpl implements ProjetoService {
 		projetoBean.setListState();
 		projetoBean.setProjetos(projetoDaoImpl.findAll(Projeto.class));
 		projetoBean.setPageMessage(labels.getString("info.paginaLista"));
+		
+		projetoBean.setSelecaoProjeto(null);
 	}
 
 	public void mostrarPopUpUpload() {
@@ -962,5 +969,39 @@ public class ProjetoServiceImpl implements ProjetoService {
 	 */
 	public void setUploadItem(UploadItem uploadItem) {
 		this.uploadItem = uploadItem;
+	}
+
+	/**
+	 * @return the directLink
+	 */
+	public boolean isDirectLink() {
+		return directLink;
+	}
+
+	/**
+	 * @param directLink
+	 *            the directLink to set
+	 */
+	public void setDirectLink(boolean directLink) {
+		this.directLink = directLink;
+	}
+
+	/**
+	 * @return the panelGroup
+	 */
+	public HtmlPanelGroup getPanelGroup() {
+		if (!isDirectLink()) {
+			this.findAll();
+		}
+		
+		return panelGroup;
+	}
+
+	/**
+	 * @param panelGroup
+	 *            the panelGroup to set
+	 */
+	public void setPanelGroup(HtmlPanelGroup panelGroup) {
+		this.panelGroup = panelGroup;
 	}
 }

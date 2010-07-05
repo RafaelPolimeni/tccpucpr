@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -35,6 +36,10 @@ public class PapelServiceImpl implements PapelService {
 
 	ExtendedTableDataModel<Papel> dataModel;
 
+	private boolean directLink = false;
+
+	private HtmlPanelGroup panelGroup;
+
 	public PapelServiceImpl() {
 
 	}
@@ -52,6 +57,7 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.setListState();
 		papelBean.setPageMessage(labels.getString("info.paginaLista"));
 
+		setDirectLink(true);
 		return "gerenciarPapeis";
 	}
 
@@ -369,5 +375,39 @@ public class PapelServiceImpl implements PapelService {
 
 	public void setPapelBean(PapelBean papelBean) {
 		this.papelBean = papelBean;
+	}
+
+	/**
+	 * @return the directLink
+	 */
+	public boolean isDirectLink() {
+		return directLink;
+	}
+
+	/**
+	 * @param directLink
+	 *            the directLink to set
+	 */
+	public void setDirectLink(boolean directLink) {
+		this.directLink = directLink;
+	}
+
+	/**
+	 * @return the panelGroup
+	 */
+	public HtmlPanelGroup getPanelGroup() {
+		if (!isDirectLink()) {
+			this.findAll();
+		}
+
+		return panelGroup;
+	}
+
+	/**
+	 * @param panelGroup
+	 *            the panelGroup to set
+	 */
+	public void setPanelGroup(HtmlPanelGroup panelGroup) {
+		this.panelGroup = panelGroup;
 	}
 }

@@ -16,7 +16,8 @@
 			<a4j:keepAlive beanName="projetoServiceImpl"/>
 			<a4j:keepAlive beanName="projetoBean"/>		
 			<a4j:form ajaxSubmit="true" id="papelForm" >
-				<h:panelGroup layout="block" id="listPanel" rendered="#{projetoServiceImpl.projetoBean.listState}">
+				<h:panelGroup layout="block" id="listPanel" rendered="#{projetoServiceImpl.projetoBean.listState}"
+					binding="#{projetoServiceImpl.panelGroup}">
 					<div align="center">
 						<rich:extendedDataTable value="#{projetoServiceImpl.projetosDataModel}" var="projeto"
 								width="700px" align="center" height="347px" id="projetos" 
@@ -24,7 +25,7 @@
 								selectionMode="single"
 								onkeypress="if (event.keyCode == 13) {document.getElementById('recursos:nomefsp').blur(); document.getElementById('recursos:habilitadofsp').blur(); return false;} else {return true;}">
 	        					
-						 	<rich:column sortBy="#{projeto.nome}" style="text-align:left;" width="90%">
+						 	<rich:column sortBy="#{projeto.nome}" style="text-align:left;" width="99%">
 						 		<f:facet name="header">
 									<h:outputText value="#{labels['papel.nome']}" />
 								</f:facet>
@@ -36,29 +37,28 @@
 					<br />
 					
 					<a4j:commandButton action="#{projetoServiceImpl.prepareCreate}"
-						 value="   #{labels['novo']}   " style="margin-left:68px;"/>
-					<rich:spacer width="7"/>
+						 value="   #{labels['novo']}   " style="margin-left:68px;" id="btnNovo"/>
+					<rich:spacer width="7" id="spacer1"/>
 				    <a4j:commandButton action="#{projetoServiceImpl.showDetails}"
-						 value="   #{labels['detalhar']}   " />
-						 
-					<rich:spacer width="7"/>
+						 value="   #{labels['detalhar']}   " id="btnDetalhe"/>
+					<rich:spacer width="7" id="spacer2"/>
 				    <a4j:commandButton action="#{projetoServiceImpl.prepareUpdate}"
-						 value="   #{labels['alterar']}   " />
+						 value="   #{labels['alterar']}   " id="btnUpdate"/>
 				</h:panelGroup>
 				
 				<rich:tabPanel switchType="ajax" rendered="#{not projetoServiceImpl.projetoBean.listState}"
-					valueChangeListener="#{projetoServiceImpl.mudarAba}">
+					valueChangeListener="#{projetoServiceImpl.mudarAba}" id="tabPanel">
 			        <rich:tab label="#{labels['projeto.dadosGerais']}" id="tabGeral">
-						<h:panelGrid columns="2" >
-							<h:outputLabel value="#{labels['projeto.nome']}:" for="nome"/>
+						<h:panelGrid columns="2" id="panelDadosGerais">
+							<h:outputLabel value="#{labels['projeto.nome']}:" for="nome" id="labelNome"/>
 							<h:inputText id="nome" value="#{projetoServiceImpl.projetoBean.nome}" 
 								rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}"
 								maxlength="100" size="80"/>
 							<h:outputText value="#{projetoServiceImpl.projetoBean.nome}" 
-								rendered="#{projetoServiceImpl.projetoBean.detailState}"/>
+								rendered="#{projetoServiceImpl.projetoBean.detailState}" id="outputNome"/>
 							
-							<h:outputLabel value="#{labels['projeto.descricao']}:" for="descricao"/>
-							<rich:editor id="descricao" width="450" height="250"
+							<h:outputLabel value="#{labels['projeto.descricao']}:" for="descricao" id="labelDescricao"/>
+							<rich:editor id="descricao" width="450" height="250" 
 								theme="advanced" value="#{projetoServiceImpl.projetoBean.descricao}"
 								rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}">
 								<f:param name="theme_advanced_buttons1" value="bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,fontselect,fontsizeselect"/>
@@ -69,23 +69,23 @@
          						<f:param name="theme_advanced_toolbar_align" value="left"/>
 							</rich:editor>
 							<h:outputText value="#{projetoServiceImpl.projetoBean.descricao}" 
-								rendered="#{projetoServiceImpl.projetoBean.detailState}" escape="false"/>
+								rendered="#{projetoServiceImpl.projetoBean.detailState}" escape="false" id="outputDescricao"/>
 							
-							<h:outputLabel value="#{labels['projeto.dataInicio']}:" for="dataInicio" />
-							<rich:calendar id="dataInicio" datePattern="dd/MM/yyyy" 
-								value="#{projetoServiceImpl.projetoBean.dataInicio}" size="50"
+							<h:outputLabel value="#{labels['projeto.dataInicioPrevista']}:" for="dataInicioPrevista" id="labelDataInicioPrevista"/>
+							<rich:calendar id="dataInicioPrevista" datePattern="dd/MM/yyyy" 
+								value="#{projetoServiceImpl.projetoBean.dataInicioPrevista}" size="50"
 								rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}" />
-							<h:outputText value="#{projetoServiceImpl.projetoBean.dataInicio}"
-								rendered="#{projetoServiceImpl.projetoBean.detailState}">
+							<h:outputText value="#{projetoServiceImpl.projetoBean.dataInicioPrevista}"
+								rendered="#{projetoServiceImpl.projetoBean.detailState}" id="outputDataInicioPrevista">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 							
-							<h:outputLabel value="#{labels['projeto.dataFimPrevista']}:" for="dataFimPrevista" />
+							<h:outputLabel value="#{labels['projeto.dataFimPrevista']}:" for="dataFimPrevista" id="labelDataFimPrevista"/>
 							<rich:calendar id="dataFimPrevista" datePattern="dd/MM/yyyy" 
 								value="#{projetoServiceImpl.projetoBean.dataFimPrevista}" size="50"
 								rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}"/>
 							<h:outputText value="#{projetoServiceImpl.projetoBean.dataFimPrevista}"
-								rendered="#{projetoServiceImpl.projetoBean.detailState}">
+								rendered="#{projetoServiceImpl.projetoBean.detailState}" id="outputDataFimPrevista">
 								<f:convertDateTime pattern="dd/MM/yyyy" />
 							</h:outputText>
 						</h:panelGrid>
@@ -93,8 +93,9 @@
 						<br />
 			        </rich:tab>
 			        <rich:tab label="#{labels['projeto.observadores']}" id="tabObservadores">
-			        	<h:panelGroup rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}">
-				        	<h:outputFormat value="#{labels['projeto.selecione']}" styleClass="pageMessage">
+			        	<h:panelGroup rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}"
+			        		id="panelPossiveisObservadores">
+				        	<h:outputFormat value="#{labels['projeto.selecione']}" styleClass="pageMessage" id="message1">
 				        		<f:param value="#{fn:toLowerCase(labels['projeto.observadores'])}"/>
 				        	</h:outputFormat>
 				        	
@@ -115,16 +116,17 @@
 				            </rich:extendedDataTable>
 							
 							<br />
-							
-							<a4j:commandButton action="#{projetoServiceImpl.selecionarObservadores}" 
-								value="#{labels['selecionar']}" reRender="observadores"/>
-							
+
+						<a4j:commandButton
+							action="#{projetoServiceImpl.selecionarObservadores}"
+							value="#{labels['selecionar']}" reRender="observadores" id="btnSelecionar1"/>
+
+						<br />
 							<br />
 							<br />
-							<br />
 							
-							<h:panelGroup rendered="#{not empty projetoServiceImpl.projetoBean.observadores}">
-								<h:outputText value="Observadores Selecionados" styleClass="pageMessage"/>
+							<h:panelGroup rendered="#{not empty projetoServiceImpl.projetoBean.observadores}" id="panel1">
+								<h:outputText value="Observadores Selecionados" styleClass="pageMessage" id="message6"/>
 				        	
 					        	<br />
 					        	<br />
@@ -159,14 +161,15 @@
 				            </rich:extendedDataTable>
 				            
 				            <h:outputFormat value="#{labels['projeto.nenhumSelecionado']}" 
-				            	rendered="#{empty projetoServiceImpl.projetoBean.observadores}">
+				            	rendered="#{empty projetoServiceImpl.projetoBean.observadores}" id="message2">
 				            	<f:param value="#{fn:toLowerCase(labels['projeto.observador'])}"/>
 				            </h:outputFormat>
 			        </rich:tab>
 			        
 			        <rich:tab label="#{labels['projeto.gerentes']}" id="tabGerentes">
-			        	<h:panelGroup rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}">
-				        	<h:outputFormat value="#{labels['projeto.selecione']}" styleClass="pageMessage">
+			        	<h:panelGroup rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}"
+			        		id="panelPossiveisGerentes">
+				        	<h:outputFormat value="#{labels['projeto.selecione']}" styleClass="pageMessage" id="message3">
 				        		<f:param value="#{fn:toLowerCase(labels['projeto.gerentes'])}"/>
 				        	</h:outputFormat>
 				        	
@@ -189,14 +192,14 @@
 							<br />
 							
 							<a4j:commandButton action="#{projetoServiceImpl.selecionarGerentes}" 
-								value="#{labels['selecionar']}"/>
+								value="#{labels['selecionar']}" id="btnSelecionar2"/>
 							
 							<br />
 							<br />
 							<br />
 							
-							<h:panelGroup rendered="#{not empty projetoServiceImpl.projetoBean.gerentes}">
-								<h:outputText value="Gerentes Selecionados" styleClass="pageMessage"/>
+							<h:panelGroup rendered="#{not empty projetoServiceImpl.projetoBean.gerentes}" id="panel2">
+								<h:outputText value="Gerentes Selecionados" styleClass="pageMessage" id="message7"/>
 				        	
 					        	<br />
 					        	<br />
@@ -230,14 +233,15 @@
 				            </rich:extendedDataTable>
 				            
 				            <h:outputFormat value="#{labels['projeto.nenhumSelecionado']}" 
-				            	rendered="#{empty projetoServiceImpl.projetoBean.gerentes}">
+				            	rendered="#{empty projetoServiceImpl.projetoBean.gerentes}" id="message4">
 				            	<f:param value="#{fn:toLowerCase(labels['projeto.gerente'])}"/>
 				            </h:outputFormat>
 			        </rich:tab>
 			        
 			        <rich:tab label="#{labels['projeto.recursos']}" id="tabRecursos">
-			        	<h:panelGroup rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}">
-				        	<h:outputFormat value="#{labels['projeto.selecione']}" styleClass="pageMessage">
+			        	<h:panelGroup rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}"
+			        		id="panelPossiveisRecursos">
+				        	<h:outputFormat value="#{labels['projeto.selecione']}" styleClass="pageMessage" id="message5">
 				        		<f:param value="#{fn:toLowerCase(labels['projeto.recursos'])}"/>
 				        	</h:outputFormat>
 				        	
@@ -269,14 +273,14 @@
 							<br />
 							
 							<a4j:commandButton action="#{projetoServiceImpl.selecionarRecursos}" 
-								value="#{labels['selecionar']}"/>
+								value="#{labels['selecionar']}" id="btnSelecionar3"/>
 							
 							<br />
 							<br />
 							<br />
 							
-							<h:panelGroup rendered="#{not empty projetoServiceImpl.projetoBean.recursos}">
-								<h:outputText value="Recursos Selecionados" styleClass="pageMessage"/>
+							<h:panelGroup rendered="#{not empty projetoServiceImpl.projetoBean.recursos}" id="panel3">
+								<h:outputText value="Recursos Selecionados" styleClass="pageMessage" id="message8"/>
 				        	
 					        	<br />
 					        	<br />
@@ -317,7 +321,7 @@
 				            </rich:extendedDataTable>
 				            
 				            <h:outputFormat value="#{labels['projeto.nenhumSelecionado']}" 
-				            	rendered="#{empty projetoServiceImpl.projetoBean.recursos}">
+				            	rendered="#{empty projetoServiceImpl.projetoBean.recursos}" id="message9">
 				            	<f:param value="#{fn:toLowerCase(labels['projeto.recurso'])}"/>
 				            </h:outputFormat>
 			        </rich:tab>
@@ -349,30 +353,35 @@
 							</rich:column>
 			            </rich:extendedDataTable>
 		            	
-		            	<h:panelGroup rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}">
+		            	<h:panelGroup rendered="#{projetoServiceImpl.projetoBean.createState or projetoServiceImpl.projetoBean.updateState}"
+		            		id="panel4">
 			            	<br />
 			            	
-				        	<a4j:commandButton action="#{projetoServiceImpl.mostrarPopUpUpload}" value="Adicionar arquivo" />
+				        	<a4j:commandButton action="#{projetoServiceImpl.mostrarPopUpUpload}" 
+				        		value="Adicionar arquivo" id="btnAdicionarArquivo"/>
 			        	</h:panelGroup>
 			        </rich:tab>
 			    </rich:tabPanel>
 			    
 			    <br />
 			    
-			    <a4j:commandButton action="#{projetoServiceImpl.confirmCreate}" value="   #{labels['confirmar']}   " rendered="#{projetoServiceImpl.projetoBean.createState}" reRender="messageSenha"/>
-				<a4j:commandButton action="#{projetoServiceImpl.confirmUpdate}" value="   #{labels['confirmar']}   " rendered="#{projetoServiceImpl.projetoBean.updateState}"/>
-				<rich:spacer width="7" rendered="#{not projetoServiceImpl.projetoBean.listState}"/>
-				<a4j:commandButton action="#{projetoServiceImpl.backToList}" value="   #{labels['cancelar']}   " rendered="#{not projetoServiceImpl.projetoBean.listState}" immediate="true"/>
+			    <a4j:commandButton action="#{projetoServiceImpl.confirmCreate}" value="   #{labels['confirmar']}   " 
+			    	rendered="#{projetoServiceImpl.projetoBean.createState}"  id="btnConfirmCreate"/>
+				<a4j:commandButton action="#{projetoServiceImpl.confirmUpdate}" value="   #{labels['confirmar']}   " 
+					rendered="#{projetoServiceImpl.projetoBean.updateState}" id="btnConfirmUpdate"/>
+				<rich:spacer width="7" rendered="#{not projetoServiceImpl.projetoBean.listState}" id="spacer4"/>
+				<a4j:commandButton action="#{projetoServiceImpl.backToList}" value="   #{labels['cancelar']}   " 
+					rendered="#{not projetoServiceImpl.projetoBean.listState}" immediate="true" id="btnBackToList"/>
 			</a4j:form>
 			
-			<rich:modalPanel autosized="true" showWhenRendered="true" 
+			<rich:modalPanel autosized="true" showWhenRendered="true" id="modalUpload" 
 				rendered="#{projetoServiceImpl.projetoBean.mostrarPopUpUpload}">
 				<f:facet name="header">
-					<h:outputText value="Adicionar arquivo" />
+					<h:outputText value="Adicionar arquivo" id="message10"/>
 				</f:facet>
 				
 				<f:facet name="controls">
-		            <h:panelGroup>
+		            <h:panelGroup id="panel5">
 		            	<a4j:form id="closeModalForm" ajaxSubmit="true">
 			                <h:graphicImage value="/img/modalClose.png" id="hideModal" style="cursor:pointer;">
 			                	<a4j:support action="#{projetoServiceImpl.cancelarUpload}" event="onclick"/>
@@ -390,25 +399,23 @@
                        		fileUploadListener="${projetoServiceImpl.listener}" maxFilesQuantity="1"
                        		immediateUpload="true" listHeight="63px;"
                        		ajaxSingle="true" allowFlash="true"/>
-					<rich:message for="upload" style="color:red;"/>
+					<rich:message for="upload" style="color:red;" id="messageUpload"/>
 					
-    				<h:panelGrid columns="3">
-    					<h:outputLabel value="#{labels['projeto.nomeArquivo']}:" for="nomeArquivo"/>
+    				<h:panelGrid columns="2" id="panel6">
+    					<h:outputLabel value="#{labels['projeto.nomeArquivo']}:" for="nomeArquivo" id="labelNomeArquivo"/>
 						<h:inputText id="nomeArquivo" value="#{projetoServiceImpl.projetoBean.nomeArquivo}" 
 							maxlength="100" />
-						<rich:message for="nomeArquivo" style="color:red;"/>
 						
-						<h:outputLabel value="#{labels['projeto.descricaoArquivo']}:" for="descricaoArquivo" />
+						<h:outputLabel value="#{labels['projeto.descricaoArquivo']}:" for="descricaoArquivo" id="labelDescricaoArquivo"/>
 						<h:inputTextarea id="descricaoArquivo" rows="3" cols="70" value="#{projetoServiceImpl.projetoBean.descricaoArquivo}"
 							onkeyup="javascript:limitText(this, 600);" />
-						<rich:message for="descricaoArquivo" style="color:red;"/>
     				</h:panelGrid>
 					
 					<br />
 					    	
-					<a4j:commandButton action="#{projetoServiceImpl.confirmarUpload}" value="#{labels['confirmar']}"/>
+					<a4j:commandButton action="#{projetoServiceImpl.confirmarUpload}" value="#{labels['confirmar']}" id="btnConfirmUpload"/>
 					<rich:spacer width="7"/>
-					<a4j:commandButton action="#{projetoServiceImpl.cancelarUpload}" value="#{labels['cancelar']}" immediate="true"/>
+					<a4j:commandButton action="#{projetoServiceImpl.cancelarUpload}" value="#{labels['cancelar']}" immediate="true" id="btnCancelarUpload"/>
 				</h:form>
 			</rich:modalPanel>
 		</ui:define>
