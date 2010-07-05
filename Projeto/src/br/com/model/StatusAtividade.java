@@ -11,14 +11,17 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity
-@NamedQueries( { @NamedQuery(name = "TipoApontamento.findAll", query = "SELECT tp FROM TipoApontamento tp order by tp.nome") })
-public class TipoApontamento implements EntityInterface {
+@NamedQueries( { @NamedQuery(name = "StatusAtividade.findAll", query = "SELECT s FROM StatusAtividade s order by s.nome") })
+public class StatusAtividade implements EntityInterface {
 
-	private static final long serialVersionUID = 792498007677468760L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2647558483887057545L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer idTipoApontamento;
+	private Integer idStatusAtividade;
 
 	@Column(length = 100, nullable = false)
 	private String nome;
@@ -28,22 +31,22 @@ public class TipoApontamento implements EntityInterface {
 
 	@Override
 	public Serializable getPrimaryKey() {
-		return getIdTipoApontamento();
+		return getIdStatusAtividade();
 	}
 
 	/**
-	 * @return the idTipoApontamento
+	 * @return the idStatusAtividade
 	 */
-	public Integer getIdTipoApontamento() {
-		return idTipoApontamento;
+	public Integer getIdStatusAtividade() {
+		return idStatusAtividade;
 	}
 
 	/**
-	 * @param idTipoApontamento
-	 *            the idTipoApontamento to set
+	 * @param idStatusAtividade
+	 *            the idStatusAtividade to set
 	 */
-	public void setIdTipoApontamento(Integer idTipoApontamento) {
-		this.idTipoApontamento = idTipoApontamento;
+	public void setIdStatusAtividade(Integer idStatusAtividade) {
+		this.idStatusAtividade = idStatusAtividade;
 	}
 
 	/**
@@ -86,7 +89,8 @@ public class TipoApontamento implements EntityInterface {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
-		result = prime * result + ((idTipoApontamento == null) ? 0 : idTipoApontamento.hashCode());
+		result = prime * result + ((idStatusAtividade == null) ? 0 : idStatusAtividade.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
 
@@ -103,17 +107,23 @@ public class TipoApontamento implements EntityInterface {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TipoApontamento other = (TipoApontamento) obj;
+		StatusAtividade other = (StatusAtividade) obj;
 		if (descricao == null) {
 			if (other.descricao != null)
 				return false;
 		} else if (!descricao.equals(other.descricao))
 			return false;
-		if (idTipoApontamento == null) {
-			if (other.idTipoApontamento != null)
+		if (idStatusAtividade == null) {
+			if (other.idStatusAtividade != null)
 				return false;
-		} else if (!idTipoApontamento.equals(other.idTipoApontamento))
+		} else if (!idStatusAtividade.equals(other.idStatusAtividade))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
 	}
+
 }

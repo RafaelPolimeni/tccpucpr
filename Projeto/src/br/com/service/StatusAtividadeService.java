@@ -1,6 +1,6 @@
 package br.com.service;
 
-public interface PapelService {
+public interface StatusAtividadeService {
 
 	String findAll() throws Exception;
 

@@ -64,12 +64,12 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.create"));
 
 		papelBean.setPageMessage(labels.getString("info.paginaInclusao"));
-		
+
 		papelBean.setSelecaoPapeis(null);
 	}
 
 	public void confirmCreate() {
-		if(validate()){
+		if (validate()) {
 			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 			ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 
@@ -79,8 +79,6 @@ public class PapelServiceImpl implements PapelService {
 
 			roleDaoImpl.save(papel);
 
-			papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
-
 			papelBean.clear();
 			papelBean.setListState();
 			papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
@@ -88,7 +86,7 @@ public class PapelServiceImpl implements PapelService {
 
 			papelBean.setPageMessage(labels.getString("info.paginaLista"));
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.inclusao")));
-			
+
 			dataModel = new ExtendedTableDataModel<Papel>(new DataProvider<Papel>() {
 				private static final long serialVersionUID = -5906008834318730281L;
 
@@ -117,20 +115,16 @@ public class PapelServiceImpl implements PapelService {
 		}
 	}
 
-	public void showDetails() throws Exception{
+	public void showDetails() throws Exception {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
-		
+
 		Iterator<Object> iterator = papelBean.getSelecaoPapeis().getKeys();
-		
+
 		if (iterator.hasNext()) {
 			Object key = iterator.next();
 			getPapeisDataModel().setRowKey(key);
 			papelBean.setPapel((Papel) getPapeisDataModel().getRowData());
 			BeanUtils.copyProperties(papelBean, papelBean.getPapel());
-			
-			papelBean.setNome(papelBean.getPapel().getNome());
-			papelBean.setDescricao(papelBean.getPapel().getDescricao());
-			papelBean.setIdPapel(papelBean.getPapel().getIdPapel());
 
 			papelBean.setDetailState();
 
@@ -138,7 +132,7 @@ public class PapelServiceImpl implements PapelService {
 			papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.detail"));
 
 			papelBean.setPageMessage(labels.getString("info.paginaDetalhe"));
-		}else{
+		} else {
 			ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 
 			String mensagem = mensagens.getString("mensagem.validacao.selecaoObrigatoria");
@@ -158,8 +152,6 @@ public class PapelServiceImpl implements PapelService {
 			getPapeisDataModel().setRowKey(key);
 			papelBean.setPapel((Papel) getPapeisDataModel().getRowData());
 			BeanUtils.copyProperties(papelBean, papelBean.getPapel());
-
-			papelBean.getPapeis();
 
 			papelBean.setUpdateState();
 
@@ -205,25 +197,25 @@ public class PapelServiceImpl implements PapelService {
 
 			});
 		}
-		
+
 		return dataModel;
 	}
 
 	public void confirmUpdate() {
-		if(validate()){
+		if (validate()) {
 			ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 			ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
-	
+
 			papelBean.getPapel().setNome(papelBean.getNome());
 			papelBean.getPapel().setDescricao(papelBean.getDescricao());
-	
+
 			roleDaoImpl.update(papelBean.getPapel());
-	
+
 			papelBean.setListState();
-	
+
 			papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
 			papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.list"));
-	
+
 			papelBean.setPageMessage(labels.getString("info.paginaLista"));
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.alteracao")));
 			papelBean.setSelecaoPapeis(null);
@@ -255,14 +247,13 @@ public class PapelServiceImpl implements PapelService {
 	}
 
 	@Transactional
-	public void delete() throws Exception{
+	public void delete() throws Exception {
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
 		ResourceBundle messages = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
-		
-		try{
+
+		try {
 			roleDaoImpl.delete(papelBean.getPapel());
 			papelBean.setListState();
-			papelBean.setPapeis(roleDaoImpl.findAll(Papel.class));
 
 			papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
 			papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.list"));
@@ -273,7 +264,7 @@ public class PapelServiceImpl implements PapelService {
 
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", messages.getString("info.sucesso.exclusao")));
 			papelBean.setSelecaoPapeis(null);
-			
+
 			dataModel = new ExtendedTableDataModel<Papel>(new DataProvider<Papel>() {
 				private static final long serialVersionUID = -5906008834318730281L;
 
@@ -298,26 +289,27 @@ public class PapelServiceImpl implements PapelService {
 					return papelBean.getPapeis().size();
 				}
 
-			});	
-		}catch (Exception e) {
-			if(e.getCause() instanceof ConstraintViolationException){
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, messages.getString("mensagem.papeis.papelReferenciado")));
-				
+			});
+		} catch (Exception e) {
+			if (e.getCause() instanceof ConstraintViolationException) {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, null, messages.getString("mensagem.papeis.papelReferenciado")));
+
 				papelBean.setListState();
-	
+
 				papelBean.getBreadCrumb().remove(papelBean.getBreadCrumb().size() - 1);
 				papelBean.getBreadCrumb().add(labels.getString("breadCrumb.papel.list"));
-	
+
 				papelBean.setPageMessage(labels.getString("info.paginaLista"));
-	
+
 				papelBean.setShowModal(false);
-			}else{
+			} else {
 				throw e;
 			}
 		}
 	}
-	
-	private boolean validate(){
+
+	private boolean validate() {
 		boolean formularioOK = true;
 		ResourceBundle mensagens = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "messages");
 		ResourceBundle labels = FacesContext.getCurrentInstance().getApplication().getResourceBundle(FacesContext.getCurrentInstance(), "labels");
@@ -331,7 +323,7 @@ public class PapelServiceImpl implements PapelService {
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
 			formularioOK = false;
 		}
-		
+
 		if (Util.isEmpty(papelBean.getDescricao())) {
 			String mensagem = mensagens.getString("mensagem.validacao.obrigatorio");
 			String param1 = labels.getString("papel.descricao");
@@ -339,7 +331,7 @@ public class PapelServiceImpl implements PapelService {
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, MessageFormat.format(mensagem, param1)));
 			formularioOK = false;
 		}
-		
+
 		return formularioOK;
 	}
 
@@ -352,16 +344,8 @@ public class PapelServiceImpl implements PapelService {
 		papelBean.clear();
 		papelBean.setListState();
 		papelBean.setPageMessage(labels.getString("info.paginaLista"));
-		
+
 		papelBean.setSelecaoPapeis(null);
-	}
-
-	public void update(Papel role) {
-		roleDaoImpl.update(role);
-	}
-
-	public void delete(Papel role) {
-		roleDaoImpl.delete(role);
 	}
 
 	/**

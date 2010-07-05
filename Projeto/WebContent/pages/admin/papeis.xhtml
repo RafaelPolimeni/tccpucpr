@@ -37,7 +37,7 @@
 						<a4j:commandButton action="#{papelServiceImpl.prepareCreate}"
 							 value="   #{labels['novo']}   " style="margin-left:68px;"/>
 						<rich:spacer width="7"/>					 
-						<a4j:commandButton action="#{papelServiceImpl.showDetail}"
+						<a4j:commandButton action="#{papelServiceImpl.showDetails}"
 						 value="   #{labels['detalhar']}   "/>
 						<rich:spacer width="7"/>				
 						<a4j:commandButton action="#{papelServiceImpl.prepareUpdate}"
@@ -69,10 +69,10 @@
 							
 							<br />
 												
-							<a4j:commandButton action="#{papelServiceImpl.confirmCreate}" value="#{labels['confirmar']}" rendered="#{papelServiceImpl.papelBean.createState}"/>
-							<a4j:commandButton action="#{papelServiceImpl.confirmUpdate}" value="#{labels['confirmar']}" rendered="#{papelServiceImpl.papelBean.updateState}"/>
+							<a4j:commandButton action="#{papelServiceImpl.confirmCreate}" value="   #{labels['confirmar']}   " rendered="#{papelServiceImpl.papelBean.createState}"/>
+							<a4j:commandButton action="#{papelServiceImpl.confirmUpdate}" value="   #{labels['confirmar']}   " rendered="#{papelServiceImpl.papelBean.updateState}"/>
 							<rich:spacer width="7" rendered="#{not papelServiceImpl.papelBean.listState}"/>
-							<a4j:commandButton action="#{papelServiceImpl.backToList}" value="#{labels['cancelar']}" rendered="#{not papelServiceImpl.papelBean.listState}" immediate="true"/>
+							<a4j:commandButton action="#{papelServiceImpl.backToList}" value="   #{labels['cancelar']}   " rendered="#{not papelServiceImpl.papelBean.listState}" immediate="true"/>
 						</fieldset>
 					</h:panelGroup>
 				</a4j:form>
@@ -90,9 +90,9 @@
 					<br />
 					
 					<a4j:form id="modalForm" ajaxSubmit="true">			
-						<a4j:commandButton action="#{papelServiceImpl.delete}" value="#{labels['excluir']}"/>
+						<a4j:commandButton action="#{papelServiceImpl.delete}" value="   #{labels['excluir']}   "/>
 						<rich:spacer width="7"/>
-						<a4j:commandButton action="#{papelServiceImpl.cancelDelete}" value="#{labels['cancelar']}"/>
+						<a4j:commandButton action="#{papelServiceImpl.cancelDelete}" value="   #{labels['cancelar']}   "/>
 					</a4j:form>		
 				</rich:modalPanel>
 		</ui:define>

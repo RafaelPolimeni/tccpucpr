@@ -47,8 +47,10 @@ public class TipoApontamentoServiceImpl implements TipoApontamentoService {
 		breadCrumb.add(labels.getString("breadCrumb.maintenance"));
 		breadCrumb.add(labels.getString("breadCrumb.tipoApontamento.list"));
 
-		tipoApontamentoBean.setBreadCrumb(breadCrumb);
+		
 		tipoApontamentoBean.setTiposApontamentos(tipoApontamentoDaoImpl.findAll(TipoApontamento.class));
+		
+		tipoApontamentoBean.setBreadCrumb(breadCrumb);
 		tipoApontamentoBean.setListState();
 		tipoApontamentoBean.setPageMessage(labels.getString("info.paginaLista"));
 

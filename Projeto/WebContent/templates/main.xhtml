@@ -50,49 +50,49 @@
 		   		<rich:modalPanel id="ajaxLoadingModalBox" height="50" width="200" style="text-align:center;">
 					<h:outputText value="#{labels['info.aguardeSuaRequisicao']}"/>
 				</rich:modalPanel>
-				<table width="100%">
-					<tr>
-						<td style="width:200px;">&nbsp;</td>
-						<td>
-							<ui:include src="/templates/include/header.xhtml" />
-							<rich:panel style="height:100%;">
-								<a4j:outputPanel ajaxRendered="true">								
-									<a4j:form ajaxSubmit="true">
-										<h:panelGroup layout="block" rendered="#{not empty userBean.autoridade and not empty bean.breadCrumb}">
-											<a4j:repeat value="#{bean.breadCrumb}" var="item" rowKeyVar="index">
-												<h:panelGroup layout="block" rendered="#{index == (fn:length(bean.breadCrumb) - 1)}">
-													<h:outputText value="#{item}" styleClass="lastBreadCrumb" />
-												</h:panelGroup>	
-												<h:panelGroup layout="block" rendered="#{index != (fn:length(bean.breadCrumb) - 1)}">
-													<h:outputText value="#{item}" />
-													<h:outputText value="  >  " />
-												</h:panelGroup>
-											</a4j:repeat>
+					<table width="100%">
+						<tr>
+							<td style="width:200px;">&nbsp;</td>
+							<td>
+								<ui:include src="/templates/include/header.xhtml" />
+								<rich:panel id="corpoPrincipal" style="min-height: 500px;">
+									<a4j:outputPanel ajaxRendered="true">								
+										<a4j:form ajaxSubmit="true">
+											<h:panelGroup layout="block" rendered="#{not empty userBean.autoridade and not empty bean.breadCrumb}">
+												<a4j:repeat value="#{bean.breadCrumb}" var="item" rowKeyVar="index">
+													<h:panelGroup layout="block" rendered="#{index == (fn:length(bean.breadCrumb) - 1)}">
+														<h:outputText value="#{item}" styleClass="lastBreadCrumb" />
+													</h:panelGroup>	
+													<h:panelGroup layout="block" rendered="#{index != (fn:length(bean.breadCrumb) - 1)}">
+														<h:outputText value="#{item}" />
+														<h:outputText value="  >  " />
+													</h:panelGroup>
+												</a4j:repeat>
+												<br />
+												<br />
+											</h:panelGroup>
+										</a4j:form>
+										<h:panelGroup layout="block" rendered="#{not empty userBean.autoridade}">
+											<br />
+											<h:outputText value="#{bean.pageMessage}" styleClass="pageMessage" />
+											<br />
 											<br />
 											<br />
 										</h:panelGroup>
-									</a4j:form>
-									<h:panelGroup layout="block" rendered="#{not empty userBean.autoridade}">
-										<br />
-										<h:outputText value="#{bean.pageMessage}" styleClass="pageMessage" />
-										<br />
-										<br />
-										<br />
-									</h:panelGroup>
-									
-									<p:messages id="mensagens" showDetail="true" 
-										showSummary="false" globalOnly="true"/>
 										
-							        <br />
-							        
-									<ui:insert name="body"/>
-								</a4j:outputPanel>					
-							</rich:panel>
-							<ui:include src="/templates/include/footer.xhtml" />
-						</td>
-						<td style="width:200px;">&nbsp;</td>
-					</tr>
-				</table>
+										<p:messages id="mensagens" showDetail="true" 
+											showSummary="false" globalOnly="true"/>
+											
+								        <br />
+								        
+										<ui:insert name="body"/>
+									</a4j:outputPanel>					
+								</rich:panel>
+								<ui:include src="/templates/include/footer.xhtml" />
+							</td>
+							<td style="width:200px;">&nbsp;</td>
+						</tr>
+					</table>
 			</f:view>
 		</body>
 	</html>
