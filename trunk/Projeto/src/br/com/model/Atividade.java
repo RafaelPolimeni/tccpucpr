@@ -52,8 +52,8 @@ public class Atividade implements EntityInterface {
 	@Column(length = 1, nullable = false)
 	private Integer tipoAtividade;
 
-	@Column(length = 1, nullable = false)
-	private Integer status;
+	@ManyToOne
+	private StatusAtividade status;
 
 	@Column(length = 1, nullable = false)
 	private Integer prioridade;
@@ -196,15 +196,14 @@ public class Atividade implements EntityInterface {
 	/**
 	 * @return the status
 	 */
-	public Integer getStatus() {
+	public StatusAtividade getStatus() {
 		return status;
 	}
 
 	/**
-	 * @param status
-	 *            the status to set
+	 * @param status the status to set
 	 */
-	public void setStatus(Integer status) {
+	public void setStatus(StatusAtividade status) {
 		this.status = status;
 	}
 

@@ -117,5 +117,11 @@
 			<from-outcome>gerenciarTipoApontamento</from-outcome>
 			<to-view-id>/pages/admin/tiposApontamento.jsf</to-view-id>
 		</navigation-case>
+		
+		<!-- Gerencias Status -->
+		<navigation-case>
+			<from-outcome>gerenciarStatus</from-outcome>
+			<to-view-id>/pages/admin/status.jsf</to-view-id>
+		</navigation-case>
 	</navigation-rule>
 </faces-config>

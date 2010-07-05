@@ -212,7 +212,7 @@ public class RecursoServiceImpl implements RecursoService {
 			formularioOK = false;
 		}
 
-		if (recursoBean.getAutoridade() == null) {
+		if (recursoBean.getIdAutoridade() == null) {
 			String mensagem = mensagens.getString("mensagem.validacao.obrigatorio");
 			String param1 = labels.getString("recurso.perfil");
 
