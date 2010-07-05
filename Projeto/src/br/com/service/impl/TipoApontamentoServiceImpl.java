@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -35,6 +36,10 @@ public class TipoApontamentoServiceImpl implements TipoApontamentoService {
 
 	ExtendedTableDataModel<TipoApontamento> dataModel;
 
+	private boolean directLink;
+
+	private HtmlPanelGroup panelGroup;
+
 	public TipoApontamentoServiceImpl() {
 
 	}
@@ -47,13 +52,14 @@ public class TipoApontamentoServiceImpl implements TipoApontamentoService {
 		breadCrumb.add(labels.getString("breadCrumb.maintenance"));
 		breadCrumb.add(labels.getString("breadCrumb.tipoApontamento.list"));
 
-		
 		tipoApontamentoBean.setTiposApontamentos(tipoApontamentoDaoImpl.findAll(TipoApontamento.class));
-		
+
 		tipoApontamentoBean.setBreadCrumb(breadCrumb);
 		tipoApontamentoBean.setListState();
 		tipoApontamentoBean.setPageMessage(labels.getString("info.paginaLista"));
 
+		setDirectLink(true);
+		
 		return "gerenciarTipoApontamento";
 	}
 
@@ -384,5 +390,39 @@ public class TipoApontamentoServiceImpl implements TipoApontamentoService {
 	 */
 	public void setTipoApontamentoBean(TipoApontamentoBean tipoApontamentoBean) {
 		this.tipoApontamentoBean = tipoApontamentoBean;
+	}
+
+	/**
+	 * @return the directLink
+	 */
+	public boolean isDirectLink() {
+		return directLink;
+	}
+
+	/**
+	 * @param directLink
+	 *            the directLink to set
+	 */
+	public void setDirectLink(boolean directLink) {
+		this.directLink = directLink;
+	}
+
+	/**
+	 * @return the panelGroup
+	 */
+	public HtmlPanelGroup getPanelGroup() {
+		if (!isDirectLink()) {
+			this.findAll();
+		}
+		
+		return panelGroup;
+	}
+
+	/**
+	 * @param panelGroup
+	 *            the panelGroup to set
+	 */
+	public void setPanelGroup(HtmlPanelGroup panelGroup) {
+		this.panelGroup = panelGroup;
 	}
 }

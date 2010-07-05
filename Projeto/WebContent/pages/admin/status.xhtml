@@ -16,7 +16,8 @@
 				<a4j:form ajaxSubmit="true" id="statusForm">
 					
 					<h:panelGroup layout="block" id="listPanel" style="align: center;" 
-						rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.listState}">
+						rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.listState}"
+						binding="#{statusAtividadeServiceImpl.panelGroup}">
 						<div align="center">
 							<rich:extendedDataTable value="#{statusAtividadeServiceImpl.statusDataModel}" var="status" 
 									width="700px" align="center" id="status" height="347px" sortMode="single"
@@ -35,54 +36,58 @@
 						<br />
 						
 						<a4j:commandButton action="#{statusAtividadeServiceImpl.prepareCreate}"
-							 value="   #{labels['novo']}   " style="margin-left:68px;"/>
-						<rich:spacer width="7"/>					 
+							 value="   #{labels['novo']}   " style="margin-left:68px;" id="btnNovo"/>
+						<rich:spacer width="7" id="spacer1"/>					 
 						<a4j:commandButton action="#{statusAtividadeServiceImpl.showDetails}"
-						 value="   #{labels['detalhar']}   "/>
-						<rich:spacer width="7"/>				
+						 value="   #{labels['detalhar']}   " id="btnDetalhe"/>
+						<rich:spacer width="7" id="spacer2"/>				
 						<a4j:commandButton action="#{statusAtividadeServiceImpl.prepareUpdate}"
-							 value="   #{labels['alterar']}   "/>
-						<rich:spacer width="7"/>	 
+							 value="   #{labels['alterar']}   " id="btnUpdate"/>
+						<rich:spacer width="7" id="spacer3"/>	 
 						<a4j:commandButton action="#{statusAtividadeServiceImpl.prepareDelete}"
-							 value="   #{labels['excluir']}   "/>
+							 value="   #{labels['excluir']}   " id="btnDelete"/>
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" id="detailPanel" rendered="#{not statusAtividadeServiceImpl.statusAtividadeBean.listState}">
 						<fieldset>
 							<legend>Dados do status</legend>
-							<h:panelGrid columns="3" >
-								<h:outputLabel value="#{labels['statusAtividade.nome']}:" for="name"/>
+							<h:panelGrid columns="2">
+								<h:outputLabel value="#{labels['statusAtividade.nome']}:" for="name" id="labelNome"/>
 								<h:inputText id="name" value="#{statusAtividadeServiceImpl.statusAtividadeBean.nome}" maxlength="100" 
 									rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.createState or statusAtividadeServiceImpl.statusAtividadeBean.updateState}"/>
-								<rich:message for="name" style="color:red;"/>
-								<h:outputText value="#{statusAtividadeServiceImpl.statusAtividadeBean.nome}" rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.detailState}"/>
+								<h:outputText value="#{statusAtividadeServiceImpl.statusAtividadeBean.nome}" 
+									rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.detailState}" id="outputNome"/>
 								
-								<h:outputLabel value="#{labels['statusAtividade.descricao']}:" for="description" />
-								<h:inputTextarea id="description" rows="3" cols="70" value="#{statusAtividadeServiceImpl.statusAtividadeBean.descricao}"
+								<h:outputLabel value="#{labels['statusAtividade.descricao']}:" for="descricao" id="labelDescricao"/>
+								<h:inputTextarea id="descricao" rows="3" cols="70" value="#{statusAtividadeServiceImpl.statusAtividadeBean.descricao}"
 									rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.createState or statusAtividadeServiceImpl.statusAtividadeBean.updateState}"
 									onkeyup="javascript:limitText(this, 1000);"/>
-								<rich:message for="description" style="color:red;"/>
-								<h:outputText value="#{statusAtividadeServiceImpl.statusAtividadeBean.descricao}" rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.detailState}" escape="false">
+								<h:outputText value="#{statusAtividadeServiceImpl.statusAtividadeBean.descricao}" id="outputDescricao"
+									rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.detailState}" escape="false">
 									<f:converter converterId="textAreaConverter"/>
 								</h:outputText>
 							</h:panelGrid>
 							
 							<br />
 												
-							<a4j:commandButton action="#{statusAtividadeServiceImpl.confirmCreate}" value="   #{labels['confirmar']}   " rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.createState}"/>
-							<a4j:commandButton action="#{statusAtividadeServiceImpl.confirmUpdate}" value="   #{labels['confirmar']}   " rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.updateState}"/>
-							<rich:spacer width="7" rendered="#{not statusAtividadeServiceImpl.statusAtividadeBean.listState}"/>
-							<a4j:commandButton action="#{statusAtividadeServiceImpl.backToList}" value="   #{labels['cancelar']}   " rendered="#{not statusAtividadeServiceImpl.statusAtividadeBean.listState}" immediate="true"/>
+							<a4j:commandButton action="#{statusAtividadeServiceImpl.confirmCreate}" value="   #{labels['confirmar']}   " 
+								rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.createState}" id="btnConfirmCreate"/>
+							<a4j:commandButton action="#{statusAtividadeServiceImpl.confirmUpdate}" value="   #{labels['confirmar']}   " 
+							rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.updateState}" id="btnConfirmUpdate"/>
+							<rich:spacer width="7" rendered="#{not statusAtividadeServiceImpl.statusAtividadeBean.listState}" id="spacer4"/>
+							<a4j:commandButton action="#{statusAtividadeServiceImpl.backToList}" value="   #{labels['cancelar']}   " 
+								rendered="#{not statusAtividadeServiceImpl.statusAtividadeBean.listState}" id="btnBackToList" immediate="true"/>
 						</fieldset>
 					</h:panelGroup>
 				</a4j:form>
 				
-				<rich:modalPanel autosized="false" showWhenRendered="true" rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.showModal}" height="100">
+				<rich:modalPanel autosized="false" showWhenRendered="true" rendered="#{statusAtividadeServiceImpl.statusAtividadeBean.showModal}" 
+					height="100" id="modalExcluir">
 					<f:facet name="header">
-						<h:outputText value="#{labels['atencao']}" />
+						<h:outputText value="#{labels['atencao']}" id="message1"/>
 					</f:facet>
 					
-					<h:outputFormat value="#{messages['mensagem.confirmarExclusao']}" styleClass="pageMessage">
+					<h:outputFormat value="#{messages['mensagem.confirmarExclusao']}" styleClass="pageMessage" id="message2">
 						<f:param value="#{labels['statusAtividade']}"/>
 					</h:outputFormat>
 					
@@ -90,9 +95,11 @@
 					<br />
 					
 					<a4j:form id="modalForm" ajaxSubmit="true">			
-						<a4j:commandButton action="#{statusAtividadeServiceImpl.delete}" value="   #{labels['excluir']}   "/>
-						<rich:spacer width="7"/>
-						<a4j:commandButton action="#{statusAtividadeServiceImpl.cancelDelete}" value="   #{labels['cancelar']}   "/>
+						<a4j:commandButton action="#{statusAtividadeServiceImpl.delete}" value="   #{labels['excluir']}   "
+							id="btnConfirmDelete"/>
+						<rich:spacer width="7" id="spacer5"/>
+						<a4j:commandButton action="#{statusAtividadeServiceImpl.cancelDelete}" value="   #{labels['cancelar']}   "
+						 	id="btnCancelDelete"/>
 					</a4j:form>		
 				</rich:modalPanel>
 		</ui:define>

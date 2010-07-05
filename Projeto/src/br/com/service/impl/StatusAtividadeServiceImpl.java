@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -34,6 +35,10 @@ public class StatusAtividadeServiceImpl implements StatusAtividadeService {
 	private StatusAtividadeBean statusAtividadeBean;
 
 	ExtendedTableDataModel<StatusAtividade> dataModel;
+	
+	private boolean directLink;
+	
+	private HtmlPanelGroup panelGroup;
 
 	public StatusAtividadeServiceImpl() {
 
@@ -52,6 +57,8 @@ public class StatusAtividadeServiceImpl implements StatusAtividadeService {
 		statusAtividadeBean.setListState();
 		statusAtividadeBean.setPageMessage(labels.getString("info.paginaLista"));
 
+		setDirectLink(true);
+		
 		return "gerenciarStatus";
 	}
 
@@ -379,5 +386,39 @@ public class StatusAtividadeServiceImpl implements StatusAtividadeService {
 	 */
 	public void setStatusAtividadeBean(StatusAtividadeBean statusAtividadeBean) {
 		this.statusAtividadeBean = statusAtividadeBean;
+	}
+	
+	/**
+	 * @return the directLink
+	 */
+	public boolean isDirectLink() {
+		return directLink;
+	}
+
+	/**
+	 * @param directLink
+	 *            the directLink to set
+	 */
+	public void setDirectLink(boolean directLink) {
+		this.directLink = directLink;
+	}
+
+	/**
+	 * @return the panelGroup
+	 */
+	public HtmlPanelGroup getPanelGroup() {
+		if(!isDirectLink()){
+			this.findAll();
+		}
+		
+		return panelGroup;
+	}
+
+	/**
+	 * @param panelGroup
+	 *            the panelGroup to set
+	 */
+	public void setPanelGroup(HtmlPanelGroup panelGroup) {
+		this.panelGroup = panelGroup;
 	}
 }

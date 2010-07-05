@@ -16,7 +16,7 @@
 				<a4j:form ajaxSubmit="true" id="papelForm">
 					
 					<h:panelGroup layout="block" id="listPanel" style="align: center;" 
-						rendered="#{papelServiceImpl.papelBean.listState}">
+						rendered="#{papelServiceImpl.papelBean.listState}" binding="#{papelServiceImpl.panelGroup}">
 						<div align="center">
 							<rich:extendedDataTable value="#{papelServiceImpl.papeisDataModel}" var="papel" 
 									width="700px" align="center" id="papeis" height="347px" sortMode="single"
@@ -35,54 +35,59 @@
 						<br />
 						
 						<a4j:commandButton action="#{papelServiceImpl.prepareCreate}"
-							 value="   #{labels['novo']}   " style="margin-left:68px;"/>
-						<rich:spacer width="7"/>					 
+							 value="   #{labels['novo']}   " style="margin-left:68px;" id="btnNovo"/>
+						<rich:spacer width="7" id="spacer1"/>
 						<a4j:commandButton action="#{papelServiceImpl.showDetails}"
-						 value="   #{labels['detalhar']}   "/>
-						<rich:spacer width="7"/>				
+						 value="   #{labels['detalhar']}   " id="btnDetalhe"/>
+						<rich:spacer width="7" id="spacer2"/>				
 						<a4j:commandButton action="#{papelServiceImpl.prepareUpdate}"
-							 value="   #{labels['alterar']}   "/>
-						<rich:spacer width="7"/>	 
+							 value="   #{labels['alterar']}   " id="btnUpdate"/>
+						<rich:spacer width="7" id="spacer3"/>	 
 						<a4j:commandButton action="#{papelServiceImpl.prepareDelete}"
-							 value="   #{labels['excluir']}   "/>
+							 value="   #{labels['excluir']}   " id="btnDelete"/>
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" id="detailPanel" rendered="#{not papelServiceImpl.papelBean.listState}">
 						<fieldset>
 							<legend>Dados do papel</legend>
-							<h:panelGrid columns="3" >
-								<h:outputLabel value="#{labels['papel.nome']}:" for="name"/>
+							<h:panelGrid columns="2" id="gridDetalhe">
+								<h:outputLabel value="#{labels['papel.nome']}:" for="name" id="labelNome"/>
 								<h:inputText id="name" value="#{papelServiceImpl.papelBean.nome}" maxlength="100" 
 									rendered="#{papelServiceImpl.papelBean.createState or papelServiceImpl.papelBean.updateState}"/>
-								<rich:message for="name" style="color:red;"/>
-								<h:outputText value="#{papelServiceImpl.papelBean.nome}" rendered="#{papelServiceImpl.papelBean.detailState}"/>
+								<h:outputText value="#{papelServiceImpl.papelBean.nome}" rendered="#{papelServiceImpl.papelBean.detailState}"
+									id="outputNome"/>
 								
-								<h:outputLabel value="#{labels['papel.descricao']}:" for="description" />
+								<h:outputLabel value="#{labels['papel.descricao']}:" for="description" id="labelDescricao"/>
 								<h:inputTextarea id="description" rows="3" cols="70" value="#{papelServiceImpl.papelBean.descricao}"
 									rendered="#{papelServiceImpl.papelBean.createState or papelServiceImpl.papelBean.updateState}"
 									onkeyup="javascript:limitText(this, 1000);"/>
-								<rich:message for="description" style="color:red;"/>
-								<h:outputText value="#{papelServiceImpl.papelBean.descricao}" rendered="#{papelServiceImpl.papelBean.detailState}" escape="false">
+								<h:outputText value="#{papelServiceImpl.papelBean.descricao}" rendered="#{papelServiceImpl.papelBean.detailState}" escape="false"
+									id="outputDescricao">
 									<f:converter converterId="textAreaConverter"/>
 								</h:outputText>
 							</h:panelGrid>
 							
 							<br />
 												
-							<a4j:commandButton action="#{papelServiceImpl.confirmCreate}" value="   #{labels['confirmar']}   " rendered="#{papelServiceImpl.papelBean.createState}"/>
-							<a4j:commandButton action="#{papelServiceImpl.confirmUpdate}" value="   #{labels['confirmar']}   " rendered="#{papelServiceImpl.papelBean.updateState}"/>
+							<a4j:commandButton action="#{papelServiceImpl.confirmCreate}" value="   #{labels['confirmar']}   " 
+								rendered="#{papelServiceImpl.papelBean.createState}" id="btnConfirmCreate"/>
+							<a4j:commandButton action="#{papelServiceImpl.confirmUpdate}" value="   #{labels['confirmar']}   " 
+								rendered="#{papelServiceImpl.papelBean.updateState}" id="btnConfirmUpdate"/>
 							<rich:spacer width="7" rendered="#{not papelServiceImpl.papelBean.listState}"/>
-							<a4j:commandButton action="#{papelServiceImpl.backToList}" value="   #{labels['cancelar']}   " rendered="#{not papelServiceImpl.papelBean.listState}" immediate="true"/>
+							<a4j:commandButton action="#{papelServiceImpl.backToList}" value="   #{labels['cancelar']}   " 
+								rendered="#{not papelServiceImpl.papelBean.listState}" id="btnBackToList" immediate="true"/>
 						</fieldset>
 					</h:panelGroup>
 				</a4j:form>
 				
-				<rich:modalPanel autosized="false" showWhenRendered="true" rendered="#{papelServiceImpl.papelBean.showModal}" height="100">
+				<rich:modalPanel autosized="false" showWhenRendered="true" id="modalExcluir"
+					rendered="#{papelServiceImpl.papelBean.showModal}" height="100">
 					<f:facet name="header">
-						<h:outputText value="#{labels['atencao']}" />
+						<h:outputText value="#{labels['atencao']}" id="outputAtencao"/>
 					</f:facet>
 					
-					<h:outputFormat value="#{messages['mensagem.confirmarExclusao']}" styleClass="pageMessage">
+					<h:outputFormat value="#{messages['mensagem.confirmarExclusao']}" styleClass="pageMessage"
+						id="outputMensagemConfirmacao">
 						<f:param value="#{labels['papel']}"/>
 					</h:outputFormat>
 					
@@ -90,9 +95,11 @@
 					<br />
 					
 					<a4j:form id="modalForm" ajaxSubmit="true">			
-						<a4j:commandButton action="#{papelServiceImpl.delete}" value="   #{labels['excluir']}   "/>
-						<rich:spacer width="7"/>
-						<a4j:commandButton action="#{papelServiceImpl.cancelDelete}" value="   #{labels['cancelar']}   "/>
+						<a4j:commandButton action="#{papelServiceImpl.delete}" value="   #{labels['excluir']}   "
+							id="btnConfirmDelete"/>
+						<rich:spacer width="7" id="spacer1"/>
+						<a4j:commandButton action="#{papelServiceImpl.cancelDelete}" value="   #{labels['cancelar']}   "
+							id="btnCancelDelete"/>
 					</a4j:form>		
 				</rich:modalPanel>
 		</ui:define>
